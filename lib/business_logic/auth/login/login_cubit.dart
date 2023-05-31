@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:dobareh_bloc/data/model/auth/login/LoginResponse.dart';
+import 'package:dobareh_bloc/data/model/auth/login/login_response.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../../utils/app_exception.dart';
 
@@ -22,10 +23,14 @@ class LoginCubit extends Cubit<LoginState> {
           loginStatus: LoginStatus.success, loginResponse: loginResponse));
     } on AppException catch (e) {
       emit(state.copyWith(
-          loginMessage: e.toString(), loginStatus: LoginStatus.failure));
+          errorMessage: e.toString(), loginStatus: LoginStatus.failure));
     } catch (e) {
       emit(state.copyWith(
-          loginMessage: e.toString(), loginStatus: LoginStatus.failure));
+          errorMessage: e.toString(), loginStatus: LoginStatus.failure));
     }
+  }
+
+  void numberChanged(String number) {
+    emit(state.copyWith(number: number));
   }
 }

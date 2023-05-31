@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dobareh_bloc/presentation/auth/code_page.dart';
+import 'package:equatable/equatable.dart';
 
 part 'timer_state.dart';
 
 class TimerCubit extends Cubit<TimerState> {
-  TimerCubit() : super(TimerState.initial(0));
-
+  TimerCubit() : super(const TimerState(tiks: 0, timerStatus: TimerStatus.initial));
 
   StreamSubscription<int>? _tickerSubscription;
 
@@ -20,16 +19,15 @@ class TimerCubit extends Cubit<TimerState> {
   void startTimer(int duration) {
     _tickerSubscription?.cancel();
 
-    _tickerSubscription = Ticker().tick(ticks: duration).listen((event) {
+    _tickerSubscription = const Ticker().tick(ticks: duration).listen((event) {
       if (event > 0) {
-        emit(TimerState.inProgress(event));
+        emit(state.copyWith(tiks: event, timerStatus: TimerStatus.inProgress));
       } else {
-        emit(const TimerState.complete());
+        emit(state.copyWith(timerStatus: TimerStatus.complete, tiks: 0));
       }
     });
   }
 }
-
 
 class Ticker {
   const Ticker();

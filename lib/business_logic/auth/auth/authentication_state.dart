@@ -2,13 +2,12 @@ part of 'authentication_cubit.dart';
 
 enum AuthenticationStatus { authenticated, unauthenticated }
 
- class AuthenticationState {
+class AuthenticationState extends Equatable {
   const AuthenticationState(
       {this.userToken = "", required this.authenticationStatus});
 
   final String userToken;
   final AuthenticationStatus authenticationStatus;
-
 
   AuthenticationState copyWith({
     String? userToken,
@@ -16,9 +15,12 @@ enum AuthenticationStatus { authenticated, unauthenticated }
   }) {
     return AuthenticationState(
       userToken: userToken ?? this.userToken,
-      authenticationStatus: authenticationStatus ?? this.authenticationStatus,
+      authenticationStatus: authenticationStatus,
     );
   }
+
+  @override
+  List<Object?> get props => [userToken, authenticationStatus];
 
 /*
   const AuthenticationState.authenticated(String token)
@@ -29,6 +31,4 @@ enum AuthenticationStatus { authenticated, unauthenticated }
   const AuthenticationState.unauthenticated()
       : this._(authenticationStatus: AuthenticationStatus.unauthenticated);
 */
-
-
 }

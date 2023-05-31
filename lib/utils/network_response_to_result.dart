@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:dobareh_bloc/data/model/ErrorModel.dart';
+import 'package:dobareh_bloc/data/model/error_model.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
 import 'package:logger/logger.dart';
 

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:dobareh_bloc/data/model/auth/login/VerifyResponse.dart';
+import 'package:dobareh_bloc/data/model/auth/login/verify_response.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../../data/repository/auth_repository.dart';
 import '../../../utils/app_exception.dart';
@@ -17,6 +18,10 @@ class VerifyCubit extends Cubit<VerifyState> {
             initRemaining: initRemaining));
 
   AuthRepository authRepository;
+
+  void codeChanged(String code) {
+    emit(state.copyWith(code: code));
+  }
 
   void verify(String number, String code) async {
     try {

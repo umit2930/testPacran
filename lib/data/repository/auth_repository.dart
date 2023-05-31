@@ -1,10 +1,10 @@
 import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
-import 'package:dobareh_bloc/data/model/auth/login/VerifyResponse.dart';
+import 'package:dobareh_bloc/data/model/auth/login/verify_response.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
 import 'package:logger/logger.dart';
 
-import '../model/auth/login/LoginResponse.dart';
+import '../model/auth/login/login_response.dart';
 
 class AuthRepository {
   final AuthApiProvider _apiProvider;

@@ -2,28 +2,37 @@ part of 'login_cubit.dart';
 
 enum LoginStatus { initial, loading, success, failure }
 
-class LoginState {
+class LoginState extends Equatable {
   const LoginState({
     required this.loginStatus,
     this.loginResponse,
-    this.loginMessage,
+    this.errorMessage,
+    this.number = "",
   });
 
   final LoginStatus loginStatus;
   final LoginResponse? loginResponse;
-  final String? loginMessage;
+  final String? errorMessage;
+
+  final String number;
 
   LoginState copyWith({
-    required LoginStatus loginStatus,
+    LoginStatus? loginStatus,
     LoginResponse? loginResponse,
-    String? loginMessage,
+    String? errorMessage,
+    String? number,
   }) {
     return LoginState(
       loginStatus: loginStatus ?? this.loginStatus,
       loginResponse: loginResponse ?? this.loginResponse,
-      loginMessage: loginMessage ?? this.loginMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
+      number: number ?? this.number,
     );
   }
+
+  @override
+  List<Object?> get props => [loginStatus, loginResponse, errorMessage, number];
+
 /*
 
   const LoginState.initial() : this._(loginStatus: LoginStatus.initial);

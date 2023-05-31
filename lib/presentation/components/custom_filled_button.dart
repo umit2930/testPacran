@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomFilledButton extends StatelessWidget {
-  CustomFilledButton(
+  const CustomFilledButton(
       {Key? key, required this.onPressed, required this.buttonChild,this.width})
       : super(key: key);
 
-  Function()? onPressed;
-  Widget buttonChild;
-  double? width;
+  final Function()? onPressed;
+  final Widget buttonChild;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Container(
+    return SizedBox(
       // height: 56.h,
       width: width,
       child: ElevatedButton(

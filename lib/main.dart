@@ -1,7 +1,7 @@
 import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
-import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
 import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
+import 'package:dobareh_bloc/data/data_provider/remote/order/home_api_provider.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
 import 'package:dobareh_bloc/presentation/auth/number_page.dart';
 import 'package:dobareh_bloc/presentation/home/home_page.dart';
@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'data/repository/home_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,11 +60,15 @@ class App extends StatelessWidget {
                     if (state.authenticationStatus ==
                         AuthenticationStatus.authenticated) {
                       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        Get.offAll(() => const HomePage());
+                        Get.offAll(() => RepositoryProvider(
+                              create: (context) => HomeRepository(
+                                  HomeApiProvider(state.userToken)),
+                              child: HomePage.router(),
+                            ));
                       });
                     } else {
                       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        Get.off(() => const NumberPage());
+                        Get.off(() => NumberPage.router());
                       });
                     }
                   },
