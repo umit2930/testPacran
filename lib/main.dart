@@ -1,28 +1,82 @@
+import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
+import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
+import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dart';
+import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
+import 'package:dobareh_bloc/data/repository/auth_repository.dart';
 import 'package:dobareh_bloc/presentation/auth/number_page.dart';
+import 'package:dobareh_bloc/presentation/home/home_page.dart';
+import 'package:dobareh_bloc/presentation/presentetion.dart';
 import 'package:dobareh_bloc/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // var pref = AppSharedPreferences();
+  //TODO getToken() is set repository token key
+  var repository = AuthRepository(AuthApiProvider(), AppSharedPreferences());
+  await repository.getToken();
+  runApp(App(authRepository: repository));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({Key? key, required this.authRepository}) : super(key: key);
+  final AuthRepository authRepository;
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      useInheritedMediaQuery: true,
-      minTextAdapt: true,
-      designSize: const Size(360, 790),
-      builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
-          title: 'Bloc Demo',
-          theme: DobareTheme.theme,
-          home: const NumberPage(),
-        );
-      },
+    return RepositoryProvider.value(
+      value: authRepository,
+      child: BlocProvider(
+        create: (context) {
+          return AuthenticationCubit(authRepository: authRepository);
+        },
+        child: ScreenUtilInit(
+          useInheritedMediaQuery: false,
+          minTextAdapt: true,
+          designSize: const Size(360, 790),
+          builder: (BuildContext context, Widget? child) {
+            return GetMaterialApp(
+              // navigatorKey: _navigatorKey,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('fa'),
+              ],
+              locale: const Locale('fa'),
+              title: 'Bloc Demo',
+              theme: DobareTheme.theme,
+              builder: (context, child) {
+                return BlocListener<AuthenticationCubit, AuthenticationState>(
+                  listener: (context, state) {
+                    if (state.authenticationStatus ==
+                        AuthenticationStatus.authenticated) {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        Get.offAll(() => const HomePage());
+                      });
+                    } else {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        Get.off(() => const NumberPage());
+                      });
+                    }
+                  },
+                  child: child,
+                );
+              },
+              onGenerateRoute: (_) => MaterialPageRoute<void>(builder: (_) {
+                context.read<AuthenticationCubit>().userChanged();
+                return const SplashPage();
+              }),
+            );
+          },
+        ),
+      ),
     );
   }
 }

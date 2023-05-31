@@ -1,27 +1,50 @@
-import 'dart:async';
-
+import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
+import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
+import 'package:dobareh_bloc/business_logic/auth/verify/timer_cubit.dart';
+import 'package:dobareh_bloc/business_logic/auth/verify/verify_cubit.dart';
+import 'package:dobareh_bloc/data/repository/auth_repository.dart';
+import 'package:dobareh_bloc/presentation/auth/number_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../utils/colors.dart';
 import '../components/custom_filled_button.dart';
 
-
 class CodePage extends StatelessWidget {
-  CodePage({Key? key}) : super(key: key);
+  const CodePage({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    // Logger().w(loginResponse.mobile);
+    Logger().e("verify page build");
+
+    var textTheme = Theme.of(context).textTheme;
+    var theme = Theme.of(context);
+
+    Widget buttonChild;
+    return BlocProvider(
+      create: (context) =>
+          LoginCubit(authRepository: context.read<AuthRepository>()),
+      child: const VerifyForm(),
+    );
+  }
+}
+
+class VerifyForm extends StatelessWidget {
+  const VerifyForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
-    var theme = Theme.of(context);
-
     TextEditingController pinController = TextEditingController();
 
-
-    Widget buttonChild;
+    var initNumber = context.read<VerifyCubit>().state.initNumber ?? "0";
+    var initRemaining = context.read<VerifyCubit>().state.initRemaining;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -77,7 +100,7 @@ class CodePage extends StatelessWidget {
                                 const TextSpan(
                                     text: "لطفا کد فعالسازی که برای "),
                                 TextSpan(
-                                    text: "",
+                                    text: initNumber,
                                     style: textTheme.bodyLarge),
                                 const TextSpan(
                                     text: "\n پیامک شده است را وارد نمایید."),
@@ -88,7 +111,7 @@ class CodePage extends StatelessWidget {
                         padding: EdgeInsets.only(top: 4.h),
                         child: TextButton(
                             onPressed: () {
-
+                              Get.offAll(NumberPage());
                             },
                             child: const Text("تغییر شماره")),
                       ),
@@ -103,7 +126,7 @@ class CodePage extends StatelessWidget {
                               /*  onCompleted: (String value) {
                                 loginViewModel.setCode(value);
                               },*/
-                              textStyle: theme.textTheme.bodyLarge,
+                              textStyle: textTheme.bodyLarge,
                               keyboardType: TextInputType.number,
                               mainAxisAlignment: MainAxisAlignment.center,
                               enableActiveFill: true,
@@ -130,106 +153,59 @@ class CodePage extends StatelessWidget {
                 ),
               ),
 
-              //TODO timer widget
-              /*StreamBuilder<NetworkResult<LoginResponse>>(
-                  stream: codeViewModel.loginStream.stream,
-                  builder: (context, snapshot) {
-                    late LoginResponse loginResponse;
+              BlocBuilder<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  switch (state.loginStatus) {
+                    case LoginStatus.loading:
+                      return const Center(child: CircularProgressIndicator());
+                    case LoginStatus.failure:
+                      WidgetsBinding.instance.addPostFrameCallback((_) =>
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                                content: Text(state.loginMessage.toString()))));
+                    default:
+                      break;
+                  }
+                  return RemainingTimerWidget();
+                },
+              ),
 
-                    if (snapshot.hasData) {
-                      NetworkResult<LoginResponse>? loginResult =
-                          snapshot.data!;
-                      //TODO add switch case
+              BlocBuilder<VerifyCubit, VerifyState>(
+                builder: (BuildContext context, VerifyState state) {
+                  Logger().e("verify bloc build");
+                  switch (state.verifyStatus) {
+                    case VerifyStatus.success:
+                      // AuthenticationCubit control the app flow and goes to the home page.
+                      WidgetsBinding.instance.addPostFrameCallback((_) =>
+                          context.read<AuthenticationCubit>().userChanged());
 
-                      switch (loginResult.status) {
-                        case NetworkStatus.loading:
-                          return Container(
-                              alignment: Alignment.center,
-                              height: 60.h,
-                              child: const CircularProgressIndicator());
-                          break;
-                        case NetworkStatus.error:
-                          context.showSnackbar(message:loginResult.message, messageType: MessageType.error,);
-                          return SizedBox(
-                            height: 60.h,
-                            child: TimerWidget(
-                              time: 0,
-                              number: initResponse.data!.mobile ?? "",
-                            ),
-                          );
+                    case VerifyStatus.loading:
+                      return const Center(child: CircularProgressIndicator());
+                    case VerifyStatus.failure:
+                      WidgetsBinding.instance.addPostFrameCallback((_) =>
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                                content: Text(state.errorMessage.toString()))));
 
-                          break;
-                        case NetworkStatus.success:
-                          loginResponse = snapshot.data!.data!;
-
-                          break;
-                      }
-                    } else {
-                      loginResponse = initResponse.data!;
-                    }
-
-                    return SizedBox(
-                      height: 60.h,
-                      child: TimerWidget(
-                        time: loginResponse.remaining as int,
-                        number: loginResponse.mobile ?? "",
-                      ),
-                    );
-                  }),*/
-              //TODO button
-/*
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 16.w, right: 16.w, bottom: 16.h, top: 8.h),
-                child: StreamBuilder<NetworkResult<VerifyResponse>>(
-                  stream: codeViewModel.verifyStream.stream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<NetworkResult<VerifyResponse>> snapshot) {
-                    // NetworkResult<VerifyResponse>? verifyStatus = viewModel.verifyStatus;
-
-                    if (snapshot.hasData) {
-                      var verifyStatus = snapshot.data!;
-                      // if (verifyStatus != null) {
-                      switch (verifyStatus.status) {
-                        case NetworkStatus.loading:
-                          buttonChild = const CircularProgressIndicator();
-                          break;
-                        case NetworkStatus.error:
-                          context.showSnackbar(message:verifyStatus.message, messageType: MessageType.error,);
-                          buttonChild = const Text("ورود");
-                          break;
-                        case NetworkStatus.success:
-                          AppSharedPreferences appSharedPreferences =
-                              Get.find();
-
-                          appSharedPreferences
-                              .saveToken(verifyStatus.data?.token ?? "")
-                              .then((value) {
-                            ApiClient newClient = Get.find();
-                            newClient.init();
-
-                            WidgetsBinding.instance.addPostFrameCallback(
-                                (_) => Get.offAll(const HomePage()));
-                          });
-                          buttonChild = const Text("");
-
-                          break;
-                      }
-                    } else {
-                      buttonChild = const Text("ورود");
-                    }
-
-                    return SendButton(
-                        buttonChild: buttonChild,
+                    default:
+                      break;
+                  }
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: 16.w, right: 16.w, bottom: 16.h, top: 16.h),
+                    child: SendButton(
+                        buttonChild: const Text("ارسال کد"),
                         textEditingController: pinController,
                         onPressed: () {
-                          var model = initResponse.data!;
-                          codeViewModel.verify(
-                              model.mobile!, pinController.text);
-                        });
-                  },
-                ),
-              ),*/
+                          context
+                              .read<VerifyCubit>()
+                              .verify(initNumber, pinController.text);
+                        }),
+                  );
+                },
+              )
             ],
           ),
         ),
@@ -238,89 +214,74 @@ class CodePage extends StatelessWidget {
   }
 }
 
-class TimerWidget extends StatefulWidget {
-  TimerWidget({Key? key, required this.time, required this.number})
-      : super(key: key);
-
-  int time;
-  String number;
-
-  @override
-  State<TimerWidget> createState() => _TimerWidgetState();
-}
-
-class _TimerWidgetState extends State<TimerWidget> {
-  late Timer _timer;
-
-  Widget timeWidget = const SizedBox();
-
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      widget.time--;
-
-      setState(() {});
-    });
-  }
-
-  @override
-  void initState() {
-    startTimer();
-  }
+class RemainingTimerWidget extends StatelessWidget {
+  const RemainingTimerWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TimerCubit timerCubit = TimerCubit();
     var textTheme = Theme.of(context).textTheme;
-
-    if (widget.time > 0) {
-      timeWidget = Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Row(
-          children: [
-            //TODO add dynamic time
-            Text(
-              " کدی دریافت نشد؟ ${widget.time}ثانیه تا ارسال مجدد ",
-              style: textTheme.bodySmall?.copyWith(color: natural5),
-            )
-          ],
-        ),
-      );
-    } else {
-      timeWidget = Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Row(
-          children: [
-            Text(
-              "کدی دریافت نشد؟",
-              style: textTheme.bodySmall?.copyWith(color: natural5),
-            ),
-            TextButton(
-                onPressed: () {
-                  var phone = widget.number;
-                },
-                child: const Text("ارسال مجدد")),
-          ],
-        ),
-      );
-      _timer.cancel();
-    }
-
-    return timeWidget;
+    return BlocBuilder<TimerCubit, TimerState>(
+        bloc: timerCubit,
+        builder: (context, state) {
+          switch (state.timerStatus) {
+            case TimerStatus.initial:
+              timerCubit.startTimer(
+                  ((context.read<LoginCubit>().state.loginResponse?.remaining?.round()) ??
+                      context.read<VerifyCubit>().state.initRemaining) ?? 0);
+              return Center();
+              break;
+            case TimerStatus.inProgress:
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: [
+                    //TODO add dynamic time
+                    Text(
+                      " کدی دریافت نشد؟ ${state.tiks}ثانیه تا ارسال مجدد ",
+                      style: textTheme.bodyMedium?.copyWith(color: natural5),
+                    )
+                  ],
+                ),
+              );
+              break;
+            case TimerStatus.complete:
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: [
+                    Text(
+                      "کدی دریافت نشد؟",
+                      style: textTheme.bodySmall?.copyWith(color: natural5),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          //TODO cannot get init in other status
+                          context
+                              .read<LoginCubit>()
+                              .login(context.read<VerifyCubit>().state.initNumber ??"");
+                        },
+                        child: const Text("ارسال مجدد")),
+                  ],
+                ),
+              );
+              break;
+          }
+        });
   }
 }
 
 class SendButton extends StatefulWidget {
-  SendButton(
+  const SendButton(
       {Key? key,
       required this.buttonChild,
       required this.textEditingController,
       required this.onPressed})
       : super(key: key);
 
-  Widget buttonChild;
-  TextEditingController textEditingController;
-  Function() onPressed;
-
-  bool listenerSet = false;
+  final Widget buttonChild;
+  final TextEditingController textEditingController;
+  final Function() onPressed;
 
   @override
   State<SendButton> createState() => _SendButtonState();
@@ -328,17 +289,25 @@ class SendButton extends StatefulWidget {
 
 class _SendButtonState extends State<SendButton> {
   @override
-  Widget build(BuildContext context) {
-    //TODO write like code page timer setState
-    if (widget.listenerSet == false) {
-      widget.listenerSet = true;
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.textEditingController.addListener(() {
+        Logger().w("changed => ${widget.textEditingController.text}");
         setState(() {});
       });
-    }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //TODO write like code page timer setState
 
     bool isEnable;
     isEnable = (widget.textEditingController.text.length > 4);
+
+    Logger().e("code rebuild. text => ${widget.textEditingController.text}");
 
     return CustomFilledButton(
       onPressed: isEnable ? widget.onPressed : null,

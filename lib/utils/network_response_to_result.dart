@@ -22,7 +22,7 @@ class NetworkResponseToResult<T> {
       JsonConverter jsonConverter, Future<Response<dynamic>> request) async {
     ///check internet
     if (await connectivity.checkConnectivity() == ConnectivityResult.none) {
-      throw NoInternetException();
+      throw NoInternetException("اتصال اینترنتی خود را برسی کنید.");
     } else {
       //TODO remove await ??
       await request.then((value) {

@@ -38,5 +38,5 @@ class UndefinedException extends AppException {
 }
 
 class NoInternetException extends AppException {
-  NoInternetException([String? message]) : super(message, "Undefined exception: ");
+  NoInternetException([String? message]) : super(message, "");
 }
