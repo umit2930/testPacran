@@ -3,7 +3,7 @@ part of 'login_cubit.dart';
 enum LoginStatus { initial, loading, success, failure }
 
 class LoginState {
-  const LoginState._({
+  const LoginState({
     required this.loginStatus,
     this.loginResponse,
     this.loginMessage,
@@ -13,7 +13,18 @@ class LoginState {
   final LoginResponse? loginResponse;
   final String? loginMessage;
 
-
+  LoginState copyWith({
+    required LoginStatus loginStatus,
+    LoginResponse? loginResponse,
+    String? loginMessage,
+  }) {
+    return LoginState(
+      loginStatus: loginStatus ?? this.loginStatus,
+      loginResponse: loginResponse ?? this.loginResponse,
+      loginMessage: loginMessage ?? this.loginMessage,
+    );
+  }
+/*
 
   const LoginState.initial() : this._(loginStatus: LoginStatus.initial);
 
@@ -24,4 +35,5 @@ class LoginState {
 
   const LoginState.failure(String message)
       : this._(loginStatus: LoginStatus.failure, loginMessage: message);
+*/
 }

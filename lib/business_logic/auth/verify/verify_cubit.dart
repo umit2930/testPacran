@@ -11,21 +11,28 @@ class VerifyCubit extends Cubit<VerifyState> {
       {required this.authRepository,
       required String initNumber,
       required int initRemaining})
-      : super(VerifyState.initial(initNumber, initRemaining));
+      : super(VerifyState(
+            verifyStatus: VerifyStatus.initial,
+            initNumber: initNumber,
+            initRemaining: initRemaining));
 
   AuthRepository authRepository;
 
   void verify(String number, String code) async {
     try {
-      emit(const VerifyState.loading());
+      emit(state.copyWith(verifyStatus: VerifyStatus.loading));
       VerifyResponse verifyResponse = await authRepository.verify(number, code);
       await authRepository.saveToken(verifyResponse.token ?? "");
       await authRepository.getToken();
-      emit(VerifyState.success(verifyResponse));
+      emit(state.copyWith(
+          verifyStatus: VerifyStatus.success, verifyResponse: verifyResponse));
     } on AppException catch (e) {
-      emit(VerifyState.failure(e.toString()));
+      emit(state.copyWith(
+          verifyStatus: VerifyStatus.failure, errorMessage: e.toString()));
     } catch (e) {
-      emit(VerifyState.failure("unknown: ${e.toString()}"));
+      emit(state.copyWith(
+          verifyStatus: VerifyStatus.failure,
+          errorMessage: "unknown: ${e.toString()}"));
     }
   }
 }

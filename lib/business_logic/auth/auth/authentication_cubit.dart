@@ -7,16 +7,21 @@ part 'authentication_state.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit({required this.authRepository})
       : super(authRepository.userToken != ""
-            ? AuthenticationState.authenticated(authRepository.userToken)
-            : const AuthenticationState.unauthenticated());
+            ? AuthenticationState(
+                userToken: authRepository.userToken,
+                authenticationStatus: AuthenticationStatus.authenticated)
+            : const AuthenticationState(
+                authenticationStatus: AuthenticationStatus.unauthenticated));
 
   AuthRepository authRepository;
 
-
-  void userChanged(){
+  void userChanged() {
     emit(authRepository.userToken != ""
-        ? AuthenticationState.authenticated(authRepository.userToken)
-        : const AuthenticationState.unauthenticated());
+        ? state.copyWith(
+            userToken: authRepository.userToken,
+            authenticationStatus: AuthenticationStatus.authenticated)
+        : state.copyWith(
+            userToken: authRepository.userToken,
+            authenticationStatus: AuthenticationStatus.unauthenticated));
   }
-
 }

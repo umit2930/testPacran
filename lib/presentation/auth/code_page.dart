@@ -20,13 +20,7 @@ class CodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Logger().w(loginResponse.mobile);
     Logger().e("verify page build");
-
-    var textTheme = Theme.of(context).textTheme;
-    var theme = Theme.of(context);
-
-    Widget buttonChild;
     return BlocProvider(
       create: (context) =>
           LoginCubit(authRepository: context.read<AuthRepository>()),
@@ -43,8 +37,6 @@ class VerifyForm extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     TextEditingController pinController = TextEditingController();
 
-    var initNumber = context.read<VerifyCubit>().state.initNumber ?? "0";
-    var initRemaining = context.read<VerifyCubit>().state.initRemaining;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -100,7 +92,7 @@ class VerifyForm extends StatelessWidget {
                                 const TextSpan(
                                     text: "لطفا کد فعالسازی که برای "),
                                 TextSpan(
-                                    text: initNumber,
+                                    text: context.read<VerifyCubit>().state.initNumber,
                                     style: textTheme.bodyLarge),
                                 const TextSpan(
                                     text: "\n پیامک شده است را وارد نمایید."),
@@ -171,40 +163,41 @@ class VerifyForm extends StatelessWidget {
                 },
               ),
 
-              BlocBuilder<VerifyCubit, VerifyState>(
-                builder: (BuildContext context, VerifyState state) {
-                  Logger().e("verify bloc build");
-                  switch (state.verifyStatus) {
-                    case VerifyStatus.success:
-                      // AuthenticationCubit control the app flow and goes to the home page.
-                      WidgetsBinding.instance.addPostFrameCallback((_) =>
-                          context.read<AuthenticationCubit>().userChanged());
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 16.w, right: 16.w, bottom: 16.h, top: 16.h),
 
-                    case VerifyStatus.loading:
-                      return const Center(child: CircularProgressIndicator());
-                    case VerifyStatus.failure:
-                      WidgetsBinding.instance.addPostFrameCallback((_) =>
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(SnackBar(
-                                content: Text(state.errorMessage.toString()))));
+                child: BlocBuilder<VerifyCubit, VerifyState>(
+                  builder: (BuildContext context, VerifyState state) {
+                    Logger().e("verify bloc build");
+                    switch (state.verifyStatus) {
+                      case VerifyStatus.success:
+                        // AuthenticationCubit control the app flow and goes to the home page.
+                        WidgetsBinding.instance.addPostFrameCallback((_) =>
+                            context.read<AuthenticationCubit>().userChanged());
 
-                    default:
-                      break;
-                  }
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.w, right: 16.w, bottom: 16.h, top: 16.h),
-                    child: SendButton(
-                        buttonChild: const Text("ارسال کد"),
+                      case VerifyStatus.loading:
+                        return const Center(child: CircularProgressIndicator());
+                      case VerifyStatus.failure:
+                        WidgetsBinding.instance.addPostFrameCallback((_) =>
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(SnackBar(
+                                  content: Text(state.errorMessage.toString()))));
+
+                      default:
+                        break;
+                    }
+                    return SendButton(
+                        buttonChild:  const Text("ارسال کد"),
                         textEditingController: pinController,
                         onPressed: () {
                           context
                               .read<VerifyCubit>()
-                              .verify(initNumber, pinController.text);
-                        }),
-                  );
-                },
+                              .verify(context.read<VerifyCubit>().state.initNumber, pinController.text);
+                        });
+                  },
+                ),
               )
             ],
           ),
@@ -228,8 +221,8 @@ class RemainingTimerWidget extends StatelessWidget {
             case TimerStatus.initial:
               timerCubit.startTimer(
                   ((context.read<LoginCubit>().state.loginResponse?.remaining?.round()) ??
-                      context.read<VerifyCubit>().state.initRemaining) ?? 0);
-              return Center();
+                      context.read<VerifyCubit>().state.initRemaining));
+              return const Center();
               break;
             case TimerStatus.inProgress:
               return Padding(
@@ -252,14 +245,13 @@ class RemainingTimerWidget extends StatelessWidget {
                   children: [
                     Text(
                       "کدی دریافت نشد؟",
-                      style: textTheme.bodySmall?.copyWith(color: natural5),
+                      style: textTheme.bodyMedium?.copyWith(color: natural5),
                     ),
                     TextButton(
                         onPressed: () {
-                          //TODO cannot get init in other status
                           context
                               .read<LoginCubit>()
-                              .login(context.read<VerifyCubit>().state.initNumber ??"");
+                              .login(context.read<VerifyCubit>().state.initNumber);
                         },
                         child: const Text("ارسال مجدد")),
                   ],

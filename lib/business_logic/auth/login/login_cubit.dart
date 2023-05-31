@@ -7,25 +7,25 @@ import '../../../utils/app_exception.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.authRepository}) : super(const LoginState.initial());
+  LoginCubit({required this.authRepository})
+      : super(const LoginState(loginStatus: LoginStatus.initial));
 
   AuthRepository authRepository;
 
-
   void login(String number) async {
     try {
-      emit(const LoginState.loading());
+      emit(state.copyWith(loginStatus: LoginStatus.loading));
 
       LoginResponse loginResponse = await authRepository.login(number);
 
-
-      emit(LoginState.success(loginResponse));
-
-
+      emit(state.copyWith(
+          loginStatus: LoginStatus.success, loginResponse: loginResponse));
     } on AppException catch (e) {
-      emit(LoginState.failure(e.toString()));
+      emit(state.copyWith(
+          loginMessage: e.toString(), loginStatus: LoginStatus.failure));
     } catch (e) {
-      emit(LoginState.failure("unknown: ${e.toString()}"));
+      emit(state.copyWith(
+          loginMessage: e.toString(), loginStatus: LoginStatus.failure));
     }
   }
 }

@@ -13,8 +13,8 @@ class CustomFilledButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return SizedBox(
-      height: 56.h,
+    return Container(
+      // height: 56.h,
       width: width,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -22,7 +22,10 @@ class CustomFilledButton extends StatelessWidget {
             backgroundColor: theme.colorScheme.secondary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.r))),
-        child: buttonChild,
+        child: Padding(
+          padding:  EdgeInsets.symmetric(vertical: 16.h),
+          child: buttonChild,
+        ),
       ),
     );
   }

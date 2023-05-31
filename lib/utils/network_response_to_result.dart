@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:dobareh_bloc/data/model/ErrorModel.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
 import 'package:logger/logger.dart';
 
@@ -14,6 +15,8 @@ typedef NetworkCallBack<T> = void Function(
 
 //TODO create a generic class for Errors
 class NetworkResponseToResult<T> {
+
+  //TODO now we throw the errors. so can we use T instead of dynamic ?
   late final Response<dynamic>? response;
 
   var connectivity = Connectivity();
@@ -46,10 +49,12 @@ class NetworkResponseToResult<T> {
           case 200:
             T result = jsonConverter(serverResponse.data);
             return result;
-          case 400:
-            throw BadRequestException();
           case 401:
             throw UnauthorisedException();
+          case 403:
+            throw ForbiddenException(ErrorModel.fromJson(serverResponse.data).errors.toString());
+          case 404:
+            throw BadRequestException(ErrorModel.fromJson(serverResponse.data).errors.toString());
           case 422:
             throw ApiKeyNotFound();
           default:

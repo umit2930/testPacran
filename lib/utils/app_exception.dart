@@ -18,7 +18,10 @@ class FetchDataException extends AppException {
 }
 
 class BadRequestException extends AppException {
-  BadRequestException([message]) : super(message, "Invalid Request: ");
+  BadRequestException([message]) : super(message, "");
+}
+class ForbiddenException extends AppException {
+  ForbiddenException([message]) : super(message, "");
 }
 
 class UnauthorisedException extends AppException {
@@ -26,7 +29,7 @@ class UnauthorisedException extends AppException {
 }
 
 class InvalidInputException extends AppException {
-  InvalidInputException([String? message]) : super(message, "Invalid Input: ");
+  InvalidInputException([String? message]) : super(message, "InvalidInput ");
 }
 
 class ApiKeyNotFound extends AppException {

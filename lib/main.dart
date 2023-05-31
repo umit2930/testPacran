@@ -5,7 +5,7 @@ import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.da
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
 import 'package:dobareh_bloc/presentation/auth/number_page.dart';
 import 'package:dobareh_bloc/presentation/home/home_page.dart';
-import 'package:dobareh_bloc/presentation/presentetion.dart';
+import 'package:dobareh_bloc/presentation/splash_page.dart';
 import 'package:dobareh_bloc/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
