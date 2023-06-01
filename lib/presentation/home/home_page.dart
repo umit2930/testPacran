@@ -36,11 +36,9 @@ class HomePage extends StatelessWidget {
                   FilledButton(
                       onPressed: () async {
                         //TODO don't use repository in presentation layer
-                        var authRepository = context.read<AuthRepository>();
+                            context.read<AuthRepository>().removeToken();
                         var authCubit = context.read<AuthenticationCubit>();
-                        await authRepository.saveToken("");
-                        await authRepository.getToken();
-                        authCubit.userChanged();
+                        authCubit.authRequested();
                       },
                       child: const Text("Logout")),
                 ],

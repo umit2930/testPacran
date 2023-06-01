@@ -94,7 +94,7 @@ class VerifyBody extends StatelessWidget {
               messageType: MessageType.error);
         } else if (state.verifyStatus == VerifyStatus.success) {
           ///AuthenticationCubit will do the navigation process.
-          context.read<AuthenticationCubit>().userChanged();
+          context.read<AuthenticationCubit>().authRequested();
         }
       },
       child: SafeArea(

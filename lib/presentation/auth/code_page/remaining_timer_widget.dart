@@ -50,7 +50,6 @@ class RemainingTimerWidget extends StatelessWidget {
                   case TimerStatus.inProgress:
                     return Row(
                       children: [
-                        //TODO add dynamic time
                         Text(
                           " کدی دریافت نشد؟ ${state.tiks}ثانیه تا ارسال مجدد ",
                           style:

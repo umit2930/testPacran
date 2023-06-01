@@ -1,5 +1,5 @@
 import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
-import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dart';
+import 'package:dobareh_bloc/data/data_provider/local/auth_shared_preferences.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/order/home_api_provider.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
@@ -17,24 +17,23 @@ import 'data/repository/home_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // var pref = AppSharedPreferences();
-  //TODO getToken() is set repository token key
-  var repository = AuthRepository(AuthApiProvider(), AppSharedPreferences());
-  await repository.getToken();
-  runApp(App(authRepository: repository));
+  var repository =
+      AuthRepository(AuthApiProvider(), await AuthSharedPreferences.getInstance());
+  Get.put(repository);
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
-  const App({Key? key, required this.authRepository}) : super(key: key);
-  final AuthRepository authRepository;
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: authRepository,
+      value: Get.find<AuthRepository>(),
       child: BlocProvider(
         create: (context) {
-          return AuthenticationCubit(authRepository: authRepository);
+          return AuthenticationCubit(
+              authRepository: Get.find<AuthRepository>());
         },
         child: ScreenUtilInit(
           useInheritedMediaQuery: true,
@@ -57,26 +56,27 @@ class App extends StatelessWidget {
               builder: (context, child) {
                 return BlocListener<AuthenticationCubit, AuthenticationState>(
                   listener: (context, state) {
-                    if (state.authenticationStatus ==
-                        AuthenticationStatus.authenticated) {
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    switch (state.authenticationStatus) {
+                      case AuthenticationStatus.initial:
+                        context.read<AuthenticationCubit>().authRequested();
+                        break;
+                      case AuthenticationStatus.authenticated:
                         Get.offAll(() => RepositoryProvider(
                               create: (context) => HomeRepository(
                                   HomeApiProvider(state.userToken)),
                               child: HomePage.router(),
                             ));
-                      });
-                    } else {
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        break;
+                      case AuthenticationStatus.unauthenticated:
                         Get.off(() => NumberPage.router());
-                      });
+                        break;
                     }
                   },
                   child: child,
                 );
               },
               onGenerateRoute: (_) => MaterialPageRoute<void>(builder: (_) {
-                context.read<AuthenticationCubit>().userChanged();
+                context.read<AuthenticationCubit>().authRequested();
                 return const SplashPage();
               }),
             );

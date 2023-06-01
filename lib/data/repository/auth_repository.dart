@@ -1,4 +1,4 @@
-import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dart';
+import 'package:dobareh_bloc/data/data_provider/local/auth_shared_preferences.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
 import 'package:dobareh_bloc/data/model/auth/login/verify_response.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
@@ -8,9 +8,9 @@ import '../model/auth/login/login_response.dart';
 
 class AuthRepository {
   final AuthApiProvider _apiProvider;
-  final AppSharedPreferences _appSharedPreferences;
+  final AuthSharedPreferences _appSharedPreferences;
 
-  String userToken = "";
+  // String userToken = "";
 
   AuthRepository(this._apiProvider, this._appSharedPreferences);
 
@@ -28,10 +28,13 @@ class AuthRepository {
     return await _appSharedPreferences.saveToken(token);
   }
 
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     var token = await _appSharedPreferences.getToken();
-    userToken = token;
-    Logger().w("get token $token");
     return token;
+  }
+
+  Future<bool> removeToken() async {
+    var isRemoved = await _appSharedPreferences.removeToken();
+    return isRemoved;
   }
 }
