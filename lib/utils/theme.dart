@@ -6,7 +6,7 @@ import 'colors.dart';
 class DobareTheme {
   static var theme = ThemeData(
     fontFamily: "Vazirmatn",
-    useMaterial3: true,
+    useMaterial3: false,
     // primarySwatch: green,
     // primaryColor: const Color.fromRGBO(99, 180, 80, 1),
 

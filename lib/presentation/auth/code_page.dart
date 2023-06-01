@@ -5,10 +5,10 @@ import 'package:dobareh_bloc/business_logic/auth/verify/verify_cubit.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
 import 'package:dobareh_bloc/presentation/auth/number_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
+import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -32,12 +32,49 @@ class CodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: VerifyForm());
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56.h),
+        child: const VerifyAppBar(),
+      ),
+      body: const VerifyBody(),
+    );
   }
 }
 
-class VerifyForm extends StatelessWidget {
-  const VerifyForm({Key? key}) : super(key: key);
+class VerifyAppBar extends StatelessWidget {
+  const VerifyAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    return SafeArea(
+      child: Container(
+        height: 66.h,
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+        child: Stack(alignment: Alignment.center, children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconAssistant.backIconButton(
+              () => Get.off(NumberPage.router()),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              "وارد کردن کد فعالسازی",
+              style: textTheme.bodyMedium
+                  ?.copyWith(color: natural1, fontWeight: FontWeight.w400),
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+class VerifyBody extends StatelessWidget {
+  const VerifyBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,34 +99,6 @@ class VerifyForm extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ///Appbar
-              Container(
-                height: 66.h,
-                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          // Get.off(NumberPage());
-                        },
-                        icon: SvgPicture.asset(
-                          "assets/icons/arrow_right.svg",
-                        ),
-                      ),
-                    ),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "وارد کردن کد فعالسازی",
-                          style: textTheme.bodyMedium?.copyWith(
-                              color: natural1, fontWeight: FontWeight.w400),
-                        ))
-                  ],
-                ),
-              ),
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 17.w),
@@ -136,9 +145,11 @@ class VerifyForm extends StatelessWidget {
               ),
 
               ///Timer
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: const RemainingTimerWidget()),
+              RepaintBoundary(
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: const RemainingTimerWidget()),
+              ),
 
               ///Verify button
               Padding(
@@ -205,10 +216,9 @@ class RemainingTimerWidget extends StatelessWidget {
               return const Center(child: LoadingWidget());
             case LoginStatus.failure:
               WidgetsBinding.instance.addPostFrameCallback((_) =>
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(
-                        content: Text(state.errorMessage.toString()))));
+                  context.showToast(
+                      message: state.errorMessage.toString(),
+                      messageType: MessageType.error));
 /*          case LoginStatus.success:
             timerCubit.startTimer(((context
                     .read<LoginCubit>()

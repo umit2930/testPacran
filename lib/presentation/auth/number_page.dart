@@ -24,23 +24,22 @@ class NumberPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(backgroundColor: Colors.white, body: LoginForm());
+    return const Scaffold(backgroundColor: Colors.white, body: LoginBody());
   }
 }
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class LoginBody extends StatelessWidget {
+  const LoginBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     var textTheme = Theme.of(context).textTheme;
 
     ///error handling
     return BlocListener<LoginCubit, LoginState>(
-    listenWhen: (oldStatus,newStatus){
-      return oldStatus.loginStatus != newStatus.loginStatus;
-    },
+      listenWhen: (oldStatus, newStatus) {
+        return oldStatus.loginStatus != newStatus.loginStatus;
+      },
       listener: (context, state) {
         if (state.loginStatus == LoginStatus.failure) {
           context.showToast(

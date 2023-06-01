@@ -37,7 +37,7 @@ class App extends StatelessWidget {
           return AuthenticationCubit(authRepository: authRepository);
         },
         child: ScreenUtilInit(
-          useInheritedMediaQuery: false,
+          useInheritedMediaQuery: true,
           minTextAdapt: true,
           designSize: const Size(360, 790),
           builder: (BuildContext context, Widget? child) {

@@ -23,6 +23,8 @@ class TimerCubit extends Cubit<TimerState> {
       if (event > 0) {
         emit(state.copyWith(tiks: event, timerStatus: TimerStatus.inProgress));
       } else {
+        _tickerSubscription?.cancel();
+
         emit(state.copyWith(timerStatus: TimerStatus.complete, tiks: 0));
       }
     });
