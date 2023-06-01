@@ -6,7 +6,8 @@ import 'package:equatable/equatable.dart';
 part 'timer_state.dart';
 
 class TimerCubit extends Cubit<TimerState> {
-  TimerCubit() : super(const TimerState(tiks: 0, timerStatus: TimerStatus.initial));
+  TimerCubit()
+      : super(const TimerState(tiks: 0, timerStatus: TimerStatus.initial));
 
   StreamSubscription<int>? _tickerSubscription;
 

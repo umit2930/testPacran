@@ -12,9 +12,7 @@ class HomeApiProvider {
     _dio.interceptors.add(CustomInterceptors());
   }
 
-
   Future<Response> getHome() async {
     return await _dio.get("home");
   }
-
 }

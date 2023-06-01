@@ -10,7 +10,7 @@ class AppSharedPreferences {
     return await prefs.setString(tokenKey, token);
   }
 
-  Future<String> getToken()async {
+  Future<String> getToken() async {
     prefs = await SharedPreferences.getInstance();
     var token = prefs.getString(tokenKey);
     return token ?? "";

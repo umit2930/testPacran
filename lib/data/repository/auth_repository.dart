@@ -15,10 +15,8 @@ class AuthRepository {
   AuthRepository(this._apiProvider, this._appSharedPreferences);
 
   Future<LoginResponse> login(String number) async {
-
     return await NetworkResponseToResult<LoginResponse>().generalNetworkResult(
         LoginResponse.fromJson, _apiProvider.login(number));
-
   }
 
   Future<VerifyResponse> verify(String number, String code) async {

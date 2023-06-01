@@ -3,7 +3,7 @@ import 'package:dobareh_bloc/data/data_provider/local/app_shared_preferences.dar
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/order/home_api_provider.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
-import 'package:dobareh_bloc/presentation/auth/number_page.dart';
+import 'package:dobareh_bloc/presentation/auth/number_page/number_page.dart';
 import 'package:dobareh_bloc/presentation/home/home_page.dart';
 import 'package:dobareh_bloc/presentation/splash_page.dart';
 import 'package:dobareh_bloc/utils/theme.dart';

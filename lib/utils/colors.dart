@@ -12,7 +12,6 @@ const Color error = Color.fromRGBO(222, 57, 57, 1);
 const Color success = Color.fromRGBO(9, 142, 9, 1);
 const Color warning = Color.fromRGBO(255, 193, 7, 1);
 
-
 const Color yellow = Color.fromRGBO(254, 223, 137, 1);
 
 const Color black = Color.fromRGBO(28, 27, 31, 1);
@@ -27,11 +26,7 @@ const Color natural8 = Color.fromRGBO(238, 238, 238, 1);
 const Color natural9 = Color.fromRGBO(250, 250, 250, 1);
 const Color white = Color.fromRGBO(255, 255, 255, 1);
 
-
 const Color background = Color.fromRGBO(244, 245, 247, 1);
-
-
-
 
 var boxDecoration = BoxDecoration(
   color: Colors.white,

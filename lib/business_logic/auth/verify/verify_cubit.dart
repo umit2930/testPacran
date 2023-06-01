@@ -23,7 +23,7 @@ class VerifyCubit extends Cubit<VerifyState> {
     emit(state.copyWith(code: code));
   }
 
-  void verify(String number, String code) async {
+  void verifySubmitted(String number, String code) async {
     try {
       emit(state.copyWith(verifyStatus: VerifyStatus.loading));
       VerifyResponse verifyResponse = await authRepository.verify(number, code);

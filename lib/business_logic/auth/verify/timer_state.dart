@@ -19,7 +19,7 @@ final class TimerState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [tiks,timerStatus];
+  List<Object?> get props => [tiks, timerStatus];
 /*
   const TimerState.initial(int duration)
       : this._(timerStatus: TimerStatus.initial, tiks: 0);

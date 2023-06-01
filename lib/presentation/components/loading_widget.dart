@@ -12,7 +12,8 @@ class LoadingWidget extends StatelessWidget {
       child: OverflowBox(
         minHeight: 125.h,
         maxHeight: 125.w,
-        child:  Lottie.asset("assets/anim/truck_loading.json",fit: BoxFit.cover),
+        child:
+            Lottie.asset("assets/anim/truck_loading.json", fit: BoxFit.cover),
       ),
     );
   }

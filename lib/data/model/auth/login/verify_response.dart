@@ -4,15 +4,17 @@
 
 class VerifyResponse {
   VerifyResponse({
-      this.token, 
-      this.user, 
-      this.status,});
+    this.token,
+    this.user,
+    this.status,
+  });
 
   VerifyResponse.fromJson(dynamic json) {
     token = json['token'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     status = json['status'];
   }
+
   String? token;
   User? user;
   num? status;
@@ -26,7 +28,6 @@ class VerifyResponse {
     map['status'] = status;
     return map;
   }
-
 }
 
 /// id : 19
@@ -51,25 +52,26 @@ class VerifyResponse {
 
 class User {
   User({
-      this.id, 
-      this.mobile, 
-      this.verifyCode, 
-      this.firstName, 
-      this.lastName, 
-      this.plateNumber, 
-      this.carName, 
-      this.carColor, 
-      this.nationalCode, 
-      this.landlineNumber, 
-      this.shabaNumber, 
-      this.email, 
-      this.verifyCodeExpire, 
-      this.verifyCodeResend, 
-      this.image, 
-      this.status, 
-      this.cityId, 
-      this.lastLocation, 
-      this.fullName,});
+    this.id,
+    this.mobile,
+    this.verifyCode,
+    this.firstName,
+    this.lastName,
+    this.plateNumber,
+    this.carName,
+    this.carColor,
+    this.nationalCode,
+    this.landlineNumber,
+    this.shabaNumber,
+    this.email,
+    this.verifyCodeExpire,
+    this.verifyCodeResend,
+    this.image,
+    this.status,
+    this.cityId,
+    this.lastLocation,
+    this.fullName,
+  });
 
   User.fromJson(dynamic json) {
     id = json['id'];
@@ -77,11 +79,15 @@ class User {
     verifyCode = json['verify_code'];
     firstName = json['first_name'];
     lastName = json['last_name'];
-    plateNumber = json['plate_number'] != null ? PlateNumber.fromJson(json['plate_number']) : null;
+    plateNumber = json['plate_number'] != null
+        ? PlateNumber.fromJson(json['plate_number'])
+        : null;
     carName = json['car_name'];
     carColor = json['car_color'];
     nationalCode = json['national_code'];
-    landlineNumber = json['landline_number'] != null ? LandlineNumber.fromJson(json['landline_number']) : null;
+    landlineNumber = json['landline_number'] != null
+        ? LandlineNumber.fromJson(json['landline_number'])
+        : null;
     shabaNumber = json['shaba_number'];
     email = json['email'];
     verifyCodeExpire = json['verify_code_expire'];
@@ -92,6 +98,7 @@ class User {
     lastLocation = json['last_location'];
     fullName = json['full_name'];
   }
+
   num? id;
   String? mobile;
   String? verifyCode;
@@ -139,7 +146,6 @@ class User {
     map['full_name'] = fullName;
     return map;
   }
-
 }
 
 /// code : "123"
@@ -147,13 +153,15 @@ class User {
 
 class LandlineNumber {
   LandlineNumber({
-      this.code, 
-      this.number,});
+    this.code,
+    this.number,
+  });
 
   LandlineNumber.fromJson(dynamic json) {
     code = json['code'];
     number = json['number'];
   }
+
   String? code;
   String? number;
 
@@ -163,7 +171,6 @@ class LandlineNumber {
     map['number'] = number;
     return map;
   }
-
 }
 
 /// first : "12"
@@ -173,10 +180,11 @@ class LandlineNumber {
 
 class PlateNumber {
   PlateNumber({
-      this.first, 
-      this.letter, 
-      this.second, 
-      this.state,});
+    this.first,
+    this.letter,
+    this.second,
+    this.state,
+  });
 
   PlateNumber.fromJson(dynamic json) {
     first = json['first'];
@@ -184,6 +192,7 @@ class PlateNumber {
     second = json['second'];
     state = json['state'];
   }
+
   String? first;
   String? letter;
   String? second;
@@ -197,5 +206,4 @@ class PlateNumber {
     map['state'] = state;
     return map;
   }
-
 }

@@ -49,17 +49,4 @@ class VerifyState extends Equatable {
         errorMessage,
         code
       ];
-/*  const VerifyState.initial(String initNumber, int initRemaining)
-      : this._(
-            verifyStatus: VerifyStatus.initial,
-            initNumber: initNumber,
-            initRemaining: initRemaining);
-
-  const VerifyState.loading() : this._(verifyStatus: VerifyStatus.loading);
-
-  const VerifyState.success(VerifyResponse verifyResponse)
-      : this._(
-            verifyStatus: VerifyStatus.success, verifyResponse: verifyResponse);
-  const VerifyState.failure(String errorMessage)
-      : this._(verifyStatus: VerifyStatus.failure, errorMessage: errorMessage);*/
 }

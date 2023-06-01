@@ -1,10 +1,12 @@
 class SuccessModel {
   SuccessModel({
-      this.status,});
+    this.status,
+  });
 
   SuccessModel.fromJson(dynamic json) {
     status = json['status'];
   }
+
   int? status;
 
   Map<String, dynamic> toJson() {
@@ -12,5 +14,4 @@ class SuccessModel {
     map['status'] = status;
     return map;
   }
-
 }

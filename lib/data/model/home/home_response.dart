@@ -8,13 +8,14 @@
 
 class HomeResponse {
   HomeResponse({
-      this.today, 
-      this.todayOrdersCount, 
-      this.todayDeliveredCount, 
-      this.times, 
-      this.orders, 
-      this.user, 
-      this.wayWarehouse,});
+    this.today,
+    this.todayOrdersCount,
+    this.todayDeliveredCount,
+    this.times,
+    this.orders,
+    this.user,
+    this.wayWarehouse,
+  });
 
   HomeResponse.fromJson(dynamic json) {
     today = json['today'] != null ? Today.fromJson(json['today']) : null;
@@ -30,6 +31,7 @@ class HomeResponse {
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     wayWarehouse = json['way_warehouse'];
   }
+
   Today? today;
   num? todayOrdersCount;
   num? todayDeliveredCount;
@@ -55,7 +57,6 @@ class HomeResponse {
     map['way_warehouse'] = wayWarehouse;
     return map;
   }
-
 }
 
 /// id : 19
@@ -80,25 +81,26 @@ class HomeResponse {
 
 class User {
   User({
-      this.id, 
-      this.mobile, 
-      this.verifyCode, 
-      this.firstName, 
-      this.lastName, 
-      this.plateNumber, 
-      this.carName, 
-      this.carColor, 
-      this.nationalCode, 
-      this.landlineNumber, 
-      this.shabaNumber, 
-      this.email, 
-      this.verifyCodeExpire, 
-      this.verifyCodeResend, 
-      this.image, 
-      this.status, 
-      this.cityId, 
-      this.lastLocation, 
-      this.fullName,});
+    this.id,
+    this.mobile,
+    this.verifyCode,
+    this.firstName,
+    this.lastName,
+    this.plateNumber,
+    this.carName,
+    this.carColor,
+    this.nationalCode,
+    this.landlineNumber,
+    this.shabaNumber,
+    this.email,
+    this.verifyCodeExpire,
+    this.verifyCodeResend,
+    this.image,
+    this.status,
+    this.cityId,
+    this.lastLocation,
+    this.fullName,
+  });
 
   User.fromJson(dynamic json) {
     id = json['id'];
@@ -106,11 +108,15 @@ class User {
     verifyCode = json['verify_code'];
     firstName = json['first_name'];
     lastName = json['last_name'];
-    plateNumber = json['plate_number'] != null ? PlateNumber.fromJson(json['plate_number']) : null;
+    plateNumber = json['plate_number'] != null
+        ? PlateNumber.fromJson(json['plate_number'])
+        : null;
     carName = json['car_name'];
     carColor = json['car_color'];
     nationalCode = json['national_code'];
-    landlineNumber = json['landline_number'] != null ? LandlineNumber.fromJson(json['landline_number']) : null;
+    landlineNumber = json['landline_number'] != null
+        ? LandlineNumber.fromJson(json['landline_number'])
+        : null;
     shabaNumber = json['shaba_number'];
     email = json['email'];
     verifyCodeExpire = json['verify_code_expire'];
@@ -121,6 +127,7 @@ class User {
     lastLocation = json['last_location'];
     fullName = json['full_name'];
   }
+
   num? id;
   String? mobile;
   String? verifyCode;
@@ -168,7 +175,6 @@ class User {
     map['full_name'] = fullName;
     return map;
   }
-
 }
 
 /// code : "123"
@@ -176,13 +182,15 @@ class User {
 
 class LandlineNumber {
   LandlineNumber({
-      this.code, 
-      this.number,});
+    this.code,
+    this.number,
+  });
 
   LandlineNumber.fromJson(dynamic json) {
     code = json['code'];
     number = json['number'];
   }
+
   String? code;
   String? number;
 
@@ -192,7 +200,6 @@ class LandlineNumber {
     map['number'] = number;
     return map;
   }
-
 }
 
 /// first : "12"
@@ -202,10 +209,11 @@ class LandlineNumber {
 
 class PlateNumber {
   PlateNumber({
-      this.first, 
-      this.letter, 
-      this.second, 
-      this.state,});
+    this.first,
+    this.letter,
+    this.second,
+    this.state,
+  });
 
   PlateNumber.fromJson(dynamic json) {
     first = json['first'];
@@ -213,6 +221,7 @@ class PlateNumber {
     second = json['second'];
     state = json['state'];
   }
+
   String? first;
   String? letter;
   String? second;
@@ -226,7 +235,6 @@ class PlateNumber {
     map['state'] = state;
     return map;
   }
-
 }
 
 /// id : 178
@@ -249,23 +257,24 @@ class PlateNumber {
 
 class Orders {
   Orders({
-      this.id, 
-      this.deliveryPersonNumber, 
-      this.deliveryPersonName, 
-      this.trackingCode, 
-      this.status, 
-      this.approxPrice, 
-      this.finalPrice, 
-      this.address, 
-      this.userId, 
-      this.deliveryDate, 
-      this.deliveryTime, 
-      this.warehouseDelivery, 
-      this.successDelivered, 
-      this.recalculateRequest, 
-      this.cityId, 
-      this.createdAt, 
-      this.updatedAt,});
+    this.id,
+    this.deliveryPersonNumber,
+    this.deliveryPersonName,
+    this.trackingCode,
+    this.status,
+    this.approxPrice,
+    this.finalPrice,
+    this.address,
+    this.userId,
+    this.deliveryDate,
+    this.deliveryTime,
+    this.warehouseDelivery,
+    this.successDelivered,
+    this.recalculateRequest,
+    this.cityId,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   Orders.fromJson(dynamic json) {
     id = json['id'];
@@ -275,10 +284,13 @@ class Orders {
     status = json['status'];
     approxPrice = json['approx_price'];
     finalPrice = json['final_price'];
-    address = json['address'] != null ? Address.fromJson(json['address']) : null;
+    address =
+        json['address'] != null ? Address.fromJson(json['address']) : null;
     userId = json['user_id'];
     deliveryDate = json['delivery_date'];
-    deliveryTime = json['delivery_time'] != null ? DeliveryTime.fromJson(json['delivery_time']) : null;
+    deliveryTime = json['delivery_time'] != null
+        ? DeliveryTime.fromJson(json['delivery_time'])
+        : null;
     warehouseDelivery = json['warehouse_delivery'];
     successDelivered = json['success_delivered'];
     recalculateRequest = json['recalculate_request'];
@@ -286,6 +298,7 @@ class Orders {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
+
   num? id;
   String? deliveryPersonNumber;
   String? deliveryPersonName;
@@ -329,7 +342,6 @@ class Orders {
     map['updated_at'] = updatedAt;
     return map;
   }
-
 }
 
 /// from : 11
@@ -337,13 +349,15 @@ class Orders {
 
 class DeliveryTime {
   DeliveryTime({
-      this.from, 
-      this.to,});
+    this.from,
+    this.to,
+  });
 
   DeliveryTime.fromJson(dynamic json) {
     from = json['from'];
     to = json['to'];
   }
+
   num? from;
   num? to;
 
@@ -353,7 +367,6 @@ class DeliveryTime {
     map['to'] = to;
     return map;
   }
-
 }
 
 /// address : "تبریز-ولیعصر- بالاتر از پرویس اعتصامی -نرسیده به برج بلور"
@@ -364,11 +377,12 @@ class DeliveryTime {
 
 class Address {
   Address({
-      this.address, 
-      this.plaque, 
-      this.unit, 
-      this.latitude, 
-      this.longitude,});
+    this.address,
+    this.plaque,
+    this.unit,
+    this.latitude,
+    this.longitude,
+  });
 
   Address.fromJson(dynamic json) {
     address = json['address'];
@@ -377,6 +391,7 @@ class Address {
     latitude = json['latitude'];
     longitude = json['longitude'];
   }
+
   String? address;
   String? plaque;
   String? unit;
@@ -392,7 +407,6 @@ class Address {
     map['longitude'] = longitude;
     return map;
   }
-
 }
 
 /// date : "1402-02-19"
@@ -402,10 +416,11 @@ class Address {
 
 class Today {
   Today({
-      this.date, 
-      this.persianDayOfWeek, 
-      this.dayOfMonthInJalali, 
-      this.persianMonth,});
+    this.date,
+    this.persianDayOfWeek,
+    this.dayOfMonthInJalali,
+    this.persianMonth,
+  });
 
   Today.fromJson(dynamic json) {
     date = json['date'];
@@ -413,6 +428,7 @@ class Today {
     dayOfMonthInJalali = json['day_of_month_in_jalali'];
     persianMonth = json['persian_month'];
   }
+
   String? date;
   String? persianDayOfWeek;
   String? dayOfMonthInJalali;
@@ -426,5 +442,4 @@ class Today {
     map['persian_month'] = persianMonth;
     return map;
   }
-
 }

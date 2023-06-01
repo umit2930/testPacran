@@ -1,15 +1,18 @@
 import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
-import 'package:dobareh_bloc/presentation/auth/code_page.dart';
+import 'package:dobareh_bloc/presentation/auth/code_page/verify_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../utils/colors.dart';
-import '../components/custom_filled_button.dart';
-import '../components/loading_widget.dart';
+import '../../../utils/colors.dart';
+import '../../components/custom_filled_button.dart';
+import '../../components/loading_widget.dart';
+
+part 'login_button.dart';
+part 'number_field_widget.dart';
 
 class NumberPage extends StatelessWidget {
   const NumberPage({Key? key}) : super(key: key);
@@ -47,7 +50,7 @@ class LoginBody extends StatelessWidget {
         } else if (state.loginStatus == LoginStatus.success) {
           var response = state.loginResponse!;
           // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          Get.off(CodePage.router(
+          Get.off(VerifyPage.router(
               initNumber: response.mobile ?? "0",
               initRemaining: response.remaining?.round() ?? 60));
           // });
@@ -88,7 +91,7 @@ class LoginBody extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 8.h),
-                        child: const NumberField(),
+                        child: const NumberFieldWidget(),
                       ),
                     ],
                   ),
@@ -102,81 +105,6 @@ class LoginBody extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class NumberField extends StatelessWidget {
-  const NumberField({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var controller = TextEditingController();
-
-    ///prevent inserting zero
-    controller.addListener(() {
-      if (controller.text == "0") {
-        controller.text = "";
-        controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: controller.text.length),
-        );
-      }
-    });
-    return SizedBox(
-        height: 48.h,
-        child: TextFormField(
-          maxLength: 10,
-          keyboardType: TextInputType.phone,
-          onChanged: (newValue) {
-            context.read<LoginCubit>().numberChanged(newValue);
-          },
-          controller: controller,
-          textDirection: TextDirection.ltr,
-          style: theme.textTheme.bodyMedium,
-          decoration: InputDecoration(
-              isDense: true,
-              counterText: "",
-              contentPadding: EdgeInsets.zero,
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: primary)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: natural7)),
-              suffixIcon: Container(
-                  margin: EdgeInsets.only(
-                      top: 1.h, left: 1.w, bottom: 1.h, right: 16.w),
-                  decoration: BoxDecoration(
-                      color: primaryTint3,
-                      borderRadius:
-                          BorderRadius.horizontal(left: Radius.circular(12.r))),
-                  alignment: Alignment.center,
-                  width: 57.w,
-                  height: 45.h,
-                  child: const Text("۹۸+"))),
-        ));
-  }
-}
-
-class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      builder: (BuildContext context, LoginState state) {
-        return (state.loginStatus == LoginStatus.loading)
-            ? const Center(child: LoadingWidget())
-            : CustomFilledButton(
-                onPressed: (state.number.length > 9)
-                    ? () {
-                        context.read<LoginCubit>().login("0${state.number}");
-                      }
-                    : null,
-                buttonChild: const Text("ارسال کد"),
-              );
-      },
     );
   }
 }

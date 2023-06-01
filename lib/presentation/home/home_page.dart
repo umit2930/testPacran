@@ -35,7 +35,6 @@ class HomePage extends StatelessWidget {
                   Text(state.homeResponse?.user?.firstName ?? "میهمان"),
                   FilledButton(
                       onPressed: () async {
-
                         //TODO don't use repository in presentation layer
                         var authRepository = context.read<AuthRepository>();
                         var authCubit = context.read<AuthenticationCubit>();

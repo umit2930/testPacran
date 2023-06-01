@@ -3,7 +3,7 @@ import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
 import 'package:dobareh_bloc/business_logic/auth/verify/timer_cubit.dart';
 import 'package:dobareh_bloc/business_logic/auth/verify/verify_cubit.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
-import 'package:dobareh_bloc/presentation/auth/number_page.dart';
+import 'package:dobareh_bloc/presentation/auth/number_page/number_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +12,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../utils/colors.dart';
-import '../components/custom_filled_button.dart';
-import '../components/loading_widget.dart';
+import '../../../utils/colors.dart';
+import '../../components/custom_filled_button.dart';
+import '../../components/loading_widget.dart';
 
-class CodePage extends StatelessWidget {
-  const CodePage({Key? key}) : super(key: key);
+part 'pin_code_widget.dart';
+part 'remaining_timer_widget.dart';
+part 'verify_button.dart';
+
+class VerifyPage extends StatelessWidget {
+  const VerifyPage({Key? key}) : super(key: key);
 
   static Widget router(
       {required String initNumber, required int initRemaining}) {
@@ -26,7 +30,7 @@ class CodePage extends StatelessWidget {
           authRepository: context.read<AuthRepository>(),
           initNumber: initNumber,
           initRemaining: initRemaining),
-      child: const CodePage(),
+      child: const VerifyPage(),
     );
   }
 
@@ -160,144 +164,6 @@ class VerifyBody extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class PinCodeWidget extends StatelessWidget {
-  const PinCodeWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-    return Directionality(
-        textDirection: TextDirection.ltr,
-        child: PinCodeTextField(
-            onChanged: (value) {
-              context.read<VerifyCubit>().codeChanged(value);
-            },
-            textStyle: textTheme.bodyLarge,
-            keyboardType: TextInputType.number,
-            mainAxisAlignment: MainAxisAlignment.center,
-            enableActiveFill: true,
-            pinTheme: PinTheme(
-                shape: PinCodeFieldShape.circle,
-                fieldHeight: 58.h,
-                fieldWidth: 58.h,
-                borderWidth: 1,
-                activeFillColor: natural8.withOpacity(0.4),
-                selectedFillColor: natural8.withOpacity(0.4),
-                inactiveFillColor: natural8.withOpacity(0.4),
-                activeColor: primary,
-                inactiveColor: natural7,
-                selectedColor: secondary,
-                fieldOuterPadding: EdgeInsets.all(5.h)),
-            appContext: context,
-            length: 5));
-  }
-}
-
-class RemainingTimerWidget extends StatelessWidget {
-  const RemainingTimerWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    late TimerCubit timerCubit;
-
-    var textTheme = Theme.of(context).textTheme;
-    return BlocProvider(
-      create: (context) =>
-          LoginCubit(authRepository: context.read<AuthRepository>()),
-      child: BlocBuilder<LoginCubit, LoginState>(
-        builder: (context, state) {
-          timerCubit = TimerCubit();
-          switch (state.loginStatus) {
-            case LoginStatus.loading:
-              return const Center(child: LoadingWidget());
-            case LoginStatus.failure:
-              WidgetsBinding.instance.addPostFrameCallback((_) =>
-                  context.showToast(
-                      message: state.errorMessage.toString(),
-                      messageType: MessageType.error));
-/*          case LoginStatus.success:
-            timerCubit.startTimer(((context
-                    .read<LoginCubit>()
-                    .state
-                    .loginResponse
-                    ?.remaining
-                    ?.round()) ??
-                context.read<VerifyCubit>().state.initRemaining));
-            break;*/
-            default:
-              break;
-          }
-          return BlocBuilder<TimerCubit, TimerState>(
-              bloc: timerCubit,
-              builder: (context, state) {
-                switch (state.timerStatus) {
-                  case TimerStatus.initial:
-                    timerCubit.startTimer(((context
-                            .read<LoginCubit>()
-                            .state
-                            .loginResponse
-                            ?.remaining
-                            ?.round()) ??
-                        context.read<VerifyCubit>().state.initRemaining));
-                    return const Center();
-                  case TimerStatus.inProgress:
-                    return Row(
-                      children: [
-                        //TODO add dynamic time
-                        Text(
-                          " کدی دریافت نشد؟ ${state.tiks}ثانیه تا ارسال مجدد ",
-                          style:
-                              textTheme.bodyMedium?.copyWith(color: natural5),
-                        )
-                      ],
-                    );
-                  case TimerStatus.complete:
-                    return Row(children: [
-                      Text(
-                        "کدی دریافت نشد؟",
-                        style: textTheme.bodyMedium?.copyWith(color: natural5),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            context.read<LoginCubit>().login(
-                                context.read<VerifyCubit>().state.initNumber);
-                          },
-                          child: const Text("ارسال مجدد"))
-                    ]);
-                }
-              });
-        },
-      ),
-    );
-  }
-}
-
-class VerifyButton extends StatelessWidget {
-  const VerifyButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<VerifyCubit, VerifyState>(
-      builder: (BuildContext context, VerifyState state) {
-        var isEnable = context.read<VerifyCubit>().state.code.length == 5;
-
-        return (state.verifyStatus == VerifyStatus.loading)
-            ? const Center(child: LoadingWidget())
-            : CustomFilledButton(
-                onPressed: isEnable
-                    ? () {
-                        context.read<VerifyCubit>().verify(
-                              context.read<VerifyCubit>().state.initNumber,
-                              context.read<VerifyCubit>().state.code,
-                            );
-                      }
-                    : null,
-                buttonChild: const Text("ارسال کد"));
-      },
     );
   }
 }

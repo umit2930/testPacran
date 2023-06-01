@@ -21,14 +21,4 @@ class AuthenticationState extends Equatable {
 
   @override
   List<Object?> get props => [userToken, authenticationStatus];
-
-/*
-  const AuthenticationState.authenticated(String token)
-      : this._(
-            authenticationStatus: AuthenticationStatus.authenticated,
-            userToken: token);
-
-  const AuthenticationState.unauthenticated()
-      : this._(authenticationStatus: AuthenticationStatus.unauthenticated);
-*/
 }

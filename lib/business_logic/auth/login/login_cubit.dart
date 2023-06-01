@@ -13,7 +13,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   AuthRepository authRepository;
 
-  void login(String number) async {
+  void loginSubmitted(String number) async {
     try {
       emit(state.copyWith(loginStatus: LoginStatus.loading));
 

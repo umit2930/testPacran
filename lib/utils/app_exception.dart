@@ -1,5 +1,4 @@
 class AppException implements Exception {
-
   final String? _message;
   final String? _prefix;
 
@@ -11,7 +10,6 @@ class AppException implements Exception {
   }
 }
 
-
 class FetchDataException extends AppException {
   FetchDataException([String? message])
       : super(message, "Error During Communication: ");
@@ -20,6 +18,7 @@ class FetchDataException extends AppException {
 class BadRequestException extends AppException {
   BadRequestException([message]) : super(message, "");
 }
+
 class ForbiddenException extends AppException {
   ForbiddenException([message]) : super(message, "");
 }
@@ -37,7 +36,8 @@ class ApiKeyNotFound extends AppException {
 }
 
 class UndefinedException extends AppException {
-  UndefinedException([String? message]) : super(message, "Undefined exception: ");
+  UndefinedException([String? message])
+      : super(message, "Undefined exception: ");
 }
 
 class NoInternetException extends AppException {

@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomFilledButton extends StatelessWidget {
   const CustomFilledButton(
-      {Key? key, required this.onPressed, required this.buttonChild,this.width})
+      {Key? key,
+      required this.onPressed,
+      required this.buttonChild,
+      this.width})
       : super(key: key);
 
   final Function()? onPressed;
@@ -23,7 +26,7 @@ class CustomFilledButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.r))),
         child: Padding(
-          padding:  EdgeInsets.symmetric(vertical: 16.h),
+          padding: EdgeInsets.symmetric(vertical: 16.h),
           child: buttonChild,
         ),
       ),

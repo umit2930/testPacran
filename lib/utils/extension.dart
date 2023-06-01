@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'colors.dart';
 
-enum MessageType { success, error, info , warning }
+enum MessageType { success, error, info, warning }
 
 extension ShowSnackbar on BuildContext {
   void showToast({required String? message, required MessageType messageType}) {
