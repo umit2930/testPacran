@@ -8,7 +8,8 @@ part 'authentication_state.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit({required this.authRepository})
       : super(const AuthenticationState(
-            authenticationStatus: AuthenticationStatus.initial));
+          authenticationStatus: AuthenticationStatus.initial,
+        ));
 
   AuthRepository authRepository;
 

@@ -4,9 +4,9 @@ enum AuthenticationStatus { initial, authenticated, unauthenticated }
 
 class AuthenticationState extends Equatable {
   const AuthenticationState(
-      {this.userToken = "", required this.authenticationStatus});
+      {this.userToken, required this.authenticationStatus});
 
-  final String userToken;
+  final String? userToken;
   final AuthenticationStatus authenticationStatus;
 
   AuthenticationState copyWith({

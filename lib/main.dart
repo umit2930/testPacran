@@ -61,9 +61,13 @@ class App extends StatelessWidget {
                         context.read<AuthenticationCubit>().authRequested();
                         break;
                       case AuthenticationStatus.authenticated:
+
+                        ///when authenticated, user token will not null
+                        //TODO change the logic to user token be not nullable?
+                        var userToken = state.userToken!;
                         Get.offAll(() => RepositoryProvider(
-                              create: (context) => HomeRepository(
-                                  HomeApiProvider(state.userToken)),
+                              create: (context) =>
+                                  HomeRepository(HomeApiProvider(userToken)),
                               child: HomePage.router(),
                             ));
                         break;
