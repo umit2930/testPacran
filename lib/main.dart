@@ -41,6 +41,7 @@ class App extends StatelessWidget {
           designSize: const Size(360, 790),
           builder: (BuildContext context, Widget? child) {
             return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
               // navigatorKey: _navigatorKey,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
@@ -62,14 +63,14 @@ class App extends StatelessWidget {
                         break;
                       case AuthenticationStatus.authenticated:
 
-                        ///when authenticated, user token will not null
-                        //TODO change the logic to user token be not nullable?
+                      ///when authenticated, user token will not null
+                      //TODO change the logic to user token be not nullable?
                         var userToken = state.userToken!;
                         Get.offAll(() => RepositoryProvider(
-                              create: (context) =>
-                                  HomeRepository(HomeApiProvider(userToken)),
-                              child: HomePage.router(),
-                            ));
+                          create: (context) =>
+                              HomeRepository(HomeApiProvider(userToken)),
+                          child: HomePage.router(),
+                        ));
                         break;
                       case AuthenticationStatus.unauthenticated:
                         Get.off(() => NumberPage.router());
