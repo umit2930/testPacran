@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dobareh_bloc/data/model/home/home_response.dart';
 import 'package:dobareh_bloc/data/repository/home_repository.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
-import 'package:logger/logger.dart';
 
 import '../../utils/enums.dart';
 
@@ -17,8 +16,6 @@ class HomeCubit extends Cubit<HomeState> {
   HomeRepository homeRepository;
 
   void timePackSelected(selectedTimePackID) {
-    Logger().w(
-        "emmited $selectedTimePackID --- times:${state.timePacks.toString()}");
     emit(state.copyWith(selectedTimePackID: selectedTimePackID));
   }
 
@@ -30,8 +27,8 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(
           homeStatus: HomeStatus.success,
           homeResponse: response,
-          timePacks: extractTimePacks(response)));
-      Logger().w("success --- times:${state.timePacks?.values.toString()}");
+          timePacks: extractTimePacks(response),
+          inProgressOrder: getInProgressOrder(response)));
     } on AppException catch (appException) {
       emit(state.copyWith(
           homeStatus: HomeStatus.failure,
@@ -41,6 +38,8 @@ class HomeCubit extends Cubit<HomeState> {
           homeStatus: HomeStatus.failure, errorMessage: e.toString()));
     }
   }
+
+
 
   Map<DeliveryTime, List<Orders>> extractTimePacks(HomeResponse? model) {
     // inProgressOrder =null;
@@ -61,24 +60,26 @@ class HomeCubit extends Cubit<HomeState> {
               time.to == order.deliveryTime!.to) {
             timePacks[time]?.add(order);
 
-            if (order.status == OrderStatus.on_way.value ||
-                order.status == OrderStatus.in_location.value ||
-                order.status == OrderStatus.check_factor.value) {
+            if (order.status == OrderStatus.onWay.value ||
+                order.status == OrderStatus.inLocation.value ||
+                order.status == OrderStatus.checkFactor.value) {
               // inProgressOrder = order;
             }
           }
         }
       }
-
-      ///Remove times that are empty
-      /*for (int i = 0; i < timePacks.length; i++) {
-                          var key = timePacks.keys.elementAt(i);
-                          var value = timePacks.values.elementAt(i);
-                          if (value.isEmpty) {
-                            timePacks.remove(key);
-                          }
-                        }*/
     }
     return timePacks;
+  }
+
+  Orders? getInProgressOrder(HomeResponse? model) {
+    for (var order in model!.orders!) {
+      if (order.status == OrderStatus.onWay.value ||
+          order.status == OrderStatus.inLocation.value ||
+          order.status == OrderStatus.checkFactor.value) {
+        return order;
+      }
+    }
+    return null;
   }
 }

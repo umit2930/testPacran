@@ -37,14 +37,4 @@ class HomeState {
       selectedTimePackID: selectedTimePackID ?? this.selectedTimePackID,
     );
   }
-/*
-  const HomeState.initial() : this._(homeStatus: HomeStatus.initial);
-
-  const HomeState.loading() : this._(homeStatus: HomeStatus.loading);
-
-  const HomeState.success(HomeResponse homeResponse)
-      : this._(homeStatus: HomeStatus.success, homeResponse: homeResponse);
-
-  const HomeState.failure(String message)
-      : this._(homeStatus: HomeStatus.failure, errorMessage: message);*/
 }

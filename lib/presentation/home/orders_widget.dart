@@ -8,16 +8,11 @@ import '../../data/model/home/home_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/enums.dart';
 import '../../utils/extension.dart';
-import 'home_order_item.dart';
+import 'order_item.dart';
 
-class HomeOrdersWidget extends StatefulWidget {
+class HomeOrdersWidget extends StatelessWidget {
   const HomeOrdersWidget({Key? key}) : super(key: key);
 
-  @override
-  State<HomeOrdersWidget> createState() => _HomeOrdersWidgetState();
-}
-
-class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -60,96 +55,42 @@ class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
             decoration: boxDecoration,
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (BuildContext context, state) {
-                var selectedID = state.selectedTimePackID;
-                Map<DeliveryTime, List<Orders>> timePacks = state.timePacks!;
+              return Column(
+                children: [
+                  ///Choice chips
+                  getChoiceChips(context),
 
-                var selectedTimePack = timePacks.values.elementAt(selectedID);
-                var selectedTimePackDelivery =
-                    timePacks.keys.elementAt(selectedID);
-                List<Widget> choicesPacks = [];
-
-                timePacks.forEach((key, value) {
-                  // if (value.isNotEmpty) {
-                  choicesPacks.add(
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: "${key.from} الی ${key.to}",
-                            style: textTheme.titleSmall),
-                        TextSpan(
-                            text: " ( ${value.length} مسیر)",
-                            style: textTheme.bodySmall),
-                      ]),
-                    ),
-                  );
-                  // }
-                });
-
-                return Column(
-                  children: [
-                    SingleChildScrollView(
-                        padding: EdgeInsets.only(
-                            top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
-                        scrollDirection: Axis.horizontal,
-                        child: Wrap(
-                            spacing: 8.w,
-                            children: List.generate(
-                              choicesPacks.length,
-                              (index) {
-                                bool isSelected = (selectedID == index);
-                                return ChoiceChip(
-                                  labelPadding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(12.sp)),
-                                  label: Container(
-                                    alignment: Alignment.center,
-                                    // width: 133.w,
-                                    // height: 42.h,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 8.h, horizontal: 14.w),
-                                    child: ColorFiltered(
-                                        colorFilter: ColorFilter.mode(
-                                            (isSelected ? white : black),
-                                            BlendMode.srcATop),
-                                        child: choicesPacks[index]),
-                                  ),
-
-                                  // selected: cryptoProvider.selectedIndex == index,
-                                  selectedColor: black,
-                                  backgroundColor: Colors.transparent,
-                                  selected: isSelected,
-                                  onSelected: (bool selected) {
-                                    context
-                                        .read<HomeCubit>()
-                                        .timePackSelected(index);
-                                    // homeViewModel.selectItem(index);
-                                  },
-                                );
-                              },
-                            ))),
-
-                    ///Orders list
-                    getItemsListWidget(
-                        selectedTimePack, textTheme, selectedTimePackDelivery),
-                  ],
-                );
-              },
-            )),
+                  ///Orders list
+                  getItemsListWidget(context),
+                ],
+              );
+            },
+          ),
+        ),
       ],
     );
   }
 
-  Widget getItemsListWidget(List<Orders> selectedTimePack, TextTheme textTheme,
-      DeliveryTime deliveryTime) {
+  Widget getItemsListWidget(BuildContext context) {
+    var homeCubit = context.read<HomeCubit>();
+    var textTheme = Theme.of(context).textTheme;
+
+    var inProgressOrder = homeCubit.state.inProgressOrder;
+
+    var selectedTimeID = homeCubit.state.selectedTimePackID;
+    Map<DeliveryTime, List<Orders>> timePacks = homeCubit.state.timePacks!;
+
+    var selectedTimePack = timePacks.values.elementAt(selectedTimeID);
+
+    var selectedDeliveryTime = timePacks.keys.elementAt(selectedTimeID);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-/*
         ///In process item
-        if (homeViewModel.inProgressOrder != null &&
-            homeViewModel.inProgressOrder?.deliveryTime?.from ==
-                deliveryTime.from) ...[
+        if (inProgressOrder != null &&
+            inProgressOrder.deliveryTime?.from ==
+                selectedDeliveryTime.from) ...[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: Column(
@@ -159,26 +100,21 @@ class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
                 HomeOrderItem(
                   isActive: true,
                   backgroundColor: secondaryTint2,
-                  personName:
-                  homeViewModel.inProgressOrder?.deliveryPersonName ??
+                  personName: inProgressOrder.deliveryPersonName ??
                       "نام و نام خانوادگی",
-                  address:
-                  homeViewModel.inProgressOrder?.address?.address ?? "آدرس",
+                  address: inProgressOrder.address?.address ?? "آدرس",
                   onPressed: () {
-                    */
-/* Get.to(
+/*                    Get.to(
                       SellePage(
                         orderID: homeViewModel.inProgressOrder!.id!.round(),
                       ),
-                    );*/ /*
-
+                    );*/
                   },
                 )
               ],
             ),
           )
         ],
-*/
 
         ///waiting items
         if (selectedTimePack
@@ -207,23 +143,20 @@ class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
                       .where((element) =>
                           element.status == OrderStatus.waiting.value)
                       .elementAt(index);
-// return Text("hello");
                   return HomeOrderItem(
                       isActive: false,
                       personName: item.deliveryPersonName!,
                       address: item.address!.address!,
-                      onPressed:
-                          /*  homeViewModel.inProgressOrder == null
+                      onPressed: inProgressOrder == null
                           ? () {
-                        // Get.to(SellePage(orderID: item.id!.toInt()));
-                      }
-                          :*/
-                          () {
-                        context.showToast(
-                          message: "شما یک سفارش در حال پردازش دارید!",
-                          messageType: MessageType.warning,
-                        );
-                      });
+                              // Get.to(SellePage(orderID: item.id!.toInt()));
+                            }
+                          : () {
+                              context.showToast(
+                                message: "شما یک سفارش در حال پردازش دارید!",
+                                messageType: MessageType.warning,
+                              );
+                            });
                 },
                 itemCount: selectedTimePack
                     .where((element) =>
@@ -250,10 +183,10 @@ class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-              )
+              ),
             ]),
           )
-        ],
+        ]
 
         /* ///padding
         if (selectedTimePack
@@ -265,6 +198,65 @@ class _HomeOrdersWidgetState extends State<HomeOrdersWidget> {
           )
         ],*/
       ],
+    );
+  }
+
+  Widget getChoiceChips(BuildContext context) {
+    var homeCubit = context.read<HomeCubit>();
+    var textTheme = Theme.of(context).textTheme;
+
+    var selectedID = homeCubit.state.selectedTimePackID;
+    Map<DeliveryTime, List<Orders>> timePacks = homeCubit.state.timePacks!;
+
+    List<Widget> choicesPacks = [];
+
+    timePacks.forEach((key, value) {
+      choicesPacks.add(
+        RichText(
+          text: TextSpan(children: [
+            TextSpan(
+                text: "${key.from} الی ${key.to}", style: textTheme.titleSmall),
+            TextSpan(
+                text: " ( ${value.length} مسیر)", style: textTheme.bodySmall),
+          ]),
+        ),
+      );
+    });
+
+    return SingleChildScrollView(
+      padding:
+          EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
+      scrollDirection: Axis.horizontal,
+      child: Wrap(
+        spacing: 8.w,
+        children: List.generate(
+          choicesPacks.length,
+          (index) {
+            bool isSelected = (selectedID == index);
+            return ChoiceChip(
+              labelPadding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.sp)),
+              label: Container(
+                alignment: Alignment.center,
+                // width: 133.w,
+                // height: 42.h,
+                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
+                child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        (isSelected ? white : black), BlendMode.srcATop),
+                    child: choicesPacks[index]),
+              ),
+              selectedColor: black,
+              backgroundColor: Colors.transparent,
+              selected: isSelected,
+              onSelected: (bool selected) {
+                homeCubit.timePackSelected(index);
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

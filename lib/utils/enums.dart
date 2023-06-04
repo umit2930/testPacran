@@ -1,11 +1,11 @@
 enum OrderStatus {
   waiting("waiting"),
-  on_way("on_way"),
-  in_location("in_location"),
+  onWay("on_way"),
+  inLocation("in_location"),
   rejected("rejected"),
 
   //TODO must don't show in home
-  check_factor("check_factor"),
+  checkFactor("check_factor"),
   delivered("delivered");
 
   const OrderStatus(this.value);
@@ -18,9 +18,9 @@ enum OrderStatus {
 }
 
 enum OrderStatusChangeReason {
-  user_not_present("user_not_present"),
+  userNotPresent("user_not_present"),
   disagreement("disagreement"),
-  problem_in_way("problem_in_way");
+  problemInWay("problem_in_way");
 
   const OrderStatusChangeReason(this.value);
 
@@ -32,12 +32,3 @@ enum OrderStatusChangeReason {
 }
 
 enum DeliveredType { delivered, canceled, all }
-
-/*
-enum ProfileKey{
-  first_name,
-  last_name,
-  national_code,
-  shaba_number,
-}
-*/

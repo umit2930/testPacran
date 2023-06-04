@@ -2,7 +2,6 @@ import 'package:dobareh_bloc/data/data_provider/local/auth_shared_preferences.da
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
 import 'package:dobareh_bloc/data/model/auth/login/verify_response.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
-import 'package:logger/logger.dart';
 
 import '../model/auth/login/login_response.dart';
 

@@ -9,14 +9,14 @@ Widget getFailureWidget(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Lottie.asset("assets/anim/failure.json", repeat: false),
-        Text(errorMessage ?? "مشکلی روی داده است."),
-        Padding(
-          padding: EdgeInsets.only(top: 32.h),
-          child: CustomFilledButton(
-              onPressed: onRetryPressed, buttonChild: const Text("تلاش مجدد")),
-        )
-      ],
-    ),
+      Lottie.asset("assets/anim/failure.json",
+          repeat: false, width: 100.r, height: 250.r),
+      Text(errorMessage ?? "مشکلی روی داده است."),
+      Padding(
+        padding: EdgeInsets.only(top: 32.h),
+        child: CustomFilledButton(
+            onPressed: onRetryPressed, buttonChild: const Text("تلاش مجدد")),
+      )
+    ]),
   );
 }

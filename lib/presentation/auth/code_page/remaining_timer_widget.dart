@@ -22,15 +22,6 @@ class RemainingTimerWidget extends StatelessWidget {
                   context.showToast(
                       message: state.errorMessage.toString(),
                       messageType: MessageType.error));
-/*          case LoginStatus.success:
-            timerCubit.startTimer(((context
-                    .read<LoginCubit>()
-                    .state
-                    .loginResponse
-                    ?.remaining
-                    ?.round()) ??
-                context.read<VerifyCubit>().state.initRemaining));
-            break;*/
             default:
               break;
           }

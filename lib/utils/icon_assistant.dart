@@ -10,6 +10,15 @@ class IconAssistant {
         "assets/icons/arrow_right.svg",
       ),
     );
+
+  }  static Widget forwardIconButton(Function()? onPressed) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      onPressed: onPressed,
+      icon: SvgPicture.asset(
+        "assets/icons/arrow_left.svg",
+      ),
+    );
   }
 
   static Widget menuIconButton(Function() onPressed) {
