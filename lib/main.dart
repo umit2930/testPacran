@@ -17,6 +17,7 @@ import 'data/repository/home_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.portraitUp]);
   var repository =
       AuthRepository(AuthApiProvider(), await AuthSharedPreferences.getInstance());
   Get.put(repository);
@@ -73,6 +74,7 @@ class App extends StatelessWidget {
                         ));
                         break;
                       case AuthenticationStatus.unauthenticated:
+                      //TODO change to offALl.
                         Get.off(() => NumberPage.router());
                         break;
                     }

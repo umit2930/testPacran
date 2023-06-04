@@ -21,4 +21,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
             ? AuthenticationStatus.authenticated
             : AuthenticationStatus.unauthenticated));
   }
+
+  void logoutRequested() async {
+    await authRepository.removeToken();
+    var userToken = await authRepository.getToken();
+    emit(state.copyWith(
+        userToken: userToken,
+        authenticationStatus: userToken != null
+            ? AuthenticationStatus.authenticated
+            : AuthenticationStatus.unauthenticated));
+  }
 }

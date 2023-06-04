@@ -2,6 +2,7 @@ import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
 import 'package:dobareh_bloc/data/repository/home_repository.dart';
 import 'package:dobareh_bloc/presentation/components/loading_widget.dart';
 import 'package:dobareh_bloc/presentation/home/map_widget.dart';
+import 'package:dobareh_bloc/presentation/home/menu/menu_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class HomePage extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(66.h), child: const HomeAppbar()),
       body: const HomeBody(),
+      drawer: const MenuPage(),
     );
   }
 }
@@ -49,9 +51,9 @@ class HomeAppbar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconAssistant.menuIconButton(() => () {
-                  Scaffold.of(context).openDrawer();
-                }),
+            IconAssistant.menuIconButton(() {
+              Scaffold.of(context).openDrawer();
+            }),
             SvgPicture.asset("assets/icons/logo.svg"),
             IconAssistant.notificationIconButton(() {}),
           ],

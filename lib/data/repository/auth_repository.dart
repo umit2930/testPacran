@@ -9,7 +9,6 @@ class AuthRepository {
   final AuthApiProvider _apiProvider;
   final AuthSharedPreferences _appSharedPreferences;
 
-  // String userToken = "";
 
   AuthRepository(this._apiProvider, this._appSharedPreferences);
 
