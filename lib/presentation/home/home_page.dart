@@ -1,8 +1,8 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
 import 'package:dobareh_bloc/data/repository/home_repository.dart';
 import 'package:dobareh_bloc/presentation/components/loading_widget.dart';
-import 'package:dobareh_bloc/presentation/home/map_widget.dart';
 import 'package:dobareh_bloc/presentation/home/menu/menu_page.dart';
+import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,10 +11,13 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../data/model/home/home_response.dart';
 import '../../utils/colors.dart';
+import '../../utils/enums.dart';
 import '../components/retry_widget.dart';
-import 'orders_widget.dart';
+import 'map_widget.dart';
+import 'order_item.dart';
 
 part 'summery_widget.dart';
+part 'orders_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

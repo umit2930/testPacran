@@ -64,6 +64,8 @@ dependencies:
   google_maps_flutter: ^2.2.6
   geolocator: ^9.0.2
 
+  dartdoc: ^6.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

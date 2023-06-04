@@ -1,14 +1,4 @@
-import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../data/model/home/home_response.dart';
-import '../../utils/colors.dart';
-import '../../utils/enums.dart';
-import '../../utils/extension.dart';
-import 'order_item.dart';
+part of 'home_page.dart';
 
 class HomeOrdersWidget extends StatelessWidget {
   const HomeOrdersWidget({Key? key}) : super(key: key);
@@ -55,13 +45,13 @@ class HomeOrdersWidget extends StatelessWidget {
             decoration: boxDecoration,
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (BuildContext context, state) {
-              return Column(
+              return const Column(
                 children: [
                   ///Choice chips
-                  getChoiceChips(context),
+                  ChoiceChipsWidget(),
 
                   ///Orders list
-                  getItemsListWidget(context),
+                  OrdersListWidget()
                 ],
               );
             },
@@ -70,8 +60,81 @@ class HomeOrdersWidget extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget getItemsListWidget(BuildContext context) {
+class ChoiceChipsWidget extends StatelessWidget {
+  const ChoiceChipsWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    {
+      var homeCubit = context.read<HomeCubit>();
+      var textTheme = Theme.of(context).textTheme;
+
+      var selectedID = homeCubit.state.selectedTimePackID;
+      Map<DeliveryTime, List<Orders>> timePacks = homeCubit.state.timePacks!;
+
+      List<Widget> choicesPacks = [];
+
+      timePacks.forEach((key, value) {
+        choicesPacks.add(
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                  text: "${key.from} الی ${key.to}",
+                  style: textTheme.titleSmall),
+              TextSpan(
+                  text: " ( ${value.length} مسیر)", style: textTheme.bodySmall),
+            ]),
+          ),
+        );
+      });
+
+      return SingleChildScrollView(
+        padding:
+            EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+          spacing: 8.w,
+          children: List.generate(
+            choicesPacks.length,
+            (index) {
+              bool isSelected = (selectedID == index);
+              return ChoiceChip(
+                labelPadding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.sp)),
+                label: Container(
+                  alignment: Alignment.center,
+                  // width: 133.w,
+                  // height: 42.h,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
+                  child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                          (isSelected ? white : black), BlendMode.srcATop),
+                      child: choicesPacks[index]),
+                ),
+                selectedColor: black,
+                backgroundColor: Colors.transparent,
+                selected: isSelected,
+                onSelected: (bool selected) {
+                  homeCubit.timePackSelected(index);
+                },
+              );
+            },
+          ),
+        ),
+      );
+    }
+  }
+}
+
+class OrdersListWidget extends StatelessWidget {
+  const OrdersListWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     var homeCubit = context.read<HomeCubit>();
     var textTheme = Theme.of(context).textTheme;
 
@@ -198,65 +261,6 @@ class HomeOrdersWidget extends StatelessWidget {
           )
         ],*/
       ],
-    );
-  }
-
-  Widget getChoiceChips(BuildContext context) {
-    var homeCubit = context.read<HomeCubit>();
-    var textTheme = Theme.of(context).textTheme;
-
-    var selectedID = homeCubit.state.selectedTimePackID;
-    Map<DeliveryTime, List<Orders>> timePacks = homeCubit.state.timePacks!;
-
-    List<Widget> choicesPacks = [];
-
-    timePacks.forEach((key, value) {
-      choicesPacks.add(
-        RichText(
-          text: TextSpan(children: [
-            TextSpan(
-                text: "${key.from} الی ${key.to}", style: textTheme.titleSmall),
-            TextSpan(
-                text: " ( ${value.length} مسیر)", style: textTheme.bodySmall),
-          ]),
-        ),
-      );
-    });
-
-    return SingleChildScrollView(
-      padding:
-          EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
-      scrollDirection: Axis.horizontal,
-      child: Wrap(
-        spacing: 8.w,
-        children: List.generate(
-          choicesPacks.length,
-          (index) {
-            bool isSelected = (selectedID == index);
-            return ChoiceChip(
-              labelPadding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.sp)),
-              label: Container(
-                alignment: Alignment.center,
-                // width: 133.w,
-                // height: 42.h,
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
-                child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                        (isSelected ? white : black), BlendMode.srcATop),
-                    child: choicesPacks[index]),
-              ),
-              selectedColor: black,
-              backgroundColor: Colors.transparent,
-              selected: isSelected,
-              onSelected: (bool selected) {
-                homeCubit.timePackSelected(index);
-              },
-            );
-          },
-        ),
-      ),
     );
   }
 }

@@ -11,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:logger/logger.dart';
 
 import '../../data/model/home/home_response.dart';
 import '../../utils/colors.dart';
@@ -20,28 +19,13 @@ import '../../utils/location_geolocator.dart';
 class OpenStreetMapWidget extends StatelessWidget {
   const OpenStreetMapWidget({Key? key}) : super(key: key);
 
-  // LatLngBounds? bounds;
-  // List<Marker> markers = [];
-  //  final Position currentLocations;
-
-  // List<Orders>? orders;
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (BuildContext context, state) {
-        Logger().w("bloc builder");
-        // bounds = null;
-        // markers = [];
-
-        // orders = null;
-
         var selectedTimePack = state.selectedTimePackID;
-
         var delivery = state.timePacks!.keys.elementAt(selectedTimePack);
-
         var orders = state.timePacks!.values.elementAt(selectedTimePack);
-
         var textTheme = Theme.of(context).textTheme;
 
         //TODO find a way to don't use ! operator.
@@ -136,22 +120,13 @@ class OpenStreetMapWidget extends StatelessWidget {
     );
   }
 
-/*  Future<bool> initValues() async {
-    await createMarkers();
-    // await createBounds(markers);
-    return true;
-  }*/
-
   Future<List<Marker>> createMarkers(
       List<Orders> orders, Position currentLocations) async {
-    // var myLocation = await LocationService().getLocation();
     List<Marker> markers = [];
-    // var currentLocations = await determinePosition();
     markers.add(Marker(
         rotate: true,
         width: 32.w,
         height: 32.h,
-        // point: LatLng(myLocation.latitude ??0, myLocation.longitude ??0),
         point: LatLng(currentLocations.latitude, currentLocations.longitude),
         builder: (context) {
           return SvgPicture.asset("assets/icons/my_location.svg");
