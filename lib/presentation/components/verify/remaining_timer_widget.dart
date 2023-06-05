@@ -1,4 +1,12 @@
-part of 'verify_page.dart';
+import 'package:dobareh_bloc/utils/extension.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../business_logic/login/login_cubit.dart';
+import '../../../business_logic/timer/timer_cubit.dart';
+import '../../../business_logic/verify/verify_cubit.dart';
+import '../../../utils/colors.dart';
+import '../general/loading_widget.dart';
 
 class RemainingTimerWidget extends StatelessWidget {
   const RemainingTimerWidget({Key? key}) : super(key: key);
@@ -9,8 +17,7 @@ class RemainingTimerWidget extends StatelessWidget {
 
     var textTheme = Theme.of(context).textTheme;
     return BlocProvider(
-      create: (context) =>
-          LoginCubit(authRepository: context.read<AuthRepository>()),
+      create: (context) => LoginCubit(),
       child: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
           timerCubit = TimerCubit();

@@ -1,7 +1,12 @@
-part of 'verify_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class VerifyButton extends StatelessWidget {
-  const VerifyButton({Key? key}) : super(key: key);
+import '../../../business_logic/verify/verify_cubit.dart';
+import '../general/custom_filled_button.dart';
+import '../general/loading_widget.dart';
+
+class VerifyButtonWidget extends StatelessWidget {
+  const VerifyButtonWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

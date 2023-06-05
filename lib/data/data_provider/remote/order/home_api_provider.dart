@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:dobareh_bloc/utils/dependency_injection.dart';
+import 'package:get/instance_manager.dart';
 
 import '../../../../utils/strings.dart';
 import '../interceptor.dart';
@@ -6,8 +8,10 @@ import '../interceptor.dart';
 class HomeApiProvider {
   final Dio _dio = Dio();
 
-  HomeApiProvider(String token) {
-    _dio.options.headers["Authorization"] = "Bearer $token";
+  final String userToken;
+
+  HomeApiProvider() : userToken = Get.find(tag: userTokenTag) {
+    _dio.options.headers["Authorization"] = "Bearer $userToken";
     _dio.options.baseUrl = apiBaseURL;
     _dio.interceptors.add(CustomInterceptors());
   }

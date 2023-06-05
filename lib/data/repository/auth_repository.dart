@@ -1,16 +1,18 @@
 import 'package:dobareh_bloc/data/data_provider/local/auth_shared_preferences.dart';
 import 'package:dobareh_bloc/data/data_provider/remote/auth/auth_api_provider.dart';
-import 'package:dobareh_bloc/data/model/auth/login/verify_response.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
+import 'package:get/get.dart';
 
-import '../model/auth/login/login_response.dart';
+import '../model/auth/login_response.dart';
+import '../model/auth/verify_response.dart';
 
 class AuthRepository {
   final AuthApiProvider _apiProvider;
   final AuthSharedPreferences _appSharedPreferences;
 
-
-  AuthRepository(this._apiProvider, this._appSharedPreferences);
+  AuthRepository()
+      : _apiProvider = Get.find(),
+        _appSharedPreferences = Get.find();
 
   Future<LoginResponse> login(String number) async {
     return await NetworkResponseToResult<LoginResponse>().generalNetworkResult(

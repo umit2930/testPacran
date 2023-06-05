@@ -1,4 +1,9 @@
-part of 'number_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../utils/colors.dart';
+import '../../../business_logic/login/login_cubit.dart';
 
 class NumberFieldWidget extends StatelessWidget {
   const NumberFieldWidget({Key? key}) : super(key: key);

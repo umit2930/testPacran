@@ -1,24 +1,17 @@
-import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
-import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
-import 'package:dobareh_bloc/business_logic/auth/verify/timer_cubit.dart';
-import 'package:dobareh_bloc/business_logic/auth/verify/verify_cubit.dart';
-import 'package:dobareh_bloc/data/repository/auth_repository.dart';
-import 'package:dobareh_bloc/presentation/auth/number_page/number_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../utils/colors.dart';
-import '../../components/custom_filled_button.dart';
-import '../../components/loading_widget.dart';
-
-part 'pin_code_widget.dart';
-part 'remaining_timer_widget.dart';
-part 'verify_button.dart';
+import '../../business_logic/auth/authentication_cubit.dart';
+import '../../business_logic/verify/verify_cubit.dart';
+import '../../utils/colors.dart';
+import '../components/verify/pin_code_widget.dart';
+import '../components/verify/remaining_timer_widget.dart';
+import '../components/verify/verify_button_widget.dart';
+import 'number_page.dart';
 
 class VerifyPage extends StatelessWidget {
   const VerifyPage({Key? key}) : super(key: key);
@@ -26,10 +19,8 @@ class VerifyPage extends StatelessWidget {
   static Widget router(
       {required String initNumber, required int initRemaining}) {
     return BlocProvider(
-      create: (context) => VerifyCubit(
-          authRepository: context.read<AuthRepository>(),
-          initNumber: initNumber,
-          initRemaining: initRemaining),
+      create: (context) =>
+          VerifyCubit(initNumber: initNumber, initRemaining: initRemaining),
       child: const VerifyPage(),
     );
   }
@@ -159,7 +150,7 @@ class VerifyBody extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(
                       left: 16.w, right: 16.w, bottom: 16.h, top: 16.h),
-                  child: const VerifyButton())
+                  child: const VerifyButtonWidget())
             ],
           ),
         ),

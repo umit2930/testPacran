@@ -1,23 +1,25 @@
 import 'package:bloc/bloc.dart';
-import 'package:dobareh_bloc/data/model/auth/login/login_response.dart';
+import 'package:dobareh_bloc/data/model/auth/login_response.dart';
 import 'package:dobareh_bloc/data/repository/auth_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/app_exception.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.authRepository})
-      : super(const LoginState(loginStatus: LoginStatus.initial));
+  LoginCubit()
+      : _authRepository = Get.find(),
+        super(const LoginState(loginStatus: LoginStatus.initial));
 
-  AuthRepository authRepository;
+  final AuthRepository _authRepository;
 
   void loginSubmitted(String number) async {
     try {
       emit(state.copyWith(loginStatus: LoginStatus.loading));
 
-      LoginResponse loginResponse = await authRepository.login(number);
+      LoginResponse loginResponse = await _authRepository.login(number);
 
       emit(state.copyWith(
           loginStatus: LoginStatus.success, loginResponse: loginResponse));

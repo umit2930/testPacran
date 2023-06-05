@@ -1,6 +1,4 @@
-import 'package:dobareh_bloc/business_logic/auth/auth/authentication_cubit.dart';
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
-import 'package:dobareh_bloc/presentation/components/loading_widget.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/colors.dart';
-import 'account_exit_conform_dialog.dart';
-import 'menu_item.dart';
+import '../../business_logic/auth/authentication_cubit.dart';
+import '../../utils/colors.dart';
+import '../components/general/loading_widget.dart';
+import '../components/home/account_exit_dialog.dart';
+import '../components/menu/menu_item.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -266,7 +266,7 @@ class MenuPage extends StatelessWidget {
                                     barrierDismissible: false,
                                     context: context,
                                     builder: (context) {
-                                      return const AccountExitConfirmDialog();
+                                      return const AccountExitDialog();
                                     }).then((value) {
                                   if (value == true) {
                                     context

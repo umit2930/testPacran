@@ -1,26 +1,20 @@
-import 'package:dobareh_bloc/business_logic/auth/login/login_cubit.dart';
-import 'package:dobareh_bloc/data/repository/auth_repository.dart';
-import 'package:dobareh_bloc/presentation/auth/code_page/verify_page.dart';
+import 'package:dobareh_bloc/presentation/components/login/login_button_widget.dart';
+import 'package:dobareh_bloc/presentation/pages/verify_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/colors.dart';
-import '../../components/custom_filled_button.dart';
-import '../../components/loading_widget.dart';
-
-part 'login_button.dart';
-part 'number_field_widget.dart';
+import '../../business_logic/login/login_cubit.dart';
+import '../components/login/number_field_widget.dart';
 
 class NumberPage extends StatelessWidget {
   const NumberPage({Key? key}) : super(key: key);
 
   static Widget router() {
     return BlocProvider(
-      create: (context) =>
-          LoginCubit(authRepository: context.read<AuthRepository>()),
+      create: (context) => LoginCubit(),
       child: const NumberPage(),
     );
   }
@@ -100,7 +94,7 @@ class LoginBody extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(
                       left: 16.w, right: 16.w, bottom: 16.h, top: 8.h),
-                  child: const LoginButton()),
+                  child: const LoginButtonWidget()),
             ],
           ),
         ),

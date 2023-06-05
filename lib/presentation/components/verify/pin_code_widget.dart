@@ -1,4 +1,10 @@
-part of 'verify_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../business_logic/verify/verify_cubit.dart';
+import '../../../utils/colors.dart';
 
 class PinCodeWidget extends StatelessWidget {
   const PinCodeWidget({Key? key}) : super(key: key);

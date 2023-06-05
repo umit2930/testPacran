@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
-import 'package:dobareh_bloc/presentation/components/loading_widget.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +11,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../data/model/home/home_response.dart';
-import '../../utils/colors.dart';
-import '../../utils/location_geolocator.dart';
+import '../../../data/model/home/home_response.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/location_geolocator.dart';
+import '../general/loading_widget.dart';
 
 class OpenStreetMapWidget extends StatelessWidget {
   const OpenStreetMapWidget({Key? key}) : super(key: key);

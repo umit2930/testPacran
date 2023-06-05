@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../utils/colors.dart';
+import '../../../utils/colors.dart';
 
 class AppExitDialog extends StatelessWidget {
   const AppExitDialog({Key? key}) : super(key: key);

@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 
 import '../../../utils/colors.dart';
 
-class AccountExitConfirmDialog extends StatelessWidget {
-  const AccountExitConfirmDialog({Key? key}) : super(key: key);
+class AccountExitDialog extends StatelessWidget {
+  const AccountExitDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

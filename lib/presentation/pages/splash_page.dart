@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'components/loading_widget.dart';
+import '../components/general/loading_widget.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});

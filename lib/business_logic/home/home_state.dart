@@ -2,7 +2,7 @@ part of 'home_cubit.dart';
 
 enum HomeStatus { initial, loading, success, failure }
 
-class HomeState {
+class HomeState extends Equatable {
   const HomeState({
     required this.homeStatus,
     this.homeResponse,
@@ -37,4 +37,14 @@ class HomeState {
       selectedTimePackID: selectedTimePackID ?? this.selectedTimePackID,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        homeStatus,
+        homeResponse,
+        errorMessage,
+        timePacks,
+        inProgressOrder,
+        selectedTimePackID
+      ];
 }
