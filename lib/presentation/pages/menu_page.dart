@@ -135,11 +135,12 @@ class MenuPage extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          "کل جمع آوری امروز",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.bodyMedium
-                                              ?.copyWith(color: primary),
+                                        FittedBox(
+                                          child: Text(
+                                            "کل جمع آوری امروز",
+                                            style: textTheme.bodyMedium
+                                                ?.copyWith(color: primary),
+                                          ),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(top: 30.h),

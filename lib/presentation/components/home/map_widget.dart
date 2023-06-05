@@ -46,9 +46,11 @@ class OpenStreetMapWidget extends StatelessWidget {
                         height: 122.h,
                         alignment: Alignment.center,
                         child: (localOrders.isEmpty)
-                            ? Text("برای این بازه زمانی جمع اوری وجود ندارد.",
-                                style: textTheme.bodyLarge
-                                    ?.copyWith(color: natural6))
+                            ? FittedBox(
+                              child: Text("برای این بازه زمانی جمع اوری وجود ندارد.",
+                                  style: textTheme.bodyLarge
+                                      ?.copyWith(color: natural6)),
+                            )
                             : FutureBuilder(
                                 future: determinePosition(),
                                 builder: (BuildContext context,
