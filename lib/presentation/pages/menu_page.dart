@@ -89,8 +89,8 @@ class MenuPage extends StatelessWidget {
                                 width: 140.r,
                                 height: 140.r,
                                 child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                                  child: LoadingWidget(),
+                              ),
                               );
                             },
                           ),
@@ -266,23 +266,21 @@ class MenuPage extends StatelessWidget {
                                 showDialog(
                                     barrierDismissible: false,
                                     context: context,
-                                    builder: (context) {
-                                      return const AccountExitDialog();
-                                    }).then((value) {
-                                  if (value == true) {
-                                    context
-                                        .read<AuthenticationCubit>()
-                                        .logoutRequested();
-                                  }
-                                });
-                              }),
-                        ],
-                      ),
-                    ),
+                                builder: (context) {
+                                  return const AccountExitDialog();
+                                }).then((value) {
+                              if (value == true) {
+                                context
+                                    .read<AuthenticationCubit>()
+                                    .logoutRequested();
+                              }
+                            });
+                          }),
+                    ]),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ]),
           );
         } else {
           return const LoadingWidget();

@@ -21,26 +21,24 @@ class BottomActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChangeOrderStatusCubit, ChangeOrderStatusState>(
         builder: (context, state) {
-      switch (state.changeOrderStatus) {
-        case ChangeOrderStatus.loading:
-          return const LoadingWidget();
-        case ChangeOrderStatus.error:
-          context.showToast(
-              message: state.errorMessage, messageType: MessageType.error);
-          return SuccessWidget(
-              //TODO if code reach here, orderStatus will not null.
-
-              orderStatus: state.orderStatus ?? OrderStatus.waiting);
-        default:
-          return SuccessWidget(
-              orderStatus: state.orderStatus ?? OrderStatus.waiting);
+      if (state.changeOrderStatus == ChangeOrderStatus.loading) {
+        return SizedBox(height: 120.h, child: const LoadingWidget());
       }
+      if (state.changeOrderStatus == ChangeOrderStatus.error) {
+        context.showToast(
+            message: state.errorMessage, messageType: MessageType.error);
+      }
+
+      return BottomActionsContent(
+          //TODO if code reach here, orderStatus will not null.
+          orderStatus: state.orderStatus ?? OrderStatus.waiting);
     });
   }
 }
 
-class SuccessWidget extends StatelessWidget {
-  const SuccessWidget({Key? key, required this.orderStatus}) : super(key: key);
+class BottomActionsContent extends StatelessWidget {
+  const BottomActionsContent({Key? key, required this.orderStatus})
+      : super(key: key);
 
   final OrderStatus orderStatus;
 
@@ -137,18 +135,20 @@ class SuccessWidget extends StatelessWidget {
         // TODO: Handle Rejected state
         SchedulerBinding.instance.addPostFrameCallback((_) {
           showDialog(
-              barrierDismissible: true,
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return const CanceledDialog();
               });
         });
 
-        return const Center(child: Text("ماموریت لغو شد"));
+        return SizedBox(
+            height: 120.h, child: const Center(child: Text("ماموریت لغو شد")));
       case OrderStatus.checkFactor:
-        // TODO: Handle checkFactor state
+        // TODO: Handle checkFactor state - go to waiting page.
         return const Center(child: Text("Check_factor"));
       case OrderStatus.delivered:
+      // TODO: this state must not be happen.
         return const Center(child: Text("delivered"));
     }
   }

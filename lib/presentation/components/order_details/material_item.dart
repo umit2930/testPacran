@@ -17,24 +17,22 @@ class MaterialItem extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(title,
+      child: Column(children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(title,
                   style: textTheme.bodyMedium?.copyWith(color: natural2)),
-              const Spacer(),
-              Text(weight,
-                  style: textTheme.titleSmall?.copyWith(color: natural2)),
-              SizedBox(
-                width: 8.w,
-              ),
-              Text(unit,
-                  style: textTheme.bodyMedium?.copyWith(color: natural6)),
-            ],
-          )
-        ],
-      ),
+            ),
+            Text(weight,
+                style: textTheme.titleSmall?.copyWith(color: natural2)),
+            SizedBox(
+              width: 8.w,
+            ),
+            Text(unit, style: textTheme.bodyMedium?.copyWith(color: natural6)),
+          ],
+        )
+      ]),
     );
   }
 }

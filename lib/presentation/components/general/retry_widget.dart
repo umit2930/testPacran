@@ -15,8 +15,8 @@ class FailureWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Lottie.asset("assets/anim/failure.json",
-            repeat: false, width: 100.r, height: 250.r),
+        Lottie.asset("assets/anim/failuretips.json",
+             width: 170.r, height: 180.r),
         Text(errorMessage ?? "مشکلی روی داده است."),
         Padding(
           padding: EdgeInsets.only(top: 32.h),

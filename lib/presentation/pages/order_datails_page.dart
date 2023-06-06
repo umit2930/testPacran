@@ -97,9 +97,10 @@ class OrderDetailsAppbar extends StatelessWidget {
                   icon: SvgPicture.asset(
                     "assets/icons/arrow_right.svg",
                   )),
-              Text("اطلاعات فروشنده",
-                  style: textTheme.bodySmall?.copyWith(color: secondary)),
-              const Spacer(),
+              Expanded(
+                child: Text("اطلاعات فروشنده",
+                    style: textTheme.bodySmall?.copyWith(color: secondary)),
+              ),
               PopupMenuButton<MenuItem>(
                 onSelected: (MenuItem selected) {
                   switch (selected) {
@@ -189,31 +190,33 @@ class OrderDetailsBody extends StatelessWidget {
           case OrderDetailsStatus.loading:
             return const LoadingWidget();
           case OrderDetailsStatus.error:
-            return FailureWidget(onRetryPressed: () {
-              context.read<OrderDetailsCubit>().getOrderDetails();
-            });
+            return FailureWidget(
+              onRetryPressed: () {
+                context.read<OrderDetailsCubit>().getOrderDetails();
+              },
+              errorMessage: state.errorMessage,
+            );
           case OrderDetailsStatus.success:
             var order = state.orderResponse!.order;
             return Column(
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Column(
-                        children: [
-                          ///Code
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.w, vertical: 8.h),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                color: natural8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "کد سفارش",
-                                  style: textTheme.bodyMedium
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(children: [
+                      ///Code
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color: natural8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "کد سفارش",
+                              style: textTheme.bodyMedium
                                       ?.copyWith(color: natural4),
                                 ),
                                 Text(
@@ -328,18 +331,18 @@ class OrderDetailsBody extends StatelessWidget {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
-                                var item = order.materialCategories?[index];
-                                return MaterialItem(
-                                  title: item?.title ?? "عنوان",
-                                  unit: "کیلو" /*item.unit*/,
-                                  weight: item?.pivot?.value ?? "0",
-                                );
-                              },
-                              itemCount: order.materialCategories?.length ?? 0,
-                            ),
-                          ),
-                        ],
-                      )),
+                            var item = order.materialCategories?[index];
+                            return MaterialItem(
+                              title: item?.title ?? "عنوان",
+                              unit: "کیلو" /*item.unit*/,
+                              weight: item?.pivot?.value ?? "0",
+                            );
+                          },
+                          itemCount: order.materialCategories?.length ?? 0,
+                        ),
+                      ),
+                    ]),
+                  ),
                 ),
                 BlocProvider(
                     create: (context) {
