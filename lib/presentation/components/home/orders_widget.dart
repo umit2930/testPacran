@@ -177,11 +177,11 @@ class OrdersListWidget extends StatelessWidget {
                         "نام و نام خانوادگی",
                     address: inProgressOrder.address?.address ?? "آدرس",
                     onPressed: () {
-/*                    Get.to(
-                      SellePage(
-                        orderID: homeViewModel.inProgressOrder!.id!.round(),
-                      ),
-                    );*/
+                      Get.off(
+                        OrderDetailsPage.router(
+                          orderID: inProgressOrder.id!.round(),
+                        ),
+                      );
                     },
                   )
                 ],
@@ -225,7 +225,8 @@ class OrdersListWidget extends StatelessWidget {
                         address: item.address!.address!,
                         onPressed: inProgressOrder == null
                             ? () {
-                                Get.to(OrderDetailsPage.router(orderID: item.id!.toInt()));
+                          Get.off(OrderDetailsPage.router(
+                                    orderID: item.id!.toInt()));
                               }
                             : () {
                                 context.showToast(

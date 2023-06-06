@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
 
 import '../components/general/loading_widget.dart';
 import '../components/general/retry_widget.dart';
@@ -59,26 +60,33 @@ class HomeAppbar extends StatelessWidget {
   }
 }
 
-class HomeBody extends StatelessWidget {
+class HomeBody extends StatelessWidget with WidgetsBindingObserver {
   const HomeBody({Key? key}) : super(key: key);
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    Logger().i(state.name);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Logger().e("home build");
     return SafeArea(
       child: BlocBuilder<HomeCubit, HomeState>(
           builder: (BuildContext context, state) {
         switch (state.homeStatus) {
           case HomeStatus.initial:
             context.read<HomeCubit>().getHomeRequested();
-          return const LoadingWidget();
-            case HomeStatus.loading:
+            return const LoadingWidget();
+          case HomeStatus.loading:
             return const LoadingWidget();
           case HomeStatus.failure:
-            return getFailureWidget(
-                errorMessage: state.errorMessage,
-                onRetryPressed: () {
-                  context.read<HomeCubit>().getHomeRequested();
-                });
+            return FailureWidget(
+              onRetryPressed: () {
+                context.read<HomeCubit>().getHomeRequested();
+              },
+              errorMessage: state.errorMessage,
+            );
           case HomeStatus.success:
             return SingleChildScrollView(
               child: Column(
@@ -90,20 +98,20 @@ class HomeBody extends StatelessWidget {
                       child: const OpenStreetMapWidget()),
 
                   ///summery
-                  Padding(
-                      padding:
+                      Padding(
+                          padding:
                           EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
-                      child: const SummeryWidget()),
+                          child: const SummeryWidget()),
 
-                  ///orders list
-                  Padding(
-                      padding: EdgeInsets.only(top: 32.h),
-                      child: const HomeOrdersWidget())
-                ],
-              ),
-            );
-        }
-      }),
+                      ///orders list
+                      Padding(
+                          padding: EdgeInsets.only(top: 32.h),
+                          child: const HomeOrdersWidget())
+                    ],
+                  ),
+                );
+            }
+          }),
     );
   }
 }

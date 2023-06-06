@@ -6,26 +6,28 @@ import 'package:dobareh_bloc/utils/app_exception.dart';
 part 'order_details_state.dart';
 
 class OrderDetailsCubit extends Cubit<OrderDetailsState> {
-  OrderDetailsCubit(int orderID)
+  OrderDetailsCubit({required int orderID})
       : _orderRepository = OrderRepository(),
-        super(
-            OrderDetailsState(orderStatus: OrderStatus.init, orderID: orderID));
+        super(OrderDetailsState(
+            orderDetailsStatus: OrderDetailsStatus.init, orderID: orderID));
 
   final OrderRepository _orderRepository;
 
   void getOrderDetails() async {
-    emit(state.copyWith(orderStatus: OrderStatus.loading));
+    emit(state.copyWith(orderDetailsStatus: OrderDetailsStatus.loading));
     try {
-      var response = await _orderRepository.getOrderDetails(state.orderID);
+      var response = await _orderRepository.getDetails(state.orderID);
       emit(state.copyWith(
-          orderStatus: OrderStatus.success, orderResponse: response));
+          orderDetailsStatus: OrderDetailsStatus.success,
+          orderResponse: response));
     } on AppException catch (appException) {
       emit(state.copyWith(
-          orderStatus: OrderStatus.error,
+          orderDetailsStatus: OrderDetailsStatus.error,
           errorMessage: appException.toString()));
     } catch (e) {
       emit(state.copyWith(
-          orderStatus: OrderStatus.error, errorMessage: e.toString()));
+          orderDetailsStatus: OrderDetailsStatus.error,
+          errorMessage: e.toString()));
     }
   }
 }

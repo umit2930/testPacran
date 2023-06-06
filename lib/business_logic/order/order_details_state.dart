@@ -1,29 +1,29 @@
 part of 'order_details_cubit.dart';
 
-enum OrderStatus { init, loading, success, error }
+enum OrderDetailsStatus { init, loading, success, error }
 
 class OrderDetailsState {
-  final OrderStatus orderStatus;
+  final OrderDetailsStatus orderDetailsStatus;
   final OrderResponse? orderResponse;
   final String? errorMessage;
 
   final int orderID;
 
   OrderDetailsState({
-    required this.orderStatus,
+    required this.orderDetailsStatus,
     required this.orderID,
     this.orderResponse,
     this.errorMessage,
   });
 
   OrderDetailsState copyWith({
-    OrderStatus? orderStatus,
+    OrderDetailsStatus? orderDetailsStatus,
     OrderResponse? orderResponse,
     String? errorMessage,
     int? orderID,
   }) {
     return OrderDetailsState(
-      orderStatus: orderStatus ?? this.orderStatus,
+      orderDetailsStatus: orderDetailsStatus ?? this.orderDetailsStatus,
       orderResponse: orderResponse ?? this.orderResponse,
       errorMessage: errorMessage ?? this.errorMessage,
       orderID: orderID ?? this.orderID,

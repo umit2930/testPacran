@@ -1,14 +1,13 @@
 import 'package:dio/dio.dart';
 
 import '../../../../utils/strings.dart';
-import '../interceptor.dart';
 
 class AuthApiProvider {
   final Dio _dio = Dio();
 
   AuthApiProvider() {
     _dio.options.baseUrl = apiBaseURL;
-    _dio.interceptors.add(CustomInterceptors());
+    // _dio.interceptors.add(CustomInterceptors());
   }
 
   Future<Response> login(String mobileNumber) async {
