@@ -40,58 +40,57 @@ class OpenStreetMapWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
             child: Column(
               children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: Container(
-                        height: 122.h,
-                        alignment: Alignment.center,
-                        child: (localOrders.isEmpty)
-                            ? FittedBox(
-                              child: Text("برای این بازه زمانی جمع اوری وجود ندارد.",
-                                  style: textTheme.bodyLarge
-                                      ?.copyWith(color: natural6)),
-                            )
-                            : FutureBuilder(
-                                future: determinePosition(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<Position> snapshot) {
-                                  if (snapshot.hasData) {
-                                    var currentLocations = snapshot.data!;
-                                    return FutureBuilder(
-                                      future: createMarkers(
-                                          orders, currentLocations),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<List<Marker>>
-                                              snapshot) {
-                                        if (snapshot.hasData) {
-                                          var markers = snapshot.data!;
-                                          return FlutterMap(
-                                            options: MapOptions(
-                                              center: LatLng(
-                                                  currentLocations.latitude,
-                                                  currentLocations.longitude),
-                                              zoom: 12.5,
-                                              // bounds: bounds
-                                            ),
-                                            children: [
-                                              TileLayer(
-                                                  urlTemplate:
-                                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                                  userAgentPackageName:
-                                                      'com.example.app'),
-                                              MarkerLayer(markers: markers)
-                                            ],
-                                          );
-                                        } else {
-                                          return const LoadingWidget();
-                                        }
-                                      },
-                                    );
-                                  } else {
-                                    return const LoadingWidget();
-                                  }
-                                },
-                              ))),
+                //TODO remove ClipRRect and check performance.
+                Container(
+                    height: 122.h,
+                    alignment: Alignment.center,
+                    child: (localOrders.isEmpty)
+                        ? FittedBox(
+                          child: Text("برای این بازه زمانی جمع اوری وجود ندارد.",
+                              style: textTheme.bodyLarge
+                                  ?.copyWith(color: natural6)),
+                        )
+                        : FutureBuilder(
+                            future: determinePosition(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Position> snapshot) {
+                              if (snapshot.hasData) {
+                                var currentLocations = snapshot.data!;
+                                return FutureBuilder(
+                                  future: createMarkers(
+                                      orders, currentLocations),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Marker>>
+                                          snapshot) {
+                                    if (snapshot.hasData) {
+                                      var markers = snapshot.data!;
+                                      return FlutterMap(
+                                        options: MapOptions(
+                                          center: LatLng(
+                                              currentLocations.latitude,
+                                              currentLocations.longitude),
+                                          zoom: 12.5,
+                                          // bounds: bounds
+                                        ),
+                                        children: [
+                                          TileLayer(
+                                              urlTemplate:
+                                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                              userAgentPackageName:
+                                                  'com.example.app'),
+                                          MarkerLayer(markers: markers)
+                                        ],
+                                      );
+                                    } else {
+                                      return const LoadingWidget();
+                                    }
+                                  },
+                                );
+                              } else {
+                                return const LoadingWidget();
+                              }
+                            },
+                          )),
                 Material(
                   color: Colors.transparent,
                   child: InkWell(

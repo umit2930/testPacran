@@ -28,19 +28,22 @@ const Color white = Color.fromRGBO(255, 255, 255, 1);
 
 const Color background = Color.fromRGBO(244, 245, 247, 1);
 
+const Color shadow = Color.fromRGBO(0, 0, 247, 1);
+
+
 var boxDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(12.r),
-  boxShadow: const [
-    BoxShadow(color: Colors.black87, blurRadius: 8, spreadRadius: -8),
+  boxShadow:  [
+    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, ),
   ],
 );
 
 var topRoundedBoxDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-  boxShadow: const [
-    BoxShadow(color: Colors.black87, blurRadius: 12, spreadRadius: -8),
+  boxShadow: [
+    BoxShadow(color: Colors.black87.withOpacity(0.1), blurRadius: 12),
   ],
 );
 

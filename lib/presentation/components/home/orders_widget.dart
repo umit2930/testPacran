@@ -1,7 +1,9 @@
+import 'package:dobareh_bloc/presentation/pages/order_datails_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../business_logic/home/home_cubit.dart';
 import '../../../data/model/home/home_response.dart';
@@ -217,11 +219,13 @@ class OrdersListWidget extends StatelessWidget {
                         .elementAt(index);
                     return HomeOrderItem(
                         isActive: false,
+
+                        //TODO remove ! operator and handle the null state.
                         personName: item.deliveryPersonName!,
                         address: item.address!.address!,
                         onPressed: inProgressOrder == null
                             ? () {
-                                // Get.to(SellePage(orderID: item.id!.toInt()));
+                                Get.to(OrderDetailsPage.router(orderID: item.id!.toInt()));
                               }
                             : () {
                                 context.showToast(

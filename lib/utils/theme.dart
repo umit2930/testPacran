@@ -88,7 +88,7 @@ class DobareTheme {
       200: Color(0xFFDEF0DC),
       300: Color(0xFFA1D296),
       400: Color(0xFF82C372),
-      500: Color(_greenPrimaryValue),
+      500: Color(0xFF63B450),
       600: Color(0xFF4F9040),
       700: Color(0xFF3B6C30),
       800: Color(0xFF274820),

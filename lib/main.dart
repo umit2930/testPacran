@@ -49,7 +49,7 @@ class App extends StatelessWidget {
             theme: DobareTheme.theme,
             builder: (context, child) {
               return BlocListener<AuthenticationCubit, AuthenticationState>(
-                listener: (context, state) {
+                listener: (context, state)  {
                   switch (state.authenticationStatus) {
                     case AuthenticationStatus.initial:
                       context.read<AuthenticationCubit>().authRequested();
@@ -60,7 +60,9 @@ class App extends StatelessWidget {
                       //TODO change the logic to user token be not nullable?
                       var userToken = state.userToken!;
 
-                      DependencyInjection.provideHome(userToken);
+                      DependencyInjection.provideUserToken(userToken);
+                      DependencyInjection.provideHome();
+                      DependencyInjection.provideOrder();
 
                       Get.offAll(() => HomePage.router());
                       break;
