@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:dobareh_bloc/utils/dependency_injection.dart';
 import 'package:dobareh_bloc/utils/enums.dart';
@@ -21,16 +23,22 @@ class OrderApiProvider {
   }
 
   Future<Response> changeStatus(
-      {required int orderID,
-      required OrderStatus orderStatus,
-      OrderStatusChangeReason? changeReason}) {
-    var dataMap = {
-      "status": orderStatus.value,
-      if (changeReason != null) ...{"reason": changeReason.value}
-    };
+      {required int orderID, required Map<String, dynamic> data}) {
 
-    var formData = FormData.fromMap(dataMap);
+    var formData = FormData.fromMap(data);
 
     return _dio.post("order/change-status/$orderID", data: formData);
+  }
+
+  Future<Response> checkStatus({required int orderID}) async {
+    return _dio.get("order/check-status/$orderID");
+  }
+
+  Future<Response> getCategories() {
+    return _dio.get("/order/material-categories");
+  }
+
+  Future<Response> calculateValues(int orderID, Map<String, dynamic> values) {
+    return _dio.post("/order/calculate/$orderID", data: json.encode(values));
   }
 }

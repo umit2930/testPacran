@@ -1,11 +1,14 @@
 import 'package:dobareh_bloc/business_logic/order/change_order_status_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart';
+import 'package:dobareh_bloc/presentation/pages/calculate_values_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
+import '../../../business_logic/order/order_details_cubit.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/enums.dart';
 import '../general/canceled_dialog.dart';
@@ -121,9 +124,14 @@ class BottomActionsContent extends StatelessWidget {
                 padding: EdgeInsets.only(top: 21.h),
                 child: CustomFilledButton(
                     onPressed: () {
-                      /* Get.to(CalculateValuesPage(
-                        orderId: orderID,
-                      ));*/
+                      Get.to(CalculateValuesPage.router((context
+                                  .read<OrderDetailsCubit>()
+                                  .state
+                                  .orderResponse
+                                  ?.order
+                                  ?.id ??
+                              0)
+                          .round()));
                     },
                     buttonChild: const Text("دریافت پسماند"),
                     width: double.infinity),

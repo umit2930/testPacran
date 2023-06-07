@@ -31,6 +31,6 @@ class DependencyInjection {
   static void provideOrder() {
     Logger().w("provide orders");
     Get.put(OrderApiProvider());
-    Get.lazyPut(() => OrderRepository());
+    Get.put(OrderRepository());
   }
 }
