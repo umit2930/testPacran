@@ -120,21 +120,23 @@ class BottomActionsContent extends StatelessWidget {
                               textTheme.bodyMedium?.copyWith(color: secondary)))
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 21.h),
-                child: CustomFilledButton(
-                    onPressed: () {
-                      Get.to(CalculateValuesPage.router((context
-                                  .read<OrderDetailsCubit>()
-                                  .state
-                                  .orderResponse
-                                  ?.order
-                                  ?.id ??
-                              0)
-                          .round()));
-                    },
-                    buttonChild: const Text("دریافت پسماند"),
-                    width: double.infinity),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 21.h),
+                  child: CustomFilledButton(
+                      onPressed: () {
+                        Get.to(CalculateValuesPage.router((context
+                                    .read<OrderDetailsCubit>()
+                                    .state
+                                    .orderResponse
+                                    ?.order
+                                    ?.id ??
+                                0)
+                            .round()));
+                      },
+                      buttonChild: const Text("دریافت پسماند"),
+                      width: double.infinity),
+                ),
               ),
             ],
           ),

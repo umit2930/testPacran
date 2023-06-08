@@ -72,13 +72,15 @@ class HomeOrderItem extends StatelessWidget {
                       Padding(
                           padding: EdgeInsets.only(top: 4.0, left: 2.w),
                           child: SvgPicture.asset("assets/icons/location.svg")),
-                      Padding(
-                        padding: EdgeInsets.only(right: 8.w),
-                        child: Text(address,
-                            maxLines: 5,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.bodyMedium
-                                ?.copyWith(color: natural1)),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 8.w),
+                          child: Text(address,
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.bodyMedium
+                                  ?.copyWith(color: natural1)),
+                        ),
                       ),
                     ],
                   ),

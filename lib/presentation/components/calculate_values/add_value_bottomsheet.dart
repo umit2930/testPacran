@@ -19,25 +19,29 @@ class _AddValueBottomSheetState extends State<AddValueBottomSheet> {
     var textTheme = Theme.of(context).textTheme;
     return Material(
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 21.h),
-        width: 360.w,
-        // height: 264.h,
-        child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Wrap(
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          decoration: BoxDecoration(
+            color: background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 21.h),
+          width: 360.w,
+          height: 264.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("لطفا مقادیر فروشنده برای ${widget.title} را وارد کنید.",
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: natural2,
-                  )),
+              FittedBox(
+                child: Text(
+                    "لطفا مقادیر فروشنده برای ${widget.title} را وارد کنید.",
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: natural2,
+                    )),
+              ),
               Padding(
-                padding: EdgeInsets.only(top: 32.h),
+                padding: EdgeInsets.only(top: 24.h),
                 child: Text(
                   "مقدار پسماند",
                   style: textTheme.bodyMedium?.copyWith(color: natural2),

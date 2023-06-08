@@ -1,15 +1,16 @@
 import 'package:dobareh_bloc/business_logic/order/calculate_values_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart';
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
+import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../utils/colors.dart';
 import '../components/calculate_values/bottom_actions_widget.dart';
 import '../components/calculate_values/categories_list.dart';
+import 'order_datails_page.dart';
 
 class CalculateValuesPage extends StatelessWidget {
   const CalculateValuesPage({Key? key}) : super(key: key);
@@ -26,6 +27,11 @@ class CalculateValuesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
+          Get.off(
+            OrderDetailsPage.router(
+              orderID: context.read<CalculateValuesCubit>().state.orderID,
+            ),
+          );
           return Future.value(false);
         },
         child: Scaffold(
@@ -47,14 +53,10 @@ class CalculateValuesAppbar extends StatelessWidget {
         padding: EdgeInsets.only(top: 8.h),
         child: Row(
           children: [
-            IconButton(
-                //TODO implement back button
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SvgPicture.asset(
-                  "assets/icons/arrow_right.svg",
-                  color: secondary,
+            IconAssistant.backIconButton(() => Get.off(
+                  OrderDetailsPage.router(
+                    orderID: context.read<CalculateValuesCubit>().state.orderID,
+                  ),
                 )),
             Text(
               "محاسبه مقادیر",

@@ -40,4 +40,14 @@ class IconAssistant {
       ),
     );
   }
+
+  static Widget moreIconButton() {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      onPressed: null,
+      icon: SvgPicture.asset(
+        "assets/icons/more.svg",
+      ),
+    );
+  }
 }

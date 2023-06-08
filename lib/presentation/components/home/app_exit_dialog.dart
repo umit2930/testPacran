@@ -15,7 +15,7 @@ class AppExitDialog extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         width: 329.w,
-        height: 311.h,
+        height: 290.h,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: Column(
           children: [
@@ -25,6 +25,7 @@ class AppExitDialog extends StatelessWidget {
               width: 32.w,
             ),
             Container(
+              width: double.infinity,
               margin: EdgeInsets.only(top: 22.h),
               decoration: BoxDecoration(
                   color: error.withOpacity(0.04),

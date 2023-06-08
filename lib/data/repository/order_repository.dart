@@ -2,6 +2,7 @@ import 'package:dobareh_bloc/data/data_provider/remote/order/order_api_provider.
 import 'package:dobareh_bloc/data/model/calculate_values/CalculateValuesBody.dart';
 import 'package:dobareh_bloc/data/model/calculate_values/CategoriesResponse.dart'
     as categories_response;
+import 'package:dobareh_bloc/data/model/calculate_values/OrederStatusResponse.dart';
 import 'package:dobareh_bloc/data/model/success_model.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -37,9 +38,10 @@ class OrderRepository {
         _orderApiProvider.changeStatus(orderID: orderID, data: dataMap));
   }
 
-  Future<SuccessModel> checkStatus({required int orderID}) {
-    return NetworkResponseToResult<SuccessModel>().generalNetworkResult(
-        SuccessModel.fromJson, _orderApiProvider.checkStatus(orderID: orderID));
+  Future<OrderStatusResponse> checkStatus({required int orderID}) {
+    return NetworkResponseToResult<OrderStatusResponse>().generalNetworkResult(
+        OrderStatusResponse.fromJson,
+        _orderApiProvider.checkStatus(orderID: orderID));
   }
 
   ///values

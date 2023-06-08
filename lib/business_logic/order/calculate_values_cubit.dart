@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dobareh_bloc/data/model/calculate_values/OrederStatusResponse.dart';
 import 'package:dobareh_bloc/data/model/success_model.dart';
 import 'package:dobareh_bloc/data/repository/order_repository.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
@@ -14,7 +15,8 @@ class CalculateValuesCubit extends Cubit<CalculateValuesState> {
   CalculateValuesCubit({required int orderID})
       : _orderRepository = Get.find(),
         super(CalculateValuesState(
-            calculateValuesStatus: CalculateValuesStatus.init,
+          calculateValuesStatus: CalculateValuesStatus.init,
+            submitValuesStatus: SubmitValuesStatus.init,
             orderID: orderID,
             addedValues: const {}));
 
@@ -39,20 +41,20 @@ class CalculateValuesCubit extends Cubit<CalculateValuesState> {
   }
 
   void valuesSubmitted() async {
-    emit(state.copyWith(calculateValuesStatus: CalculateValuesStatus.loading));
+    emit(state.copyWith(submitValuesStatus: SubmitValuesStatus.loading));
     try {
       var response = await _orderRepository.calculateValues(
           state.orderID, state.addedValues);
       emit(state.copyWith(
-          calculateValuesStatus: CalculateValuesStatus.success,
+          submitValuesStatus: SubmitValuesStatus.success,
           calculateValuesResponse: response));
     } on AppException catch (appException) {
       emit(state.copyWith(
-          calculateValuesStatus: CalculateValuesStatus.error,
+          submitValuesStatus: SubmitValuesStatus.error,
           errorMessage: appException.toString()));
     } catch (e) {
       emit(state.copyWith(
-          calculateValuesStatus: CalculateValuesStatus.error,
+          submitValuesStatus: SubmitValuesStatus.error,
           errorMessage: e.toString()));
     }
   }

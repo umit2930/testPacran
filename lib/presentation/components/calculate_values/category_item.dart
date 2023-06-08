@@ -102,11 +102,14 @@ class CategoryItem extends StatelessWidget {
                             iconSize: 50.h,
                             icon: SvgPicture.asset("assets/icons/add.svg"),
                             onPressed: null,
+                            padding: EdgeInsets.zero,
                           )
                         : IconButton(
                             iconSize: 50.h,
                             onPressed: null,
-                            icon: SvgPicture.asset("assets/icons/edit.svg")),
+                            icon: SvgPicture.asset("assets/icons/edit.svg"),
+                            padding: EdgeInsets.zero,
+                          ),
                   ),
                 ],
               ),

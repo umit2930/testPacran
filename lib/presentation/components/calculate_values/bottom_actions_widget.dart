@@ -1,9 +1,11 @@
 import 'package:dobareh_bloc/presentation/components/calculate_values/values_summery_bottomsheet.dart';
+import 'package:dobareh_bloc/presentation/pages/invoice_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../business_logic/order/calculate_values_cubit.dart';
@@ -25,6 +27,7 @@ class BottomActions extends StatelessWidget {
         padding:
             EdgeInsets.only(bottom: 57.h, left: 15.w, right: 15.w, top: 8.h),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
@@ -51,12 +54,15 @@ class BottomActions extends StatelessWidget {
                   children: [
                     SvgPicture.asset("assets/icons/attention.svg"),
                     Expanded(
-                      child: Text(
-                          NumberFormat.decimalPattern()
-                              .format(state.totalPrice),
-                          textAlign: TextAlign.center,
-                          style:
-                              textTheme.titleLarge?.copyWith(color: secondary)),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                            NumberFormat.decimalPattern()
+                                .format(state.totalPrice),
+                            textAlign: TextAlign.center,
+                            style: textTheme.titleLarge
+                                ?.copyWith(color: secondary)),
+                      ),
                     ),
                     Text(
                       "تومان",
@@ -78,10 +84,8 @@ class BottomActions extends StatelessWidget {
                       messageType: MessageType.warning,
                     );
                   } else {
-                    /*
-              Get.off(InvoicePage(
-                orderID: widget.orderId,
-              ));*/
+                    Get.to(InvoicePage.router(
+                        state.orderID, context.read<CalculateValuesCubit>()));
                   }
                 },
                 buttonChild: Row(

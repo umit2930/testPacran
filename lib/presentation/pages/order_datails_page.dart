@@ -4,6 +4,7 @@ import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/bottom_actions_widget.dart';
 import 'package:dobareh_bloc/presentation/pages/home_page.dart';
+import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,23 +86,20 @@ class OrderDetailsAppbar extends StatelessWidget {
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          height: 48.h,
+          // height: 66.h,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                  onPressed: () {
-                    // Get.back();
-                    Get.offAll(HomePage.router());
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/icons/arrow_right.svg",
-                  )),
+              IconAssistant.backIconButton(() => Get.offAll(HomePage.router())),
               Expanded(
-                child: Text("اطلاعات فروشنده",
-                    style: textTheme.bodySmall?.copyWith(color: secondary)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text("اطلاعات فروشنده",
+                      style: textTheme.bodySmall?.copyWith(color: secondary)),
+                ),
               ),
               PopupMenuButton<MenuItem>(
+                padding: EdgeInsets.zero,
                 onSelected: (MenuItem selected) {
                   switch (selected) {
                     case MenuItem.problem:
@@ -156,12 +154,7 @@ class OrderDetailsAppbar extends StatelessWidget {
                         )),
                   ];
                 },
-                child: SvgPicture.asset(
-                  "assets/icons/more.svg",
-                  height: 46.h,
-                  width: 46.w,
-                  fit: BoxFit.scaleDown,
-                ),
+                child: IconAssistant.moreIconButton(),
               ),
             ],
           ),
@@ -323,14 +316,14 @@ class OrderDetailsBody extends StatelessWidget {
 
                           ///Weight of items
                           Container(
-                            margin: EdgeInsets.only(top: 58.h, bottom: 10.h),
-                            decoration: BoxDecoration(
-                                color: natural8,
-                                borderRadius: BorderRadius.circular(12.r)),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (BuildContext context, int index) {
+                            margin: EdgeInsets.only(top: 16.h, bottom: 10.h),
+                        decoration: BoxDecoration(
+                            color: natural8,
+                            borderRadius: BorderRadius.circular(12.r)),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
                             var item = order.materialCategories?[index];
                             return MaterialItem(
                               title: item?.title ?? "عنوان",

@@ -1,4 +1,5 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
+import 'package:dobareh_bloc/presentation/components/home/app_exit_dialog.dart';
 import 'package:dobareh_bloc/presentation/pages/menu_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,26 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(66.h), child: const HomeAppbar()),
-      body: const HomeBody(),
-      drawer: const MenuPage(),
+    return WillPopScope(
+      onWillPop: () async {
+        var result = await showDialog<bool>(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return const AppExitDialog();
+            });
+        if (result == null) {
+          return Future.value(false);
+        } else {
+          return Future.value(result);
+        }
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(66.h), child: const HomeAppbar()),
+        body: const HomeBody(),
+        drawer: const MenuPage(),
+      ),
     );
   }
 }
