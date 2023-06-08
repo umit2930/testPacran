@@ -61,7 +61,7 @@ class BottomActionsContent extends StatelessWidget {
                     onPressed: () {
                       context
                           .read<ChangeOrderStatusCubit>()
-                          .changeStatus(orderStatus: OrderStatus.onWay);
+                          .statusSubmitted(orderStatus: OrderStatus.onWay);
                     },
                     buttonChild: const Text("شروع حرکت"),
                     width: 158.w),
@@ -80,7 +80,7 @@ class BottomActionsContent extends StatelessWidget {
                     onPressed: () {
                       context
                           .read<ChangeOrderStatusCubit>()
-                          .changeStatus(orderStatus: OrderStatus.inLocation);
+                          .statusSubmitted(orderStatus: OrderStatus.inLocation);
                     },
                     buttonChild: const Text("به مقصد رسیدم"),
                     width: 158.w),
@@ -107,7 +107,7 @@ class BottomActionsContent extends StatelessWidget {
                               return const ConfirmCancelDialog();
                             }).then((value) {
                           if (value == true) {
-                            context.read<ChangeOrderStatusCubit>().changeStatus(
+                            context.read<ChangeOrderStatusCubit>().statusSubmitted(
                                 orderStatus: OrderStatus.rejected,
                                 changeReason:
                                     OrderStatusChangeReason.userNotPresent);

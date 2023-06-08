@@ -68,6 +68,7 @@ class WaitingBody extends StatelessWidget {
                     return const LoadingWidget();
                   });
             } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
+              context.read<WaitingCubit>().orderStatusClosed();
               showDialog(
                   barrierDismissible: false,
                   context: context,
@@ -109,7 +110,7 @@ class WaitingBody extends StatelessWidget {
                     }).then((value) {
                   //if false -> user canceled the order
                   if (value == false) {
-                    context.read<ChangeOrderStatusCubit>().changeStatus(
+                    context.read<ChangeOrderStatusCubit>().statusSubmitted(
                         orderStatus: OrderStatus.rejected,
                         changeReason: OrderStatusChangeReason.disagreement);
                     //if true -> user want to recalculate
@@ -161,29 +162,32 @@ class WaitingBody extends StatelessWidget {
                 child: SizedBox(
                     child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16.h, horizontal: 16.w)),
-                  onPressed: () {
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return const ConfirmCancelDialog();
-                        }).then((value) {
-                      if (value == true) {
-                        context.read<ChangeOrderStatusCubit>().changeStatus(
-                              orderStatus: OrderStatus.rejected,
-                              changeReason:
-                                  OrderStatusChangeReason.disagreement,
-                            );
-                      }
-                    });
-                  },
-                  child: Text(
-                    "لغو درخواست",
-                    style: textTheme.bodyMedium?.copyWith(color: secondary),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16.h, horizontal: 16.w)),
+                    onPressed: () {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return const ConfirmCancelDialog();
+                          }).then((value) {
+                        if (value == true) {
+                          context
+                              .read<ChangeOrderStatusCubit>()
+                              .statusSubmitted(
+                                orderStatus: OrderStatus.rejected,
+                                changeReason:
+                                    OrderStatusChangeReason.disagreement,
+                              );
+                        }
+                      });
+                    },
+                    child: Text(
+                      "لغو درخواست",
+                      style: textTheme.bodyMedium?.copyWith(color: secondary),
+                    ),
                   ),
-                )),
+                ),
               ),
             ],
           ),

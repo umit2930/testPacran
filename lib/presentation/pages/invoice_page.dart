@@ -262,7 +262,7 @@ class InvoicePageBody extends StatelessWidget {
                               if (value == true) {
                                 context
                                     .read<ChangeOrderStatusCubit>()
-                                    .changeStatus(
+                                    .statusSubmitted(
                                         orderStatus: OrderStatus.rejected,
                                         changeReason: OrderStatusChangeReason
                                             .disagreement);

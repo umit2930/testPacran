@@ -1,5 +1,7 @@
 part of 'calculate_values_cubit.dart';
 
+
+//TODO is calling two api in one cubit is correct?
 enum CalculateValuesStatus { init, loading, success, error }
 
 enum SubmitValuesStatus { init, loading, success, error }
@@ -50,7 +52,6 @@ class CalculateValuesState extends Equatable {
     SubmitValuesStatus? submitValuesStatus,
     CategoriesResponse? categoriesResponse,
     SuccessModel? calculateValuesResponse,
-    OrderStatusResponse? orderStatusResponse,
     String? errorMessage,
     int? orderID,
     Map<MaterialCategories, Items>? addedValues,

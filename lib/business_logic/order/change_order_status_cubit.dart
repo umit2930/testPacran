@@ -16,7 +16,7 @@ class ChangeOrderStatusCubit extends Cubit<ChangeOrderStatusState> {
 
   final OrderRepository _orderRepository;
 
-  void changeStatus(
+  void statusSubmitted(
       {required OrderStatus orderStatus,
       OrderStatusChangeReason? changeReason}) async {
     emit(state.copyWith(changeOrderStatus: ChangeOrderStatus.loading));
@@ -25,7 +25,7 @@ class ChangeOrderStatusCubit extends Cubit<ChangeOrderStatusState> {
           orderID: state.orderID,
           orderStatus: orderStatus,
           changeReason: changeReason);
-      //if request return 200, we update the order status with new value.
+      //if request return 200, we update the order status with entered value.
       emit(state.copyWith(
           changeOrderStatus: ChangeOrderStatus.success,
           orderStatus: orderStatus));

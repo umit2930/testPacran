@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dobareh_bloc/data/model/order/order_response.dart';
 import 'package:dobareh_bloc/data/repository/order_repository.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
+import 'package:equatable/equatable.dart';
 
 part 'order_details_state.dart';
 
@@ -13,7 +14,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 
   final OrderRepository _orderRepository;
 
-  void getOrderDetails() async {
+  void orderDetailsRequested() async {
     emit(state.copyWith(orderDetailsStatus: OrderDetailsStatus.loading));
     try {
       var response = await _orderRepository.getDetails(state.orderID);

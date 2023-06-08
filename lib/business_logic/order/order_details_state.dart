@@ -2,14 +2,14 @@ part of 'order_details_cubit.dart';
 
 enum OrderDetailsStatus { init, loading, success, error }
 
-class OrderDetailsState {
+class OrderDetailsState extends Equatable{
   final OrderDetailsStatus orderDetailsStatus;
   final OrderResponse? orderResponse;
   final String? errorMessage;
 
   final int orderID;
 
-  OrderDetailsState({
+  const OrderDetailsState({
     required this.orderDetailsStatus,
     required this.orderID,
     this.orderResponse,
@@ -29,4 +29,8 @@ class OrderDetailsState {
       orderID: orderID ?? this.orderID,
     );
   }
+
+  //TODO check if this prevent rebuild during responsive.
+  @override
+  List<Object?> get props => [orderDetailsStatus,orderResponse,errorMessage,orderID];
 }

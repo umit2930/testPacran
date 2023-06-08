@@ -39,7 +39,7 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<OrderDetailsCubit>().getOrderDetails();
+    context.read<OrderDetailsCubit>().orderDetailsRequested();
 
     return WillPopScope(
       onWillPop: () {
@@ -113,7 +113,7 @@ class OrderDetailsAppbar extends StatelessWidget {
                             return const ConfirmCancelDialog();
                           }).then((value) {
                         if (value == true) {
-                          context.read<ChangeOrderStatusCubit>().changeStatus(
+                          context.read<ChangeOrderStatusCubit>().statusSubmitted(
                               orderStatus: OrderStatus.rejected,
                               changeReason:
                                   OrderStatusChangeReason.problemInWay);
@@ -178,14 +178,14 @@ class OrderDetailsBody extends StatelessWidget {
       builder: (context, state) {
         switch (state.orderDetailsStatus) {
           case OrderDetailsStatus.init:
-            context.read<OrderDetailsCubit>().getOrderDetails();
+            context.read<OrderDetailsCubit>().orderDetailsRequested();
             return const LoadingWidget();
           case OrderDetailsStatus.loading:
             return const LoadingWidget();
           case OrderDetailsStatus.error:
             return FailureWidget(
               onRetryPressed: () {
-                context.read<OrderDetailsCubit>().getOrderDetails();
+                context.read<OrderDetailsCubit>().orderDetailsRequested();
               },
               errorMessage: state.errorMessage,
             );
