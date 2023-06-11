@@ -31,7 +31,7 @@ class OrderApiProvider {
     return _dio.post("order/change-status/$orderID", data: formData);
   }
 
-  Future<Response> checkStatus({required int orderID}) async {
+  Future<Response> checkStatus({required int orderID}) {
     return _dio.get("order/check-status/$orderID");
   }
 

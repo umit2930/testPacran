@@ -45,26 +45,9 @@ class InvoicePage extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(66.h),
             child: const InvoicePageAppbar()),
-        body: const InvoicePageBody(),
-      ),
-    );
-  }
-}
-
-class InvoicePageBody extends StatelessWidget {
-  const InvoicePageBody({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return BlocBuilder<CalculateValuesCubit, CalculateValuesState>(
-      builder: (context, state) {
-        var addedValues = state.addedValues;
-        return MultiBlocListener(
+        body: MultiBlocListener(
           listeners: [
+            ///cancel order
             BlocListener<ChangeOrderStatusCubit, ChangeOrderStatusState>(
               listener: (context, state) {
                 if (state.changeOrderStatus == ChangeOrderStatus.loading) {
@@ -95,61 +78,129 @@ class InvoicePageBody extends StatelessWidget {
               },
             ),
           ],
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 18.h, right: 16.w),
-                  child: Text(
-                    "شما مقادیر زیر را برای پسماندهای فروشنده ثبت کردید",
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodyMedium?.copyWith(color: natural1),
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 9.h),
-                          child: Text(
-                            "پسماند های غیر الکترونیکی",
-                            style:
-                                textTheme.bodyMedium?.copyWith(color: natural4),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 16.h,
-                          ),
-                          decoration: BoxDecoration(
-                              color: natural8,
-                              borderRadius: BorderRadius.circular(12.r)),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              var category = addedValues.keys.elementAt(index);
-                              var value = addedValues.values.elementAt(index);
-                              return MaterialItem(
-                                title: category.title ?? "عنوان محصول",
-                                unit: "کیلو" /*item.unit*/,
-                                weight: "${value.value}",
-                              );
-                            },
-                            itemCount: addedValues.length,
-                          ),
-                        ),
+          child: const InvoicePageBody(),
+        ),
+      ),
+    );
+  }
+}
 
-                        ///Total weight
-                        Container(
-                          margin: EdgeInsets.only(top: 16.h),
-                          decoration: BoxDecoration(
-                              color: natural8,
+class InvoicePageAppbar extends StatelessWidget {
+  const InvoicePageAppbar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.only(top: 8.h, left: 16.w),
+        child: Row(
+          children: [
+            IconAssistant.backIconButton(() => Get.back()),
+            Expanded(
+              child: Text(
+                "فاکتور ثبت شده",
+                style: textTheme.bodyMedium?.copyWith(color: secondary),
+              ),
+            ),
+            FilledButton(
+                style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r)),
+                    backgroundColor: secondaryTint2),
+                onPressed: () {
+                  Get.back();
+
+                  // Get.off(CalculateValuesPage.router());
+                },
+                child: Row(
+                  children: [
+                    SvgPicture.asset("assets/icons/edit.svg"),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10.w),
+                      child: Text(
+                        "تغییر موارد",
+                        style: textTheme.bodyMedium?.copyWith(color: secondary),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InvoicePageBody extends StatelessWidget {
+  const InvoicePageBody({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return BlocBuilder<CalculateValuesCubit, CalculateValuesState>(
+      builder: (context, state) {
+        var addedValues = state.addedValues;
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 18.h, right: 16.w),
+                child: Text(
+                  "شما مقادیر زیر را برای پسماندهای فروشنده ثبت کردید",
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodyMedium?.copyWith(color: natural1),
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 9.h),
+                        child: Text(
+                          "پسماند های غیر الکترونیکی",
+                          style:
+                              textTheme.bodyMedium?.copyWith(color: natural4),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: 16.h,
+                        ),
+                        decoration: BoxDecoration(
+                            color: natural8,
+                            borderRadius: BorderRadius.circular(12.r)),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            var category = addedValues.keys.elementAt(index);
+                            var value = addedValues.values.elementAt(index);
+                            return MaterialItem(
+                              title: category.title ?? "عنوان محصول",
+                              unit: "کیلو" /*item.unit*/,
+                              weight: "${value.value}",
+                            );
+                          },
+                          itemCount: addedValues.length,
+                        ),
+                      ),
+
+                      ///Total weight
+                      Container(
+                        margin: EdgeInsets.only(top: 16.h),
+                        decoration: BoxDecoration(
+                            color: natural8,
                               borderRadius: BorderRadius.circular(12.r)),
                           child: Container(
                             // height: 45.h,
@@ -287,58 +338,8 @@ class InvoicePageBody extends StatelessWidget {
                 ),
               ],
             ),
-          ),
         );
       },
-    );
-  }
-}
-
-class InvoicePageAppbar extends StatelessWidget {
-  const InvoicePageAppbar({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.only(top: 8.h, left: 16.w),
-        child: Row(
-          children: [
-            IconAssistant.backIconButton(() => Get.back()),
-            Expanded(
-              child: Text(
-                "فاکتور ثبت شده",
-                style: textTheme.bodyMedium?.copyWith(color: secondary),
-              ),
-            ),
-            FilledButton(
-                style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r)),
-                    backgroundColor: secondaryTint2),
-                onPressed: () {
-                  Get.back();
-
-                  // Get.off(CalculateValuesPage.router());
-                },
-                child: Row(
-                  children: [
-                    SvgPicture.asset("assets/icons/edit.svg"),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10.w),
-                      child: Text(
-                        "تغییر موارد",
-                        style: textTheme.bodyMedium?.copyWith(color: secondary),
-                      ),
-                    )
-                  ],
-                ))
-          ],
-        ),
-      ),
     );
   }
 }

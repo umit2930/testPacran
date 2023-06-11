@@ -10,14 +10,14 @@ class AuthApiProvider {
     // _dio.interceptors.add(CustomInterceptors());
   }
 
-  Future<Response> login(String mobileNumber) async {
+  Future<Response> login(String mobileNumber)  {
     final formData = FormData.fromMap({"mobile": mobileNumber});
-    return await _dio.post("login", data: formData);
+    return _dio.post("login", data: formData);
   }
 
-  Future<Response> verify(String mobileNumber, String code) async {
+  Future<Response> verify(String mobileNumber, String code)  {
     final formData =
         FormData.fromMap({"mobile": mobileNumber, "verify_code": code});
-    return await _dio.post("verify", data: formData);
+    return  _dio.post("verify", data: formData);
   }
 }

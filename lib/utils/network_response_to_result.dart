@@ -10,28 +10,29 @@ class NetworkResponseToResult<T> {
   //TODO now we throw the errors. so can we use T instead of dynamic ? i think no , because apiProvider is dynamic.
   late final Response<dynamic>? response;
 
-  var connectivity = Connectivity();
 
   Future<T> generalNetworkResult(
       JsonConverter<T> jsonConverter, Future<Response<dynamic>> request) async {
     ///check internet
-    if (await connectivity.checkConnectivity() == ConnectivityResult.none) {
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       throw NoInternetException("اتصال اینترنتی خود را برسی کنید.");
     } else {
       //TODO remove await ??
       await request.then((value) {
         response = value;
-      }).catchError((Object obj) {
+      }, onError: (obj, stackTree) {
         Logger().i(obj);
         switch (obj.runtimeType) {
           case DioError:
-            //TODO check the status when obj isn't instance of DioError
+          //TODO check the status when obj isn't instance of DioError
             response = (obj as DioError).response;
             break;
           default:
-            break;
+            throw UndefinedException(obj.toString());
         }
-      });
+      })/*.catchError((Object obj) {
+
+      })*/;
 
       ///generate response
       if (response != null) {
@@ -54,7 +55,7 @@ class NetworkResponseToResult<T> {
             throw UndefinedException();
         }
       } else {
-        throw UndefinedException();
+        throw UndefinedException("پاسخی از سمت سرور دریافت نشد.");
       }
     }
   }

@@ -40,7 +40,77 @@ class WaitingPage extends StatelessWidget {
         onWillPop: () {
           return Future.value(false);
         },
-        child: const WaitingBody(),
+        child: MultiBlocListener(listeners: [
+          BlocListener<ChangeOrderStatusCubit, ChangeOrderStatusState>(
+            listener: (context, state) {
+              if (state.changeOrderStatus == ChangeOrderStatus.loading) {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return const LoadingWidget();
+                    });
+              } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
+                context.read<WaitingCubit>().orderStatusClosed();
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return const CanceledDialog();
+                    });
+              }
+            },
+          ),
+          BlocListener<WaitingCubit, WaitingState>(
+            listener: (context, state) {
+              switch (state.orderStatusResponse?.orderStatus) {
+                //waiting
+                case 1:
+                  break;
+                //success
+                case 2:
+                  context.read<WaitingCubit>().orderStatusClosed();
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return const AcceptedByUserDialog();
+                      });
+                  // });
+
+                  break;
+                //calculate again
+                case 3:
+                  context.read<WaitingCubit>().orderStatusClosed();
+
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return const CalculateAgainDialog();
+                      }).then((value) {
+                    //if false -> user canceled the order
+                    if (value == false) {
+                      context.read<ChangeOrderStatusCubit>().statusSubmitted(
+                          orderStatus: OrderStatus.rejected,
+                          changeReason: OrderStatusChangeReason.disagreement);
+                      //if true -> user want to recalculate
+                    } else {
+                      Get.off(CalculateValuesPage.router(state.orderID));
+                    }
+                  });
+                  // });
+                  break;
+
+                //cancelled
+                case 4:
+                  break;
+              }
+            },
+          ),
+        ], child: const WaitingBody()),
       ),
     );
   }
@@ -56,100 +126,28 @@ class WaitingBody extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     context.read<WaitingCubit>().orderStatusRequested();
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<ChangeOrderStatusCubit, ChangeOrderStatusState>(
-          listener: (context, state) {
-            if (state.changeOrderStatus == ChangeOrderStatus.loading) {
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return const LoadingWidget();
-                  });
-            } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
-              context.read<WaitingCubit>().orderStatusClosed();
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return const CanceledDialog();
-                  });
-            }
-          },
-        ),
-        BlocListener<WaitingCubit, WaitingState>(
-          listener: (context, state) {
-            switch (state.orderStatusResponse?.orderStatus) {
-              //waiting
-              case 1:
-                break;
-              //success
-              case 2:
-                context.read<WaitingCubit>().orderStatusClosed();
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return const AcceptedByUserDialog();
-                    });
-                // });
-
-                break;
-              //calculate again
-              case 3:
-                context.read<WaitingCubit>().orderStatusClosed();
-
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return const CalculateAgainDialog();
-                    }).then((value) {
-                  //if false -> user canceled the order
-                  if (value == false) {
-                    context.read<ChangeOrderStatusCubit>().statusSubmitted(
-                        orderStatus: OrderStatus.rejected,
-                        changeReason: OrderStatusChangeReason.disagreement);
-                    //if true -> user want to recalculate
-                  } else {
-                    Get.off(CalculateValuesPage.router(state.orderID));
-                  }
-                });
-                // });
-                break;
-
-              //cancelled
-              case 4:
-                break;
-            }
-          },
-        ),
-      ],
-      child: SafeArea(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "منتظر باشید",
-                style: textTheme.displayMedium?.copyWith(color: yellow),
+    return SafeArea(
+      child: Container(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "منتظر باشید",
+              style: textTheme.displayMedium?.copyWith(color: yellow),
+            ),
+            LottieBuilder.asset(
+              "assets/anim/hourglass.json",
+              height: 200.h,
+              fit: BoxFit.fill,
+            ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "کاربر در حال تایید مقادیر وزن کشی ‌شده‌است",
+                style: textTheme.bodyLarge?.copyWith(color: primary),
               ),
-              LottieBuilder.asset(
-                "assets/anim/hourglass.json",
-                height: 200.h,
-                fit: BoxFit.fill,
-              ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  "کاربر در حال تایید مقادیر وزن کشی ‌شده‌است",
-                  style: textTheme.bodyLarge?.copyWith(color: primary),
-                ),
-              ),
+            ),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
@@ -192,7 +190,6 @@ class WaitingBody extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

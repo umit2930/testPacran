@@ -51,7 +51,26 @@ class OrderDetailsPage extends StatelessWidget {
           preferredSize: Size.fromHeight(66.h),
           child: const OrderDetailsAppbar(),
         ),
-        body: const OrderDetailsBody(),
+        body: BlocListener<ChangeOrderStatusCubit, ChangeOrderStatusState>(
+          listener: (context, state) {
+            if (state.changeOrderStatus == ChangeOrderStatus.loading) {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return const LoadingWidget();
+                  });
+            } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return const CanceledDialog();
+                  });
+            }
+          },
+          child: const OrderDetailsBody(),
+        ),
       ),
     );
   }
@@ -66,68 +85,49 @@ class OrderDetailsAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return SafeArea(
-      child: BlocListener<ChangeOrderStatusCubit, ChangeOrderStatusState>(
-        listener: (context, state) {
-          if (state.changeOrderStatus == ChangeOrderStatus.loading) {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  return const LoadingWidget();
-                });
-          } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  return const CanceledDialog();
-                });
-          }
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          // height: 66.h,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconAssistant.backIconButton(() => Get.offAll(HomePage.router())),
-              Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text("اطلاعات فروشنده",
-                      style: textTheme.bodySmall?.copyWith(color: secondary)),
-                ),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+        // height: 66.h,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconAssistant.backIconButton(() => Get.offAll(HomePage.router())),
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("اطلاعات فروشنده",
+                    style: textTheme.bodySmall?.copyWith(color: secondary)),
               ),
-              PopupMenuButton<MenuItem>(
-                padding: EdgeInsets.zero,
-                onSelected: (MenuItem selected) {
-                  switch (selected) {
-                    case MenuItem.problem:
-                      // Get.to(ReportPage());
-                      break;
-                    case MenuItem.cancel:
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return const ConfirmCancelDialog();
-                          }).then((value) {
-                        if (value == true) {
-                          context.read<ChangeOrderStatusCubit>().statusSubmitted(
-                              orderStatus: OrderStatus.rejected,
-                              changeReason:
-                                  OrderStatusChangeReason.problemInWay);
-                        }
-                      });
-                      // TODO: Handle this case.
-                      break;
-                  }
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r)),
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
+            ),
+            PopupMenuButton<MenuItem>(
+              padding: EdgeInsets.zero,
+              onSelected: (MenuItem selected) {
+                switch (selected) {
+                  case MenuItem.problem:
+                    // Get.to(ReportPage());
+                    break;
+                  case MenuItem.cancel:
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return const ConfirmCancelDialog();
+                        }).then((value) {
+                      if (value == true) {
+                        context.read<ChangeOrderStatusCubit>().statusSubmitted(
+                            orderStatus: OrderStatus.rejected,
+                            changeReason: OrderStatusChangeReason.problemInWay);
+                      }
+                    });
+                    // TODO: Handle this case.
+                    break;
+                }
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r)),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
                         value: MenuItem.problem,
                         child: Row(
                           children: [
@@ -159,7 +159,6 @@ class OrderDetailsAppbar extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

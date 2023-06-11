@@ -65,7 +65,11 @@ class HomeAppbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconAssistant.menuIconButton(() {
-              Scaffold.of(context).openDrawer();
+              var isSuccess = (context.read<HomeCubit>().state.homeStatus ==
+                  HomeStatus.success);
+              if (isSuccess) {
+                Scaffold.of(context).openDrawer();
+              }
             }),
             SvgPicture.asset("assets/icons/logo.svg"),
             IconAssistant.notificationIconButton(() {}),
@@ -86,7 +90,6 @@ class HomeBody extends StatelessWidget with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    Logger().e("home build");
     return SafeArea(
       child: BlocBuilder<HomeCubit, HomeState>(
           builder: (BuildContext context, state) {

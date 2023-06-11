@@ -21,7 +21,25 @@ class NumberPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(backgroundColor: Colors.white, body: LoginBody());
+    return BlocListener<LoginCubit, LoginState>(
+        listenWhen: (oldStatus, newStatus) {
+          return oldStatus.loginStatus != newStatus.loginStatus;
+        },
+        listener: (context, state) {
+          if (state.loginStatus == LoginStatus.failure) {
+            context.showToast(
+                message: state.errorMessage, messageType: MessageType.error);
+          } else if (state.loginStatus == LoginStatus.success) {
+            var response = state.loginResponse!;
+            // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            Get.off(VerifyPage.router(
+                initNumber: response.mobile ?? "0",
+                initRemaining: response.remaining?.round() ?? 60));
+            // });
+          }
+        },
+        child:
+            const Scaffold(backgroundColor: Colors.white, body: LoginBody()));
   }
 }
 
@@ -33,45 +51,28 @@ class LoginBody extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
 
     ///error handling
-    return BlocListener<LoginCubit, LoginState>(
-      listenWhen: (oldStatus, newStatus) {
-        return oldStatus.loginStatus != newStatus.loginStatus;
-      },
-      listener: (context, state) {
-        if (state.loginStatus == LoginStatus.failure) {
-          context.showToast(
-              message: state.errorMessage, messageType: MessageType.error);
-        } else if (state.loginStatus == LoginStatus.success) {
-          var response = state.loginResponse!;
-          // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          Get.off(VerifyPage.router(
-              initNumber: response.mobile ?? "0",
-              initRemaining: response.remaining?.round() ?? 60));
-          // });
-        }
-      },
-      child: SafeArea(
-        child: Container(
-          constraints: const BoxConstraints.expand(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 17.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 28.h),
-                        width: 112.w,
-                        height: 170.h,
-                        child: Image.asset("assets/images/login.png"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 56.h),
-                        child: Text("لطفا شماره همراه خود را وارد نمایید.",
-                            style: textTheme.titleSmall),
+    return SafeArea(
+      child: Container(
+        constraints: const BoxConstraints.expand(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 28.h),
+                      width: 112.w,
+                      height: 170.h,
+                      child: Image.asset("assets/images/login.png"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 56.h),
+                      child: Text("لطفا شماره همراه خود را وارد نمایید.",
+                          style: textTheme.titleSmall),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15.h),
@@ -98,7 +99,6 @@ class LoginBody extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
