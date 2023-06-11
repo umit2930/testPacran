@@ -27,7 +27,7 @@ class HomeOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return Container(
-      // height: 100.h,
+      height: 100.h,
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.only(top: 16.h),
       decoration: backgroundColor == null

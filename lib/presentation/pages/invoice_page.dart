@@ -216,8 +216,7 @@ class InvoicePageBody extends StatelessWidget {
                                             ?.copyWith(color: natural2)),
                                     const Spacer(),
                                     Text(
-                                        NumberFormat.decimalPattern()
-                                            .format(state.totalWeight),
+                                        state.totalWeight.toString(),
                                         style: textTheme.titleSmall
                                             ?.copyWith(color: natural2)),
                                     SizedBox(

@@ -1,4 +1,5 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
+import 'package:dobareh_bloc/presentation/pages/orders_list_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 import '../../business_logic/auth/authentication_cubit.dart';
 import '../../utils/colors.dart';
 import '../components/general/loading_widget.dart';
 import '../components/home/account_exit_dialog.dart';
 import '../components/menu/menu_item.dart';
+import 'account_info_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -132,16 +135,18 @@ class MenuPage extends StatelessWidget {
                                             BorderSide(color: secondaryTint2)),
                                         color: background),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FittedBox(
+                                      child: Text(
+                                        "کل جمع آوری امروز",
+                                        style: textTheme.bodyMedium
+                                            ?.copyWith(color: primary),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        FittedBox(
-                                          child: Text(
-                                            "کل جمع آوری امروز",
-                                            style: textTheme.bodyMedium
-                                                ?.copyWith(color: primary),
-                                          ),
-                                        ),
                                         Padding(
                                           padding: EdgeInsets.only(top: 30.h),
                                           child: RichText(
@@ -159,8 +164,10 @@ class MenuPage extends StatelessWidget {
                                                           color: natural4)),
                                             ]),
                                           ),
-                                        )
+                                        ),
                                       ],
+                                    )
+                                  ],
                                     ),
                                   ),
                                 ),
@@ -228,17 +235,15 @@ class MenuPage extends StatelessWidget {
                               svgAsset: "assets/icons/note.svg",
                               text: "لیست جمع آوری",
                               onTap: () {
-                                /*  var toadyString =
-                              homeResponse.today?.date ?? "1402-01-01";
-                          Jalali today = Jalali(
-                            int.parse(toadyString.substring(0, 4)),
-                            int.parse(toadyString.substring(5, 7)),
-                            int.parse(toadyString.substring(8, 10)),
-                          );
-                          Get.to(OrdersListPage(
-                            today: today,
-                          ));*/
-                              }),
+                            var toadyString =
+                                homeResponse.today?.date ?? "1402-01-01";
+                            Jalali today = Jalali(
+                              int.parse(toadyString.substring(0, 4)),
+                              int.parse(toadyString.substring(5, 7)),
+                              int.parse(toadyString.substring(8, 10)),
+                            );
+                            Get.to(OrdersListPage.router(today));
+                          }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/support.svg",
                               text: "پشتیبانی ",
@@ -249,8 +254,8 @@ class MenuPage extends StatelessWidget {
                               svgAsset: "assets/icons/account_info.svg",
                               text: "اطلاعات حساب کاربری",
                               onTap: () {
-                                // Get.to(AccountInfoPage());
-                              }),
+                                Get.to(AccountInfoPage.router());
+                          }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/about.svg",
                               text: "درباره ما",

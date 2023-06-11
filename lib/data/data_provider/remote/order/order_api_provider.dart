@@ -6,6 +6,7 @@ import 'package:dobareh_bloc/utils/strings.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 
+import '../../../../utils/enums.dart';
 import '../interceptor.dart';
 
 class OrderApiProvider {
@@ -23,7 +24,29 @@ class OrderApiProvider {
     return _dio.get("order/show/$orderID");
   }
 
-  Future<Response> changeStatus(
+  Future<Response> getOrders(
+      {OrderStatus? orderStatus, String? date, int? limit, int? offset}) async {
+    Map<String ,String> queries = {};
+
+    if(orderStatus != null) {
+      queries["status"] = orderStatus.value;
+    }
+    if(date != null) {
+      queries["date"] = date;
+    }
+
+    if(limit != null) {
+      queries["limit"] = "$limit";
+    }
+    if(offset != null) {
+      queries["offset"] = "$offset";
+    }
+
+
+    return await _dio.get("order/", queryParameters:queries);
+  }
+
+  Future<Response> postStatus(
       {required int orderID, required Map<String, dynamic> data}) {
 
     var formData = FormData.fromMap(data);
@@ -31,7 +54,7 @@ class OrderApiProvider {
     return _dio.post("order/change-status/$orderID", data: formData);
   }
 
-  Future<Response> checkStatus({required int orderID}) {
+  Future<Response> getStatus({required int orderID}) {
     return _dio.get("order/check-status/$orderID");
   }
 
@@ -39,7 +62,7 @@ class OrderApiProvider {
     return _dio.get("/order/material-categories");
   }
 
-  Future<Response> calculateValues(int orderID, Map<String, dynamic> values) {
+  Future<Response> postValues(int orderID, Map<String, dynamic> values) {
     return _dio.post("/order/calculate/$orderID", data: json.encode(values));
   }
 }

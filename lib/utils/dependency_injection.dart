@@ -7,7 +7,7 @@ import '../data/data_provider/local/auth_shared_preferences.dart';
 import '../data/data_provider/remote/auth/auth_api_provider.dart';
 import '../data/data_provider/remote/order/home_api_provider.dart';
 import '../data/repository/auth_repository.dart';
-import '../data/repository/home_repository.dart';
+import '../data/repository/user_repository.dart';
 
 const userTokenTag = "user_token";
 
@@ -24,8 +24,8 @@ class DependencyInjection {
 
   //TODO why when we use lazyPut, its not work when go to the screen again ?
   static void provideHome() {
-    Get.put(HomeApiProvider());
-    Get.put<HomeRepository>(HomeRepository());
+    Get.put(UserApiProvider());
+    Get.put<UserRepository>(UserRepository());
   }
 
   static void provideOrder() {

@@ -10,8 +10,8 @@ import '../../../data/model/order/order_response.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/location_geolocator.dart';
 
-class MapWidget extends StatefulWidget {
-  const MapWidget({
+class GoogleMapWidget extends StatefulWidget {
+  const GoogleMapWidget({
     Key? key,
     required this.order,
   }) : super(key: key);
@@ -19,10 +19,10 @@ class MapWidget extends StatefulWidget {
   final Order order;
 
   @override
-  State<MapWidget> createState() => _MapWidgetState();
+  State<GoogleMapWidget> createState() => _GoogleMapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 

@@ -47,9 +47,10 @@ class CategoryItem extends StatelessWidget {
                         title: category.title ?? "پسماند",
                       );
                     }).then((value) {
+                      print(value);
                   if (value != null) {
                     ///delete
-                    if (value == 0) {
+                    if (value == 0.0) {
                       cubit.valueDeleted(category);
                     } else {
                       ///add

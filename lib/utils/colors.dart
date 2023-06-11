@@ -35,7 +35,7 @@ var boxDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(12.r),
   boxShadow:  [
-    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, ),
+    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8, ),
   ],
 );
 
@@ -43,7 +43,7 @@ var topRoundedBoxDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
   boxShadow: [
-    BoxShadow(color: Colors.black87.withOpacity(0.1), blurRadius: 12),
+    BoxShadow(color: Colors.black87.withOpacity(0.1), blurRadius: 8),
   ],
 );
 
