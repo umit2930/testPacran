@@ -4,6 +4,7 @@ import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/bottom_actions_widget.dart';
 import 'package:dobareh_bloc/presentation/pages/home_page.dart';
+import 'package:dobareh_bloc/presentation/pages/report_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -104,7 +105,7 @@ class OrderDetailsAppbar extends StatelessWidget {
               onSelected: (MenuItem selected) {
                 switch (selected) {
                   case MenuItem.problem:
-                    // Get.to(ReportPage());
+                    Get.to(ReportPage.router());
                     break;
                   case MenuItem.cancel:
                     showDialog(

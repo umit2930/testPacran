@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 
 import '../data/data_provider/local/auth_shared_preferences.dart';
 import '../data/data_provider/remote/auth/auth_api_provider.dart';
-import '../data/data_provider/remote/order/home_api_provider.dart';
+import '../data/data_provider/remote/order/user_api_provider.dart';
 import '../data/repository/auth_repository.dart';
 import '../data/repository/user_repository.dart';
 
@@ -18,7 +18,7 @@ class DependencyInjection {
     Get.lazyPut<AuthRepository>(() => AuthRepository());
   }
 
-  static Future<void> provideUserToken(String token) async {
+  static void provideUserToken(String token)  {
     Get.put(token, tag: userTokenTag);
   }
 

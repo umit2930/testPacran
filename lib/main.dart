@@ -64,7 +64,7 @@ class App extends StatelessWidget {
                       DependencyInjection.provideHome();
                       DependencyInjection.provideOrder();
 
-                      Get.offAll(() => HomePage.router());
+                      Get.off(() => HomePage.router());
                       break;
                     case AuthenticationStatus.unauthenticated:
                       //TODO change to offALl.

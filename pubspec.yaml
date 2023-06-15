@@ -58,7 +58,7 @@ dependencies:
 
   lottie: ^2.3.2
   persian_datetime_picker: ^2.6.0
-  location: ^4.4.0
+#  location: ^4.4.0
 
   flutter_map: ^4.0.0
   latlong2: ^0.8.1

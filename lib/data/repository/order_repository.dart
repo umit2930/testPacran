@@ -24,7 +24,7 @@ class OrderRepository {
   ///orders
   Future<OrdersListResponse> getOrders(
       {OrderStatus? orderStatus, String? date, int? limit, int? offset}) {
-    return NetworkResponseToResult<OrdersListResponse>().generalNetworkResult(
+    return generalNetworkResult<OrdersListResponse>(
         OrdersListResponse.fromJson,
         _orderApiProvider.getOrders(
             orderStatus: orderStatus,
@@ -35,7 +35,7 @@ class OrderRepository {
 
   ///details
   Future<OrderResponse> getDetails(int orderID) {
-    return NetworkResponseToResult<OrderResponse>().generalNetworkResult(
+    return generalNetworkResult<OrderResponse>(
         OrderResponse.fromJson, _orderApiProvider.getDetails(orderID));
   }
 
@@ -49,20 +49,20 @@ class OrderRepository {
       if (changeReason != null) ...{"reason": changeReason.value}
     };
 
-    return NetworkResponseToResult<SuccessModel>().generalNetworkResult(
+    return generalNetworkResult<SuccessModel>(
         SuccessModel.fromJson,
         _orderApiProvider.postStatus(orderID: orderID, data: dataMap));
   }
 
   Future<OrderStatusResponse> checkStatus({required int orderID}) {
-    return NetworkResponseToResult<OrderStatusResponse>().generalNetworkResult(
+    return generalNetworkResult<OrderStatusResponse>(
         OrderStatusResponse.fromJson,
         _orderApiProvider.getStatus(orderID: orderID));
   }
 
   ///values
   Future<CategoriesResponse> getCategories() {
-    return NetworkResponseToResult<CategoriesResponse>().generalNetworkResult(
+    return generalNetworkResult<CategoriesResponse>(
         CategoriesResponse.fromJson, _orderApiProvider.getCategories());
   }
 
@@ -74,7 +74,7 @@ class OrderRepository {
 
     Logger().e(jsonEncode(valuesBody));
 
-    return NetworkResponseToResult<SuccessModel>().generalNetworkResult(
+    return generalNetworkResult<SuccessModel>(
         SuccessModel.fromJson,
         _orderApiProvider.postValues(orderID, valuesBody));
   }

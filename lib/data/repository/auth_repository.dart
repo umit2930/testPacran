@@ -15,12 +15,12 @@ class AuthRepository {
         _appSharedPreferences = Get.find();
 
   Future<LoginResponse> login(String number) async {
-    return await NetworkResponseToResult<LoginResponse>().generalNetworkResult(
+    return await generalNetworkResult<LoginResponse>(
         LoginResponse.fromJson, _apiProvider.login(number));
   }
 
   Future<VerifyResponse> verify(String number, String code) async {
-    return await NetworkResponseToResult<VerifyResponse>().generalNetworkResult(
+    return await generalNetworkResult<VerifyResponse>(
         VerifyResponse.fromJson, _apiProvider.verify(number, code));
   }
 

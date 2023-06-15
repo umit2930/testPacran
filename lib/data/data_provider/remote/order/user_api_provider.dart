@@ -23,4 +23,23 @@ class UserApiProvider {
   Future<Response> getProfile(){
     return _dio.get("profile");
   }
+
+
+  ///report
+  Future<Response> getReports()  {
+    return  _dio.get("/report/index");
+  }
+
+  Future<Response> sendReport(int reportID)  {
+    return  _dio.post("/report/send-report/$reportID");
+  }
+
+  ///support
+  Future<Response> getSupport()  {
+    return  _dio.get("/support/index");
+  }
+
+  Future<Response> getSupportAnswer(int supportID)  {
+    return  _dio.get("/support/show/$supportID");
+  }
 }

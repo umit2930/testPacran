@@ -42,7 +42,7 @@ class BottomActionsWidget extends StatelessWidget {
       switch (state.orderStatus ?? OrderStatus.waiting) {
         case OrderStatus.waiting:
           return Container(
-              height: 120.h,
+              // height: 120.h,
               decoration: topRoundedBoxDecoration,
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 30.h),
               child: Row(
@@ -61,7 +61,7 @@ class BottomActionsWidget extends StatelessWidget {
               ));
         case OrderStatus.onWay:
           return Container(
-              height: 120.h,
+              // height: 120.h,
               decoration: topRoundedBoxDecoration,
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 30.h),
               child: Row(

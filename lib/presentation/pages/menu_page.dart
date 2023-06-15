@@ -1,5 +1,6 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
 import 'package:dobareh_bloc/presentation/pages/orders_list_page.dart';
+import 'package:dobareh_bloc/presentation/pages/support_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -248,8 +249,8 @@ class MenuPage extends StatelessWidget {
                               svgAsset: "assets/icons/support.svg",
                               text: "پشتیبانی ",
                               onTap: () {
-                                // Get.to(const SupportPage());
-                              }),
+                                Get.to(SupportPage.router());
+                          }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/account_info.svg",
                               text: "اطلاعات حساب کاربری",

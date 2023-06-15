@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
+import 'package:dobareh_bloc/presentation/pages/large_map_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../data/model/home/home_response.dart';
@@ -37,84 +39,87 @@ class OpenStreetMapWidget extends StatelessWidget {
         return RepaintBoundary(
           child: Container(
             decoration: boxDecoration,
-            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-            child: Column(
-              children: [
-                //TODO remove ClipRRect and check performance.
-                Container(
-                    height: 122.h,
-                    alignment: Alignment.center,
-                    child: (localOrders.isEmpty)
-                        ? FittedBox(
-                          child: Text("برای این بازه زمانی جمع اوری وجود ندارد.",
-                              style: textTheme.bodyLarge
-                                  ?.copyWith(color: natural6)),
-                        )
-                        : FutureBuilder(
-                            future: determinePosition(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<Position> snapshot) {
-                              if (snapshot.hasData) {
-                                var currentLocations = snapshot.data!;
-                                return FutureBuilder(
-                                  future: createMarkers(
-                                      orders, currentLocations),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  // homeViewModel.homeStream
+                  Get.to(LargeMapPage.router(
+                      state.timePacks!, state.inProgressOrder,selectedTimePack));
+                  // homeViewModel.getProfile();
+                },
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                  child: Column(
+                    children: [
+                      //TODO remove ClipRRect and check performance.
+                      Container(
+                          height: 122.h,
+                          alignment: Alignment.center,
+                          child: (localOrders.isEmpty)
+                              ? FittedBox(
+                                  child: Text(
+                                      "برای این بازه زمانی جمع اوری وجود ندارد.",
+                                      style: textTheme.bodyLarge
+                                          ?.copyWith(color: natural6)),
+                                )
+                              : FutureBuilder(
+                                  future: determinePosition(),
                                   builder: (BuildContext context,
-                                      AsyncSnapshot<List<Marker>>
-                                          snapshot) {
+                                      AsyncSnapshot<Position> snapshot) {
                                     if (snapshot.hasData) {
-                                      var markers = snapshot.data!;
-                                      return FlutterMap(
-                                        options: MapOptions(
-                                          center: LatLng(
-                                              currentLocations.latitude,
-                                              currentLocations.longitude),
-                                          zoom: 12.5,
-                                          // bounds: bounds
-                                        ),
-                                        children: [
-                                          TileLayer(
-                                              urlTemplate:
-                                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                              userAgentPackageName:
-                                                  'com.example.app'),
-                                          MarkerLayer(markers: markers)
-                                        ],
+                                      var currentLocations = snapshot.data!;
+                                      return FutureBuilder(
+                                        future: createMarkers(
+                                            orders, currentLocations),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<List<Marker>>
+                                                snapshot) {
+                                          if (snapshot.hasData) {
+                                            var markers = snapshot.data!;
+                                            return FlutterMap(
+                                              options: MapOptions(
+                                                center: LatLng(
+                                                    currentLocations.latitude,
+                                                    currentLocations.longitude),
+                                                zoom: 12.5,
+                                                // bounds: bounds
+                                              ),
+                                              children: [
+                                                TileLayer(
+                                                    urlTemplate:
+                                                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                                    userAgentPackageName:
+                                                        'com.example.app'),
+                                                MarkerLayer(markers: markers)
+                                              ],
+                                            );
+                                          } else {
+                                            return const LoadingWidget();
+                                          }
+                                        },
                                       );
                                     } else {
                                       return const LoadingWidget();
                                     }
                                   },
-                                );
-                              } else {
-                                return const LoadingWidget();
-                              }
-                            },
-                          )),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      // homeViewModel.homeStream
-                      /* Get.to(LargeMapPage(
-                                          selectedTimeID: selectedTimePack,
-                                        ));*/
-                      // homeViewModel.getProfile();
-                    },
-                    child: Row(
-                      children: [
-                        Text(" منطقه شما ",
-                            style: textTheme.titleSmall
-                                ?.copyWith(color: natural1)),
-                        Text("(بازه ${delivery.from} الی ${delivery.to})"),
-                        IconAssistant.forwardIconButton(null),
-                      ],
-                    ),
+                                )),
+                      Row(
+                        children: [
+                          Text(" منطقه شما ",
+                              style: textTheme.titleSmall
+                                  ?.copyWith(color: natural1)),
+                          Text("(بازه ${delivery.from} الی ${delivery.to})"),
+                          IconAssistant.forwardIconButton(null),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                ],
               ),
             ),
+          ),
           );
         // var selectedTimePack = state.selectedTimePackID;
       },
