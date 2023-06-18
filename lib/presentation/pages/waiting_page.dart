@@ -106,6 +106,12 @@ class WaitingPage extends StatelessWidget {
 
               //cancelled
                 case 4:
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return const CanceledDialog();
+                      });
                   break;
               }
             },

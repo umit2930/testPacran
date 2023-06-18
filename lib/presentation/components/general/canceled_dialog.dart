@@ -12,45 +12,48 @@ class CanceledDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
-    return Dialog(
-      child: Container(
-        padding: EdgeInsets.only(top: 10.h),
-        alignment: Alignment.center,
-        width: 329.w,
-        height: 283.h,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/success.png",
-              height: 64.h,
-              width: 64.w,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 24.h),
-              child: Text(
-                "ماموریت لغو شد",
-                style: textTheme.titleSmall?.copyWith(color: natural2),
+    return WillPopScope(
+      onWillPop: () { return Future(() => false); },
+      child: Dialog(
+        child: Container(
+          padding: EdgeInsets.only(top: 10.h),
+          alignment: Alignment.center,
+          width: 329.w,
+          height: 283.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/success.png",
+                height: 64.h,
+                width: 64.w,
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 16.h),
-              child: Text(
-                "در صورت نیاز با پشتیبانی تماس بگیرید",
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: textTheme.bodyMedium?.copyWith(color: natural5),
+              Padding(
+                padding: EdgeInsets.only(top: 24.h),
+                child: Text(
+                  "ماموریت لغو شد",
+                  style: textTheme.titleSmall?.copyWith(color: natural2),
+                ),
               ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(top: 32.h),
-                child: CustomFilledButton(
-                    width: 156.w,
-                    onPressed: () {
-                      Get.offAll(HomePage.router());
-                    },
-                    buttonChild: const Text("تایید")))
-          ],
+              Padding(
+                padding: EdgeInsets.only(top: 16.h),
+                child: Text(
+                  "در صورت نیاز با پشتیبانی تماس بگیرید",
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: textTheme.bodyMedium?.copyWith(color: natural5),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: CustomFilledButton(
+                      width: 156.w,
+                      onPressed: () {
+                        Get.offAll(HomePage.router());
+                      },
+                      buttonChild: const Text("تایید")))
+            ],
+          ),
         ),
       ),
     );

@@ -66,11 +66,7 @@ class InvoicePage extends StatelessWidget {
                       barrierDismissible: false,
                       context: context,
                       builder: (context) {
-                        return WillPopScope(
-                            onWillPop: () {
-                              return Future(() => false);
-                            },
-                            child: const CanceledDialog());
+                        return const CanceledDialog();
                       });
                 } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
                   context.showToast(
