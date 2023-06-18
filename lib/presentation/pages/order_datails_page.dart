@@ -1,6 +1,7 @@
 import 'package:dobareh_bloc/business_logic/order/change_order_status_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/general/canceled_dialog.dart';
 import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart';
+import 'package:dobareh_bloc/presentation/components/general/location_checker.dart';
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/bottom_actions_widget.dart';
 import 'package:dobareh_bloc/presentation/pages/home_page.dart';
@@ -244,8 +245,10 @@ class OrderDetailsBody extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.center,
                                   height: 182.h,
-                                  child: OpenStreetWidget(
-                                    order: order,
+                                  child: LocationCheckerWidget(
+                                    mapWidget: OpenStreetWidget(
+                                      order: order,
+                                    ),
                                   ),
                                 )),
                           ),

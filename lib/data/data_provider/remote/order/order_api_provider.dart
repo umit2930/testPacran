@@ -17,7 +17,7 @@ class OrderApiProvider {
   OrderApiProvider() : _userToken = Get.find(tag: userTokenTag) {
     _dio.options.baseUrl = apiBaseURL;
     _dio.options.headers["Authorization"] = "Bearer $_userToken";
-    _dio.interceptors.add(CustomInterceptors());
+    // _dio.interceptors.add(CustomInterceptors());
   }
 
   Future<Response> getDetails(int orderID) {

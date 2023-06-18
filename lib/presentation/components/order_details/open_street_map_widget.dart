@@ -97,7 +97,7 @@ class _OpenStreetWidgetState extends State<OpenStreetWidget> {
         height: 48.h,
         point: LatLng(latitude, longitude),
         builder: (context) {
-          return SvgPicture.asset("assets/images/marker.svg");
+          return SvgPicture.asset("assets/icons/user_marker.svg");
         }));
   }
 

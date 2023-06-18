@@ -13,7 +13,7 @@ class UserApiProvider {
   UserApiProvider() : userToken = Get.find(tag: userTokenTag) {
     _dio.options.headers["Authorization"] = "Bearer $userToken";
     _dio.options.baseUrl = apiBaseURL;
-    _dio.interceptors.add(CustomInterceptors());
+    // _dio.interceptors.add(CustomInterceptors());
   }
 
   Future<Response> getHome() {

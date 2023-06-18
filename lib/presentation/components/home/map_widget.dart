@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
+import 'package:dobareh_bloc/presentation/components/general/custom_filled_button.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,15 +11,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:logger/logger.dart';
 
 import '../../../data/model/home/home_response.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/location_geolocator.dart';
 import '../../pages/large_map_page.dart';
 import '../general/loading_widget.dart';
+import '../general/location_checker.dart';
 
 class OpenStreetMapWidget extends StatelessWidget {
   const OpenStreetMapWidget({Key? key}) : super(key: key);
@@ -69,46 +69,8 @@ class OpenStreetMapWidget extends StatelessWidget {
                                       style: textTheme.bodyLarge
                                           ?.copyWith(color: natural6)),
                                 )
-                              : FutureBuilder(
-                                  future: determinePosition(),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<Position> snapshot) {
-                                    if (snapshot.hasData) {
-                                      var currentLocations = snapshot.data!;
-                                      return FutureBuilder(
-                                        future: createMarkers(
-                                            orders, currentLocations),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<List<Marker>>
-                                                snapshot) {
-                                          if (snapshot.hasData) {
-                                            var markers = snapshot.data!;
-                                            return FlutterMap(
-                                              options: MapOptions(
-                                                center: LatLng(
-                                                    currentLocations.latitude,
-                                                    currentLocations.longitude),
-                                                zoom: 12.5,
-                                                // bounds: bounds
-                                              ),
-                                              children: [
-                                                TileLayer(
-                                                    urlTemplate:
-                                                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                                    userAgentPackageName:
-                                                        'com.example.app'),
-                                                MarkerLayer(markers: markers)
-                                              ],
-                                            );
-                                          } else {
-                                            return const LoadingWidget();
-                                          }
-                                        },
-                                      );
-                                    } else {
-                                      return const LoadingWidget();
-                                    }
-                                  },
+                              : LocationCheckerWidget(
+                                  mapWidget: HomeMap(orders: orders),
                                 )),
                       Row(
                         children: [
@@ -127,6 +89,69 @@ class OpenStreetMapWidget extends StatelessWidget {
           ),
           );
         // var selectedTimePack = state.selectedTimePackID;
+      },
+    );
+  }
+
+
+
+/*  Future<void> createBounds(List<Marker> markers) async {
+    var longs = markers.map((e) => e.point.longitude);
+    var latis = markers.map((e) => e.point.latitude);
+
+    double topMost = longs.reduce(max);
+    double leftMost = latis.reduce(min);
+    double rightMost = latis.reduce(max);
+    double bottomMost = longs.reduce(min);
+
+    bounds = LatLngBounds(
+      LatLng(rightMost, topMost),
+      LatLng(leftMost, bottomMost),
+    );
+  }*/
+}
+
+class HomeMap extends StatelessWidget {
+  const HomeMap({Key? key, required this.orders}) : super(key: key);
+
+  final List<Orders> orders;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: determinePosition(),
+      builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+        if (snapshot.hasData) {
+          var currentLocations = snapshot.data!;
+          return FutureBuilder(
+            future: createMarkers(orders, currentLocations),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Marker>> snapshot) {
+              if (snapshot.hasData) {
+                var markers = snapshot.data!;
+                return FlutterMap(
+                  options: MapOptions(
+                    center: LatLng(
+                        currentLocations.latitude, currentLocations.longitude),
+                    zoom: 12.5,
+                    // bounds: bounds
+                  ),
+                  children: [
+                    TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.example.app'),
+                    MarkerLayer(markers: markers)
+                  ],
+                );
+              } else {
+                return const LoadingWidget();
+              }
+            },
+          );
+        } else {
+          return const LoadingWidget();
+        }
       },
     );
   }
@@ -153,25 +178,12 @@ class OpenStreetMapWidget extends StatelessWidget {
           height: 48.h,
           point: LatLng(latitude, longitude),
           builder: (context) {
-            return SvgPicture.asset("assets/images/marker.svg");
+            return SvgPicture.asset("assets/icons/user_marker.svg");
           }));
     }
 
     return markers;
   }
-
-/*  Future<void> createBounds(List<Marker> markers) async {
-    var longs = markers.map((e) => e.point.longitude);
-    var latis = markers.map((e) => e.point.latitude);
-
-    double topMost = longs.reduce(max);
-    double leftMost = latis.reduce(min);
-    double rightMost = latis.reduce(max);
-    double bottomMost = longs.reduce(min);
-
-    bounds = LatLngBounds(
-      LatLng(rightMost, topMost),
-      LatLng(leftMost, bottomMost),
-    );
-  }*/
 }
+
+

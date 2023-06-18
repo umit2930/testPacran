@@ -1,4 +1,5 @@
 import 'package:dobareh_bloc/business_logic/map/map_cubit.dart';
+import 'package:dobareh_bloc/presentation/components/general/location_checker.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -195,9 +196,11 @@ class LargeMapBody extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 100.h),
                           child: Align(
                               alignment: Alignment.topCenter,
-                              child: LargeMapWidget(
-                                orders: selectedTimePack,
-                                pageController: pageController,
+                              child: LocationCheckerWidget(
+                                mapWidget: LargeMapWidget(
+                                  orders: selectedTimePack,
+                                  pageController: pageController,
+                                ),
                               )),
                         ),
                   Align(

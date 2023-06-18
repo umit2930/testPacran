@@ -1,4 +1,5 @@
 import 'package:dobareh_bloc/business_logic/order/order_details_cubit.dart';
+import 'package:dobareh_bloc/presentation/components/general/location_checker.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/open_street_map_widget.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
@@ -241,8 +242,10 @@ class OrderDetailsBody extends StatelessWidget {
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 172.h,
-                                      child: OpenStreetWidget(
-                                        order: order ?? Order(),
+                                      child: LocationCheckerWidget(
+                                        mapWidget: OpenStreetWidget(
+                                          order: order ?? Order(),
+                                        ),
                                       )),
                                 ),
                               ],

@@ -104,7 +104,7 @@ class LargeMapWidget extends StatelessWidget {
 
   Future<void> createMarkers() async {
     var pinIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/images/pin.png");
+        const ImageConfiguration(), "assets/images/user_location_pin.png");
 
     for (int i = 0; i < orders.length; i++) {
       var markerID = MarkerId("$i");
