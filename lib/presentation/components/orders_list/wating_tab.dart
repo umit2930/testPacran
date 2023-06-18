@@ -18,8 +18,6 @@ class WaitingTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
-
     return BlocBuilder<OrdersListCubit, OrdersListState>(
         builder: (context, state) {
       switch (state.waitingOrdersStatus) {
@@ -62,148 +60,173 @@ class WaitingTabSuccessWidget extends StatelessWidget {
 
       var filteredTimePack = selectedTimePack
           .where((element) => element.status == OrderStatus.waiting.value);
+
+      var inProgressOrder = state.inProgressOrder;
       return SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                  top: 16.h, left: 16.w, right: 16.w, bottom: 16.h),
-              child: Row(
-                children: [
-                  const Expanded(child: Text("لیست جمع آوری‌های در انتظار")),
-                  SizedBox(
-                    // width: 106.w,
-                    child: PopupMenuButton<int>(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r)),
-                      onSelected: (item) {
-                        context
-                            .read<OrdersListCubit>()
-                            .timePackSelected(index: item);
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return List<PopupMenuItem<int>>.generate(
-                            state.waitingPacks!.keys.length, (index) {
-                          var selectedTime =
-                              state.waitingPacks!.keys.elementAt(index);
-                          return PopupMenuItem(
-                              value: index,
-                              child: Row(
-                                children: [
-                                  Theme(
-                                    data: Theme.of(context)
-                                        .copyWith(disabledColor: primary),
-                                    child: Checkbox(
-                                      value: selectedTimeID == index,
-                                      onChanged: null,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 10.w),
-                                    child: Text(
-                                      "${selectedTime.from} تا  ${selectedTime.to}",
-                                      style: textTheme.titleSmall
-                                          ?.copyWith(color: natural1),
-                                    ),
-                                  ),
-                                ],
-                              ));
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        // width: 106.w,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                            color: background,
-                            border: Border.all(color: secondaryTint2),
-                            borderRadius: BorderRadius.circular(12.r)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.only(
+                top: 16.h, left: 16.w, right: 16.w, bottom: 16.h),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                  "لیست جمع آوری‌های در انتظار",
+                  style: textTheme.bodyMedium?.copyWith(color: natural1),
+                )),
+                PopupMenuButton<int>(
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: secondaryTint2),
+                      borderRadius: BorderRadius.circular(12.r)),
+                  onSelected: (item) {
+                    context
+                        .read<OrdersListCubit>()
+                        .timePackSelected(index: item);
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return List<PopupMenuItem<int>>.generate(
+                        state.waitingPacks!.keys.length, (index) {
+                      var selectedTime =
+                          state.waitingPacks!.keys.elementAt(index);
+                      return PopupMenuItem(
+                          value: index,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding:  EdgeInsets.only(right: 8.w),
-                                child: Text(
-                                    "${selectedTime.from} تا  ${selectedTime.to}",
-                                    style: textTheme.titleSmall
-                                        ?.copyWith(color: natural1)),
+                              Theme(
+                                data: Theme.of(context)
+                                    .copyWith(disabledColor: primary),
+                                child: Checkbox(
+                                  value: selectedTimeID == index,
+                                  onChanged: null,
+                                ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(right: 8.w,left: 8.w),
-                                child: SvgPicture.asset(
-                                    "assets/icons/arrow_down.svg"),
+                                padding: EdgeInsets.only(right: 10.w),
+                                child: Text(
+                                  "${selectedTime.from} تا  ${selectedTime.to}",
+                                  style: textTheme.titleSmall
+                                      ?.copyWith(color: natural1),
+                                ),
                               ),
                             ],
+                          ));
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    // width: 106.w,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        color: background,
+                        border: Border.all(color: secondaryTint2),
+                        borderRadius: BorderRadius.circular(12.r)),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.w),
+                            child: Text(
+                                "${selectedTime.from} تا  ${selectedTime.to}",
+                                style: textTheme.titleSmall
+                                    ?.copyWith(color: natural1)),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.w, left: 8.w),
+                            child:
+                                SvgPicture.asset("assets/icons/arrow_down.svg"),
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
-            Expanded(
-                child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (filteredTimePack.isNotEmpty) ...[
-                    ListView.builder(
-                      padding: EdgeInsets.only(
-                          left: 16.w, right: 16.w, bottom: 80.h),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        var item = filteredTimePack.elementAt(index);
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(children: [
+                ///In process item
+/*                if (inProgressOrder != null &&
+                    inProgressOrder.deliveryTime?.from ==
+                        selectedTime.from) ...[
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("در حال جمع آوری مواد بازیافتی"),
+                          HomeOrderItem(
+                              isActive: true,
+                              backgroundColor: secondaryTint2,
+                              personName: inProgressOrder.deliveryPersonName ??
+                                  "نام و نام خانوادگی",
+                              address:
+                                  inProgressOrder.address?.address ?? "آدرس",
+                              onPressed: () {
+                                Get.off(OrderDetailsPage.router(
+                                  orderID: inProgressOrder.id!.round(),
+                                ));
+                              }),
+                        ]),
+                  )
+                ],*/
 
-                        return HomeOrderItem(
-                            isActive: false,
-                            personName: item.deliveryPersonName!,
-                            address: item.address!.address!,
-                            onPressed: state.inProgressOrder == null
-                                ? () {
-                                    Get.to(OrderDetailsPage.router(
-                                        orderID: item.id!.toInt()));
-                                  }
-                                : () {
-                                    context.showToast(
-                                        message:
-                                            "شما یک سفارش در حال پردازش دارید!",
-                                        messageType: MessageType.warning);
-                                  });
-                      },
-                      itemCount: selectedTimePack
-                          .where((element) =>
-                              element.status == OrderStatus.waiting.value)
-                          .length,
-                    ),
-                  ] else ...[
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(top: 60.h),
-                      child: Column(children: [
-                        SvgPicture.asset("assets/icons/empty.svg"),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h, bottom: 100.h),
-                          child: Text(
-                            "برای این بازه زمانی جمع آوری وجود ندارد",
-                            style: textTheme.bodyLarge?.copyWith(
-                              color: natural6,
-                            ),
-                            textAlign: TextAlign.center,
+                if (filteredTimePack.isNotEmpty) ...[
+                  ListView.builder(
+                    padding:
+                        EdgeInsets.only(left: 16.w, right: 16.w, bottom: 80.h),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      var item = filteredTimePack.elementAt(index);
+
+                      return HomeOrderItem(
+                          isActive: false,
+                          personName: item.deliveryPersonName!,
+                          address: item.address!.address!,
+                          onPressed: inProgressOrder == null
+                              ? () {
+                                  Get.to(OrderDetailsPage.router(
+                                      orderID: item.id!.toInt()));
+                                }
+                              : () {
+                                  context.showToast(
+                                      message:
+                                          "شما یک سفارش در حال پردازش دارید!",
+                                      messageType: MessageType.warning);
+                                });
+                    },
+                    itemCount: filteredTimePack.length,
+                  ),
+                ] else ...[
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(top: 60.h),
+                    child: Column(children: [
+                      SvgPicture.asset("assets/icons/empty.svg"),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10.h, bottom: 100.h),
+                        child: Text(
+                          "برای این بازه زمانی جمع آوری وجود ندارد",
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: natural6,
                           ),
-                        )
-                      ]),
-                    )
-                  ]
-                ],
-              ),
-            ))
-          ],
-        ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ]),
+                  )
+                ]
+              ]),
+            ),
+          ),
+        ]),
       );
-      ;
     });
   }
 }

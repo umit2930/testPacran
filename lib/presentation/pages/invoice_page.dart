@@ -55,16 +55,29 @@ class InvoicePage extends StatelessWidget {
                       barrierDismissible: false,
                       context: context,
                       builder: (context) {
-                        return const LoadingWidget();
+                        return WillPopScope(
+                            onWillPop: () {
+                              return Future(() => false);
+                            },
+                            child: const LoadingWidget());
                       });
-                } else if (state.changeOrderStatus ==
-                    ChangeOrderStatus.success) {
+                } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
                   showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (context) {
-                        return const CanceledDialog();
+                        return WillPopScope(
+                            onWillPop: () {
+                              return Future(() => false);
+                            },
+                            child: const CanceledDialog());
                       });
+                } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
+                  context.showToast(
+                      message: state.errorMessage, messageType: MessageType.error);
+
+                  ///this close dialog
+                  Get.back();
                 }
               },
             ),

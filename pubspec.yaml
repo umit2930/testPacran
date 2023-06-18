@@ -69,6 +69,7 @@ dependencies:
 
   url_launcher: ^6.1.11
   open_route_service: ^1.2.2
+  maps_launcher: ^2.2.0
 
 
 dev_dependencies:

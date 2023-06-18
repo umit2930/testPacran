@@ -72,7 +72,6 @@ class OrderRepository {
     Map<String, dynamic> valuesBody =
         CalculateValuesBody(items: values.values.toList()).toJson();
 
-    Logger().e(jsonEncode(valuesBody));
 
     return generalNetworkResult<SuccessModel>(
         SuccessModel.fromJson,

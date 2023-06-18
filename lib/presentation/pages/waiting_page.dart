@@ -64,10 +64,10 @@ class WaitingPage extends StatelessWidget {
           BlocListener<WaitingCubit, WaitingState>(
             listener: (context, state) {
               switch (state.orderStatusResponse?.orderStatus) {
-                //waiting
+              //waiting
                 case 1:
                   break;
-                //success
+              //success
                 case 2:
                   context.read<WaitingCubit>().orderStatusClosed();
                   // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -80,7 +80,7 @@ class WaitingPage extends StatelessWidget {
                   // });
 
                   break;
-                //calculate again
+              //calculate again
                 case 3:
                   context.read<WaitingCubit>().orderStatusClosed();
 
@@ -104,7 +104,7 @@ class WaitingPage extends StatelessWidget {
                   // });
                   break;
 
-                //cancelled
+              //cancelled
                 case 4:
                   break;
               }
@@ -124,72 +124,78 @@ class WaitingBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    context.read<WaitingCubit>().orderStatusRequested();
 
     return SafeArea(
-      child: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "منتظر باشید",
-              style: textTheme.displayMedium?.copyWith(color: yellow),
-            ),
-            LottieBuilder.asset(
-              "assets/anim/hourglass.json",
-              height: 200.h,
-              fit: BoxFit.fill,
-            ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                "کاربر در حال تایید مقادیر وزن کشی ‌شده‌است",
-                style: textTheme.bodyLarge?.copyWith(color: primary),
-              ),
-            ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  "بعد از تایید مقادیر، ماموریت شما به پایان می‌رسد",
-                  style: textTheme.bodyLarge?.copyWith(color: natural2),
+      child: BlocBuilder<WaitingCubit, WaitingState>(
+        builder: (context, state) {
+          if (state.orderStatusStatus == OrderStatusStatus.init) {
+            context.read<WaitingCubit>().orderStatusRequested();
+          }
+          return SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "منتظر باشید",
+                  style: textTheme.displayMedium?.copyWith(color: yellow),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 95.h),
-                child: SizedBox(
+                LottieBuilder.asset(
+                  "assets/anim/hourglass.json",
+                  height: 200.h,
+                  fit: BoxFit.fill,
+                ),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "کاربر در حال تایید مقادیر وزن کشی ‌شده‌است",
+                    style: textTheme.bodyLarge?.copyWith(color: primary),
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "بعد از تایید مقادیر، ماموریت شما به پایان می‌رسد",
+                    style: textTheme.bodyLarge?.copyWith(color: natural2),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 95.h),
+                  child: SizedBox(
                     child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16.h, horizontal: 16.w)),
-                    onPressed: () {
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return const ConfirmCancelDialog();
-                          }).then((value) {
-                        if (value == true) {
-                          context
-                              .read<ChangeOrderStatusCubit>()
-                              .statusSubmitted(
-                                orderStatus: OrderStatus.rejected,
-                                changeReason:
-                                    OrderStatusChangeReason.disagreement,
-                              );
-                        }
-                      });
-                    },
-                    child: Text(
-                      "لغو درخواست",
-                      style: textTheme.bodyMedium?.copyWith(color: secondary),
+                      style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.h, horizontal: 16.w)),
+                      onPressed: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return const ConfirmCancelDialog();
+                            }).then((value) {
+                          if (value == true) {
+                            context
+                                .read<ChangeOrderStatusCubit>()
+                                .statusSubmitted(
+                                  orderStatus: OrderStatus.rejected,
+                                  changeReason:
+                                      OrderStatusChangeReason.disagreement,
+                                );
+                          }
+                        });
+                      },
+                      child: Text(
+                        "لغو درخواست",
+                        style: textTheme.bodyMedium?.copyWith(color: secondary),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

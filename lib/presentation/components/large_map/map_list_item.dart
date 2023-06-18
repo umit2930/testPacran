@@ -37,7 +37,7 @@ class MapListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
             ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -63,49 +63,47 @@ class MapListItem extends StatelessWidget {
                 ]
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 8.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 4.0.h,
-                      left: 2.w,
-                    ),
-                    child: SvgPicture.asset(
-                      "assets/icons/location.svg",
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 8.w),
-                      child: Text(
-                        address,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodyMedium?.copyWith(color: natural1),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 4.0.h,
+                        left: 2.w,
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/icons/location.svg",
                       ),
                     ),
-                  )
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: Text(address,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodyMedium?.copyWith(color: natural1),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-            SizedBox(
-                width: 117.w,
-                height: 45.h,
-                child: FilledButton(
-                  onPressed: onPressed,
-                  style: FilledButton.styleFrom(
-                      backgroundColor:
-                          backgroundColor == null ? secondaryTint2 : secondary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12))),
-                  child: Text("جزئیات بیشتر",
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: backgroundColor == null ? secondary : white,
-                      )),
-                ))
+            FilledButton(
+              onPressed: onPressed,
+              style: FilledButton.styleFrom(
+                  backgroundColor:
+                      backgroundColor == null ? secondaryTint2 : secondary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12))),
+              child: Text("جزئیات بیشتر",
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: backgroundColor == null ? secondary : white,
+                  )),
+            )
           ],
         ),
       ),

@@ -15,14 +15,13 @@ import '../../../utils/location_geolocator.dart';
 
 
 class LargeMapWidget extends StatelessWidget {
-   LargeMapWidget({Key? key,required this.orders,required this.pageController}) : super(key: key);
-
-
+   LargeMapWidget({Key? key, required this.orders, required this.pageController})
+      : super(key: key);
 
   List<Orders> orders;
   PageController pageController;
   final Completer<GoogleMapController> _controller =
-  Completer<GoogleMapController>();
+      Completer<GoogleMapController>();
 
   // HomeLargeMapViewModel homeLargeMapViewModel = HomeLargeMapViewModel();
 
@@ -30,7 +29,8 @@ class LargeMapWidget extends StatelessWidget {
 
   LatLngBounds? bounds;
   Map<MarkerId, Marker> markers = {};
-   Polyline? routePolyline;
+  Polyline? routePolyline;
+  Position? currentPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class LargeMapWidget extends StatelessWidget {
                   markers: Set<Marker>.of(markers.values),
                   polylines: {polyline},
                   initialCameraPosition: CameraPosition(
-                      target: markers.values.first.position, zoom: 12),
+                      target: markers.values.last.position, zoom: 12),
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
@@ -92,7 +92,7 @@ class LargeMapWidget extends StatelessWidget {
   }
 
   Future<bool> initValues(int selectedOrder1) async {
-
+    currentPosition = await determinePosition();
     await createMarkers();
     await createBounds(markers.values.toList());
     var selectedOrder = orders.elementAt(selectedOrder1);
@@ -126,8 +126,11 @@ class LargeMapWidget extends StatelessWidget {
   }
 
   Future<void> createBounds(List<Marker> markers) async {
-    var lngs = markers.map((e) => e.position.longitude);
-    var lats = markers.map((e) => e.position.latitude);
+    var lngs = markers.map((e) => e.position.longitude).toList();
+    var lats = markers.map((e) => e.position.latitude).toList();
+
+    lngs.add(currentPosition?.longitude ?? 0);
+    lats.add(currentPosition?.latitude ?? 0);
 
     double topMost = lngs.reduce(max);
     double leftMost = lats.reduce(min);
@@ -143,14 +146,13 @@ class LargeMapWidget extends StatelessWidget {
   Future<void> getPolyline(double endLat, double endLng) async {
     final OpenRouteService client = OpenRouteService(
         apiKey: '5b3ce3597851110001cf624852fa353744464ff0b50de2c992d27769');
-    Position    currentPosition = await determinePosition();
 
     // Form Route between coordinates
     final List<ORSCoordinate> routeCoordinates =
     await client.directionsRouteCoordsGet(
       startCoordinate: ORSCoordinate(
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude),
+          latitude: currentPosition?.latitude ?? 0,
+          longitude: currentPosition?.longitude ?? 0),
       endCoordinate: ORSCoordinate(latitude: endLat, longitude: endLng),
     );
 

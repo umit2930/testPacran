@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
-import 'package:dobareh_bloc/presentation/pages/large_map_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,11 +10,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:logger/logger.dart';
 
 import '../../../data/model/home/home_response.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/location_geolocator.dart';
+import '../../pages/large_map_page.dart';
 import '../general/loading_widget.dart';
 
 class OpenStreetMapWidget extends StatelessWidget {
@@ -42,9 +44,12 @@ class OpenStreetMapWidget extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {
+                onTap: () async{
                   // homeViewModel.homeStream
-                  Get.to(LargeMapPage.router(
+                  // Geolocator.requestPermission();
+
+                  // Logger().w(await Geolocator.checkPermission());
+                      Get.to(LargeMapPage.router(
                       state.timePacks!, state.inProgressOrder,selectedTimePack));
                   // homeViewModel.getProfile();
                 },

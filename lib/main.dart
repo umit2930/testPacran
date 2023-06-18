@@ -14,8 +14,8 @@ import 'business_logic/auth/authentication_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await DependencyInjection.provideAuth();
-
+  // await DependencyInjection.provideAuth();
+  await AuthBinding().dependencies();
   runApp(const App());
 }
 
@@ -60,11 +60,12 @@ class App extends StatelessWidget {
                       //TODO change the logic to user token be not nullable?
                       var userToken = state.userToken!;
 
-                      DependencyInjection.provideUserToken(userToken);
-                      DependencyInjection.provideHome();
-                      DependencyInjection.provideOrder();
+                      // DependencyInjection.provideUserToken(userToken);
+                      // DependencyInjection.provideHome();
+                      // DependencyInjection.provideOrder();
 
-                      Get.off(() => HomePage.router());
+                      Get.off(() => HomePage.router(),
+                          binding: HomeOrderBinding(userToken));
                       break;
                     case AuthenticationStatus.unauthenticated:
                       //TODO change to offALl.

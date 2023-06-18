@@ -1,7 +1,6 @@
 import 'package:dobareh_bloc/data/data_provider/remote/order/order_api_provider.dart';
 import 'package:dobareh_bloc/data/repository/order_repository.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 import '../data/data_provider/local/auth_shared_preferences.dart';
 import '../data/data_provider/remote/auth/auth_api_provider.dart';
@@ -11,26 +10,44 @@ import '../data/repository/user_repository.dart';
 
 const userTokenTag = "user_token";
 
+
+
+class AuthBinding extends Bindings {
+  @override
+  Future<void> dependencies() async{
+    Get.lazyPut<AuthApiProvider>(() => AuthApiProvider(), fenix: true);
+    await Get.putAsync(() async => await AuthSharedPreferences.getInstance(),
+        permanent: true);
+    Get.lazyPut<AuthRepository>(() => AuthRepository(), fenix: true);
+  }
+}
+
+class HomeOrderBinding extends Bindings {
+  HomeOrderBinding(this.token);
+
+  String token;
+
+  @override
+  void dependencies() {
+    Get.put(token, tag: userTokenTag);
+    Get.put<UserApiProvider>(UserApiProvider(), permanent: true);
+    Get.put<UserRepository>(UserRepository(), permanent: true);
+    Get.put<OrderApiProvider>(OrderApiProvider(), permanent: true);
+    Get.put<OrderRepository>(OrderRepository(), permanent: true);
+  }
+}
+
 class DependencyInjection {
   static Future<void> provideAuth() async {
-    Get.lazyPut<AuthApiProvider>(() => AuthApiProvider());
-    await Get.putAsync(() async => await AuthSharedPreferences.getInstance());
-    Get.lazyPut<AuthRepository>(() => AuthRepository());
+    Get.lazyPut<AuthApiProvider>(() => AuthApiProvider(), fenix: true);
+    await Get.putAsync(() async => await AuthSharedPreferences.getInstance(),
+        permanent: true);
+    Get.lazyPut<AuthRepository>(() => AuthRepository(), fenix: true);
   }
 
-  static void provideUserToken(String token)  {
-    Get.put(token, tag: userTokenTag);
-  }
+  static void provideUserToken(String token) {}
 
-  //TODO why when we use lazyPut, its not work when go to the screen again ?
-  static void provideHome() {
-    Get.put(UserApiProvider());
-    Get.put<UserRepository>(UserRepository());
-  }
+  static void provideHome() {}
 
-  static void provideOrder() {
-    Logger().w("provide orders");
-    Get.put(OrderApiProvider());
-    Get.put(OrderRepository());
-  }
+  static void provideOrder() {}
 }

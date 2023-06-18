@@ -5,6 +5,7 @@ import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/bottom_actions_widget.dart';
 import 'package:dobareh_bloc/presentation/pages/home_page.dart';
 import 'package:dobareh_bloc/presentation/pages/report_page.dart';
+import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,15 +60,29 @@ class OrderDetailsPage extends StatelessWidget {
                   barrierDismissible: false,
                   context: context,
                   builder: (context) {
-                    return const LoadingWidget();
+                    return WillPopScope(
+                        onWillPop: () {
+                          return Future(() => false);
+                        },
+                        child: const LoadingWidget());
                   });
             } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
               showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (context) {
-                    return const CanceledDialog();
+                    return WillPopScope(
+                        onWillPop: () {
+                          return Future(() => false);
+                        },
+                        child: const CanceledDialog());
                   });
+            } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
+              context.showToast(
+                  message: state.errorMessage, messageType: MessageType.error);
+
+              ///this close dialog
+              Get.back();
             }
           },
           child: const OrderDetailsBody(),

@@ -1,4 +1,5 @@
 import 'package:dobareh_bloc/business_logic/map/map_cubit.dart';
+import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -223,7 +224,12 @@ class LargeMapBody extends StatelessWidget {
                                         Get.to(OrderDetailsPage.router(
                                             orderID: item.id!.toInt()));
                                       }
-                                    : null,
+                                    : () {
+                                        context.showToast(
+                                            message:
+                                                "شما یک سفارش در حال پردازش دارید.",
+                                            messageType: MessageType.warning);
+                                      },
                                 isActive: false,
                               );
                             } else {

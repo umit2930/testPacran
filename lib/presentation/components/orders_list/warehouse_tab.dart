@@ -26,7 +26,7 @@ class _WarehouseTabState extends State<WarehouseTab> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
+              padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w,bottom: 16.h),
               child: Row(
                 children: [
                   Expanded(
@@ -37,16 +37,17 @@ class _WarehouseTabState extends State<WarehouseTab> {
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
+                      // padding: EdgeInsets.zero,
                         backgroundColor: background,
                         shape: RoundedRectangleBorder(
                             side: const BorderSide(color: secondaryTint2),
                             borderRadius: BorderRadius.circular(12.r))),
                     onPressed: () {
                       showPersianDatePicker(
-                              context: context,
-                              initialDate: Jalali.now(),
-                              firstDate: Jalali(1402, 1),
-                              lastDate: Jalali(1410, 1))
+                          context: context,
+                          initialDate: Jalali.now(),
+                          firstDate: Jalali(1402, 1),
+                          lastDate: Jalali(1410, 1))
                           .then((value) {
                         context
                             .read<OrdersListCubit>()
@@ -57,24 +58,26 @@ class _WarehouseTabState extends State<WarehouseTab> {
                       });
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 6.w, vertical: 4.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             context.read<OrdersListCubit>().state.selectedDate.formatCompactDate(),
-                            style:
-                                textTheme.titleSmall?.copyWith(color: natural1),
+                            style: textTheme.titleSmall
+                                ?.copyWith(color: natural1),
                           ),
                           Padding(
                             padding: EdgeInsets.only(right: 10.w),
                             child:
-                                SvgPicture.asset("assets/icons/arrow_down.svg"),
+                            SvgPicture.asset("assets/icons/arrow_down.svg"),
                           ),
                         ],
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

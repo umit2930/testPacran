@@ -31,14 +31,3 @@ Map<DeliveryTime, List<Orders>> extractTimePacks(OrdersListResponse? model) {
   }
   return timePacks;
 }
-
-Orders? getInProgressOrder(OrdersListResponse? model) {
-  for (var order in model!.orders!) {
-    if (order.status == OrderStatus.onWay.value ||
-        order.status == OrderStatus.inLocation.value ||
-        order.status == OrderStatus.checkFactor.value) {
-      return order;
-    }
-  }
-  return null;
-}

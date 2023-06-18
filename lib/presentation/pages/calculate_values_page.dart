@@ -93,7 +93,7 @@ class CalculateValuesBody extends StatelessWidget {
               context.read<CalculateValuesCubit>().categoriesRequested();
             });
           case CalculateValuesStatus.success:
-            return Column(
+            return Column(crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),

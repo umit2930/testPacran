@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 import '../../../business_logic/order/order_details_cubit.dart';
 import '../../../utils/colors.dart';
@@ -50,6 +51,18 @@ class BottomActionsWidget extends StatelessWidget {
                 children: [
                   CustomFilledButton(
                       onPressed: () {
+                        var orderAddress = context
+                            .read<OrderDetailsCubit>()
+                            .state
+                            .orderResponse!
+                            .order
+                            ?.address;
+                        if (orderAddress?.latitude != null &&
+                            orderAddress?.longitude != null) {
+                          MapsLauncher.launchCoordinates(
+                              double.parse(orderAddress!.latitude!),
+                              double.parse(orderAddress!.longitude!));
+                        }
                         context
                             .read<ChangeOrderStatusCubit>()
                             .statusSubmitted(orderStatus: OrderStatus.onWay);

@@ -1,6 +1,7 @@
 import 'package:dobareh_bloc/data/data_provider/remote/order/user_api_provider.dart';
 import 'package:dobareh_bloc/data/model/home/home_response.dart';
 import 'package:dobareh_bloc/data/model/home/profile_response.dart';
+import 'package:dobareh_bloc/data/model/notifications/NotificationsResponse.dart';
 import 'package:dobareh_bloc/data/model/report/ReportResponse.dart';
 import 'package:dobareh_bloc/data/model/report/SendReportResponse.dart';
 import 'package:dobareh_bloc/data/model/support/SupportAnswerResponse.dart';
@@ -21,6 +22,11 @@ class UserRepository {
   Future<ProfileResponse> getProfile() async {
     return await generalNetworkResult<ProfileResponse>(
         ProfileResponse.fromJson, _userApiProvider.getProfile());
+  }
+
+  Future<NotificationsResponse> getNotifications() async {
+    return await generalNetworkResult<NotificationsResponse>(
+        NotificationsResponse.fromJson, _userApiProvider.getNotifications());
   }
 
   Future<SupportResponse> getSupports() async {

@@ -13,17 +13,19 @@ class FailureWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Lottie.asset("assets/anim/failuretips.json",
-             width: 170.r, height: 180.r),
-        Text(errorMessage ?? "مشکلی روی داده است."),
-        Padding(
-          padding: EdgeInsets.only(top: 32.h),
-          child: CustomFilledButton(
-              onPressed: onRetryPressed, buttonChild: const Text("تلاش مجدد")),
-        )
-      ]),
+    return Container(color: Colors.white,
+      child: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Lottie.asset("assets/anim/failuretips.json",
+               width: 170.r, height: 180.r),
+          Text(errorMessage ?? "مشکلی روی داده است."),
+          Padding(
+            padding: EdgeInsets.only(top: 32.h),
+            child: CustomFilledButton(
+                onPressed: onRetryPressed, buttonChild: const Text("تلاش مجدد")),
+          )
+        ]),
+      ),
     );
   }
 }

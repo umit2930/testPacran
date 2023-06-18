@@ -9,17 +9,17 @@ import 'package:intl/intl.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 part 'orders_list_assistant.dart';
-
 part 'orders_list_state.dart';
 
 class OrdersListCubit extends Cubit<OrdersListState> {
-  OrdersListCubit({required Jalali todayDate})
+  OrdersListCubit({required Jalali todayDate, required Orders? inProgressOrder})
       : _orderRepository = Get.find(),
         super(OrdersListState(
           waitingOrdersStatus: WaitingOrdersStatus.initial,
           deliveredOrdersStatus: DeliveredOrdersStatus.initial,
           selectedDate: Jalali.now(),
           todayDate: todayDate,
+          inProgressOrder: inProgressOrder,
         ));
 
   final OrderRepository _orderRepository;
@@ -48,7 +48,7 @@ class OrdersListCubit extends Cubit<OrdersListState> {
           waitingOrdersStatus: WaitingOrdersStatus.success,
           waitingOrdersResponse: response,
           waitingPacks: extractTimePacks(response),
-          inProgressOrder: getInProgressOrder(response)));
+      ));
     } on AppException catch (appException) {
       emit(state.copyWith(
           waitingOrdersStatus: WaitingOrdersStatus.failure,

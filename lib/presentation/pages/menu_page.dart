@@ -1,4 +1,6 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
+import 'package:dobareh_bloc/data/model/order/orders_list_response.dart';
+import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/pages/orders_list_page.dart';
 import 'package:dobareh_bloc/presentation/pages/support_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
@@ -84,29 +86,29 @@ class MenuPage extends StatelessWidget {
                         child: ClipOval(
                           child: Image.network(
                             "${homeResponse.user?.image}",
-                            width: 140.r,
-                            height: 140.r,
-                            fit: BoxFit.fill,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return SizedBox(
-                                width: 140.r,
-                                height: 140.r,
-                                child: const Center(
-                                  child: LoadingWidget(),
+                          width: 140.r,
+                          height: 140.r,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return SizedBox(
+                              width: 140.r,
+                              height: 140.r,
+                              child: const Center(
+                                child: LoadingWidget(),
                               ),
-                              );
-                            },
-                          ),
+                            );
+                          },
                         ),
                       ),
-                      Positioned(
-                          top: 26.h,
-                          right: 5.w,
-                          child: IconAssistant.backIconButton(() {
-                            Get.back();
-                          })),
-                    ],
+                    ),
+                    Positioned(
+                        top: 26.h,
+                        right: 5.w,
+                        child: IconAssistant.backIconButton(() {
+                          Get.back();
+                        })),
+                  ],
                   ),
                 ),
                 Expanded(
@@ -236,14 +238,19 @@ class MenuPage extends StatelessWidget {
                               svgAsset: "assets/icons/note.svg",
                               text: "لیست جمع آوری",
                               onTap: () {
-                            var toadyString =
+                                var toadyString =
                                 homeResponse.today?.date ?? "1402-01-01";
                             Jalali today = Jalali(
                               int.parse(toadyString.substring(0, 4)),
                               int.parse(toadyString.substring(5, 7)),
                               int.parse(toadyString.substring(8, 10)),
                             );
-                            Get.to(OrdersListPage.router(today));
+                            Get.to(OrdersListPage.router(
+                                today,
+                                state.inProgressOrder == null
+                                    ? null
+                                    : Orders.fromJson(
+                                        state.inProgressOrder?.toJson())));
                           }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/support.svg",
@@ -288,8 +295,14 @@ class MenuPage extends StatelessWidget {
               )
             ]),
           );
+        } else if (state.homeStatus == HomeStatus.failure) {
+          return FailureWidget(
+              errorMessage: state.errorMessage,
+              onRetryPressed: () {
+                context.read<HomeCubit>().getHomeRequested();
+              });
         } else {
-          return const LoadingWidget();
+          return Container(color: Colors.white, child: const LoadingWidget());
         }
       },
     );

@@ -1,11 +1,13 @@
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/home/app_exit_dialog.dart';
 import 'package:dobareh_bloc/presentation/pages/menu_page.dart';
+import 'package:dobareh_bloc/presentation/pages/notifications_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import '../components/general/loading_widget.dart';
@@ -65,14 +67,12 @@ class HomeAppbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconAssistant.menuIconButton(() {
-              var isSuccess = (context.read<HomeCubit>().state.homeStatus ==
-                  HomeStatus.success);
-              if (isSuccess) {
                 Scaffold.of(context).openDrawer();
-              }
             }),
             SvgPicture.asset("assets/icons/logo.svg"),
-            IconAssistant.notificationIconButton(() {}),
+            IconAssistant.notificationIconButton(() {
+              Get.to(NotificationPage.router());
+            }),
           ],
         ),
       ),
@@ -101,7 +101,7 @@ class HomeBody extends StatelessWidget with WidgetsBindingObserver {
             return const LoadingWidget();
           case HomeStatus.failure:
             return FailureWidget(
-              onRetryPressed: () {
+                onRetryPressed: () {
                 context.read<HomeCubit>().getHomeRequested();
               },
               errorMessage: state.errorMessage,

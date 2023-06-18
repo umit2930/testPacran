@@ -20,18 +20,21 @@ class UserApiProvider {
     return _dio.get("home");
   }
 
-  Future<Response> getProfile(){
+  Future<Response> getProfile() {
     return _dio.get("profile");
   }
 
-
-  ///report
-  Future<Response> getReports()  {
-    return  _dio.get("/report/index");
+  Future<Response> getNotifications() {
+    return _dio.get("notification");
   }
 
-  Future<Response> sendReport(int reportID)  {
-    return  _dio.post("/report/send-report/$reportID");
+  ///report
+  Future<Response> getReports() {
+    return _dio.get("/report/index");
+  }
+
+  Future<Response> sendReport(int reportID) {
+    return _dio.post("/report/send-report/$reportID");
   }
 
   ///support

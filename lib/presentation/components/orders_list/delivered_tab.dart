@@ -10,7 +10,6 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import '../../../data/model/order/orders_list_response.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/enums.dart';
-import '../general/custom_outlined_button.dart';
 import '../general/loading_widget.dart';
 import '../general/retry_widget.dart';
 import 'delivered_item.dart';
@@ -67,7 +66,8 @@ class DeliveredTabSuccessWidget extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w,bottom: 16.h),
+                padding: EdgeInsets.only(
+                    top: 16.h, left: 16.w, right: 16.w, bottom: 16.h),
                 child: Row(
                   children: [
                     Expanded(
@@ -76,11 +76,13 @@ class DeliveredTabSuccessWidget extends StatelessWidget {
                         style: textTheme.bodyMedium?.copyWith(color: natural1),
                       ),
                     ),
-
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
+                          // padding: EdgeInsets.zero,
                           backgroundColor: background,
-                          shape: RoundedRectangleBorder(side: BorderSide(color: secondaryTint2),borderRadius: BorderRadius.circular(12.r))),
+                          shape: RoundedRectangleBorder(
+                              side: const BorderSide(color: secondaryTint2),
+                              borderRadius: BorderRadius.circular(12.r))),
                       onPressed: () {
                         showPersianDatePicker(
                                 context: context,
@@ -97,14 +99,15 @@ class DeliveredTabSuccessWidget extends StatelessWidget {
                         });
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.w, vertical: 4.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               state.selectedDate.formatCompactDate(),
-                              style:
-                                  textTheme.titleSmall?.copyWith(color: natural1),
+                              style: textTheme.titleSmall
+                                  ?.copyWith(color: natural1),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 10.w),

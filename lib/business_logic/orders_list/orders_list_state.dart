@@ -37,7 +37,7 @@ class OrdersListState extends Equatable {
       required this.todayDate,
       this.selectedTimePackID = 0,
       this.waitingPacks,
-      this.inProgressOrder,
+      required this.inProgressOrder,
       required this.selectedDate,
       this.deliveredOrders});
 

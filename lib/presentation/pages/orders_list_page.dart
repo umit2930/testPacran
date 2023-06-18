@@ -5,20 +5,20 @@ import 'package:get/get.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 import '../../business_logic/orders_list/orders_list_cubit.dart';
+import '../../data/model/order/orders_list_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/icon_assistant.dart';
 import '../components/orders_list/delivered_tab.dart';
 import '../components/orders_list/warehouse_tab.dart';
 import '../components/orders_list/wating_tab.dart';
-import 'home_page.dart';
-import 'order_datails_page.dart';
 
 class OrdersListPage extends StatelessWidget {
   const OrdersListPage({Key? key}) : super(key: key);
 
-  static Widget router(Jalali todayDate) {
+  static Widget router(Jalali todayDate, Orders? inProgressOrder) {
     return BlocProvider(
-      create: (context) => OrdersListCubit(todayDate: todayDate),
+      create: (context) => OrdersListCubit(
+          todayDate: todayDate, inProgressOrder: inProgressOrder),
       child: const OrdersListPage(),
     );
   }
@@ -119,7 +119,7 @@ class ChoicesWidget extends StatelessWidget {
 
     return SingleChildScrollView(
         padding:
-            EdgeInsets.only(top: 10.h, left: 8.w, right: 8.w, bottom: 20.h),
+            EdgeInsets.only(top: 12.h, left: 8.w, right: 8.w, bottom: 12.h),
         scrollDirection: Axis.horizontal,
         child: Wrap(
             spacing: 8.w,

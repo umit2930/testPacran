@@ -4,12 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 import '../../../business_logic/home/home_cubit.dart';
 import '../../../data/model/home/home_response.dart';
+import '../../../data/model/order/orders_list_response.dart' as orders_response;
 import '../../../utils/colors.dart';
 import '../../../utils/enums.dart';
 import '../../../utils/extension.dart';
+import '../../pages/orders_list_page.dart';
 import 'order_item.dart';
 
 class HomeOrdersWidget extends StatelessWidget {
@@ -33,16 +36,20 @@ class HomeOrdersWidget extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(foregroundColor: secondary),
                   onPressed: () {
-                    /*     var toadyString =
-                                    model.today?.date ?? "1402-01-01";
-                                Jalali today = Jalali(
-                                  int.parse(toadyString.substring(0, 4)),
-                                  int.parse(toadyString.substring(5, 7)),
-                                  int.parse(toadyString.substring(8, 10)),
-                                );*/
-                    /* Get.to(OrdersListPage(
-                                    today: today,
-                                  ));*/
+                    var state = context.read<HomeCubit>().state;
+                    var toadyString =
+                        state.homeResponse!.today?.date ?? "1402-01-01";
+                    Jalali today = Jalali(
+                      int.parse(toadyString.substring(0, 4)),
+                      int.parse(toadyString.substring(5, 7)),
+                      int.parse(toadyString.substring(8, 10)),
+                    );
+                    Get.to(OrdersListPage.router(
+                        today,
+                        state.inProgressOrder == null
+                            ? null
+                            : orders_response.Orders.fromJson(
+                                state.inProgressOrder?.toJson())));
                   },
                   child: Text(
                     "تاریخچه",
