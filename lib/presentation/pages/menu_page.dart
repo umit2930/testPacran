@@ -18,6 +18,7 @@ import '../components/general/loading_widget.dart';
 import '../components/home/account_exit_dialog.dart';
 import '../components/menu/menu_item.dart';
 import 'account_info_page.dart';
+import 'home_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -245,6 +246,8 @@ class MenuPage extends StatelessWidget {
                               int.parse(toadyString.substring(5, 7)),
                               int.parse(toadyString.substring(8, 10)),
                             );
+                            HomePage.refreshData = true;
+
                             Get.to(OrdersListPage.router(
                                 today,
                                 state.inProgressOrder == null
@@ -256,13 +259,15 @@ class MenuPage extends StatelessWidget {
                               svgAsset: "assets/icons/support.svg",
                               text: "پشتیبانی ",
                               onTap: () {
-                                Get.to(SupportPage.router());
+                                HomePage.refreshData = false;
+                            Get.to(SupportPage.router());
                           }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/account_info.svg",
                               text: "اطلاعات حساب کاربری",
                               onTap: () {
-                                Get.to(AccountInfoPage.router());
+                                HomePage.refreshData = false;
+                            Get.to(AccountInfoPage.router());
                           }),
                           ProfileMenuItem(
                               svgAsset: "assets/icons/about.svg",

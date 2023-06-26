@@ -2,6 +2,7 @@ import 'package:dobareh_bloc/business_logic/notifications/notifications_cubit.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
@@ -40,6 +41,7 @@ class NotificationsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
     return BlocBuilder<NotificationsCubit, NotificationsState>(
       builder: (BuildContext context, state) {
         switch (state.notificationsStatus) {
@@ -58,25 +60,42 @@ class NotificationsBody extends StatelessWidget {
               children: [
                 ///content
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    itemBuilder: (BuildContext context, int index) {
-                      var item = notifications?.elementAt(index);
-                      var date = DateTime.parse(item?.createdAt ?? "");
-                      var jalaliDate = Jalali.fromDateTime(date);
+                    child: notifications!.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            itemBuilder: (BuildContext context, int index) {
+                              var item = notifications.elementAt(index);
+                              var date = DateTime.parse(item.createdAt ?? "");
+                              var jalaliDate = Jalali.fromDateTime(date);
 
-                      return NotificationItem(
-                        title: item?.title ?? "عنوان",
-                        body: item?.body ?? "متن اعلان",
-                        createdAt:
-                            "${jalaliDate.formatShortDate()} - ${TimeOfDay.fromDateTime(date).persianFormat(context)}",
-                        location: item?.location ?? "/home_screen",
-                      );
-                    },
-                    itemCount: notifications?.length,
-                  ),
-                ),
+                              return NotificationItem(
+                                title: item.title ?? "عنوان",
+                                body: item.body ?? "متن اعلان",
+                                createdAt:
+                                    "${jalaliDate.formatShortDate()} - ${TimeOfDay.fromDateTime(date).persianFormat(context)}",
+                                location: item.location ?? "/home_screen",
+                              );
+                            },
+                            itemCount: notifications.length,
+                          )
+                        : Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.only(top: 60.h),
+                            child: Column(children: [
+                              SvgPicture.asset("assets/icons/empty.svg"),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16.h),
+                                child: Text(
+                                  "لیست اعلانات خالی است.",
+                                  style: textTheme.bodyLarge?.copyWith(
+                                    color: natural6,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ]),
+                          )),
               ],
             );
         }

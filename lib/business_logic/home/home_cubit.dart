@@ -4,11 +4,13 @@ import 'package:dobareh_bloc/data/repository/user_repository.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';
+import 'package:collection/collection.dart';
 
 import '../../utils/enums.dart';
 
-part 'home_state.dart';
 part 'home_assistant.dart';
+
+part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit()
@@ -28,11 +30,13 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(homeStatus: HomeStatus.loading));
       var response = await _homeRepository.getHome();
 
-      emit(state.copyWith(
+      //create new instance because we want to clear inProgressOrder.
+      emit(HomeState(
           homeStatus: HomeStatus.success,
           homeResponse: response,
           timePacks: extractTimePacks(response),
-          inProgressOrder: getInProgressOrder(response)));
+          inProgressOrder: getInProgressOrder(response),
+      selectedTimePackID: state.selectedTimePackID));
     } on AppException catch (appException) {
       emit(state.copyWith(
           homeStatus: HomeStatus.failure,

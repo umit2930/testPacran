@@ -8,7 +8,7 @@ class OrdersListState extends Equatable {
   final WaitingOrdersStatus waitingOrdersStatus;
   final DeliveredOrdersStatus deliveredOrdersStatus;
 
-  final OrdersListResponse? waitingOrdersResponse;
+  final home_response.HomeResponse? waitingOrdersResponse;
   final OrdersListResponse? deliveredOrdersResponse;
 
   final String? errorMessage;
@@ -18,14 +18,13 @@ class OrdersListState extends Equatable {
   ///waiting tab
   final int selectedTimePackID;
   final Jalali todayDate;
-  final Map<DeliveryTime, List<Orders>>? waitingPacks;
-  final Orders? inProgressOrder;
+  final Map<home_response.DeliveryTime, List<home_response.Orders>>?
+      waitingPacks;
+  final home_response.Orders? inProgressOrder;
 
   ///delivered tab
   final Jalali selectedDate;
   final List<Orders>? deliveredOrders;
-
-
 
   const OrdersListState(
       {required this.waitingOrdersStatus,
@@ -37,7 +36,7 @@ class OrdersListState extends Equatable {
       required this.todayDate,
       this.selectedTimePackID = 0,
       this.waitingPacks,
-      required this.inProgressOrder,
+      this.inProgressOrder,
       required this.selectedDate,
       this.deliveredOrders});
 
@@ -60,14 +59,14 @@ class OrdersListState extends Equatable {
   OrdersListState copyWith({
     WaitingOrdersStatus? waitingOrdersStatus,
     DeliveredOrdersStatus? deliveredOrdersStatus,
-    OrdersListResponse? waitingOrdersResponse,
+    home_response.HomeResponse? waitingOrdersResponse,
     OrdersListResponse? deliveredOrdersResponse,
     String? errorMessage,
     int? selectedTab,
-    Jalali? today,
     int? selectedTimePackID,
-    Map<DeliveryTime, List<Orders>>? waitingPacks,
-    Orders? inProgressOrder,
+    Jalali? todayDate,
+    Map<home_response.DeliveryTime, List<home_response.Orders>>? waitingPacks,
+    home_response.Orders? inProgressOrder,
     Jalali? selectedDate,
     List<Orders>? deliveredOrders,
   }) {
@@ -81,8 +80,8 @@ class OrdersListState extends Equatable {
           deliveredOrdersResponse ?? this.deliveredOrdersResponse,
       errorMessage: errorMessage ?? this.errorMessage,
       selectedTab: selectedTab ?? this.selectedTab,
-      todayDate: today ?? this.todayDate,
       selectedTimePackID: selectedTimePackID ?? this.selectedTimePackID,
+      todayDate: todayDate ?? this.todayDate,
       waitingPacks: waitingPacks ?? this.waitingPacks,
       inProgressOrder: inProgressOrder ?? this.inProgressOrder,
       selectedDate: selectedDate ?? this.selectedDate,

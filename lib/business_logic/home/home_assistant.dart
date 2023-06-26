@@ -27,10 +27,19 @@ Map<DeliveryTime, List<Orders>> extractTimePacks(HomeResponse? model) {
       }
     }
   }
+
+  var packs = groupBy(model!.orders!, (p0) => p0.deliveryTime?.from);
+  print(packs);
   return timePacks;
 }
 
 Orders? getInProgressOrder(HomeResponse? model) {
+  model?.orders?.firstWhereOrNull((element) =>
+      (element.status == OrderStatus.onWay.value ||
+          element.status == OrderStatus.inLocation.value ||
+          element.status == OrderStatus.checkFactor.value));
+
+
   for (var order in model!.orders!) {
     if (order.status == OrderStatus.onWay.value ||
         order.status == OrderStatus.inLocation.value ||

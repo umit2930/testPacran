@@ -1,5 +1,4 @@
 import 'package:dobareh_bloc/business_logic/report/report_cubit.dart';
-import 'package:dobareh_bloc/business_logic/support/support_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart';
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/support/report_item.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../data/model/report/ReportResponse.dart';
+import '../../data/model/report/report_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/icon_assistant.dart';
 import '../components/general/call_support_bottomsheet.dart';

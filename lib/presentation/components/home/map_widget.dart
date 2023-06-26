@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dobareh_bloc/business_logic/home/home_cubit.dart';
-import 'package:dobareh_bloc/presentation/components/general/custom_filled_button.dart';
+import 'package:dobareh_bloc/presentation/pages/home_page.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,8 +49,9 @@ class OpenStreetMapWidget extends StatelessWidget {
                   // Geolocator.requestPermission();
 
                   // Logger().w(await Geolocator.checkPermission());
-                      Get.to(LargeMapPage.router(
-                      state.timePacks!, state.inProgressOrder,selectedTimePack));
+                  HomePage.refreshData = true;
+                  Get.to(LargeMapPage.router(state.timePacks!,
+                      state.inProgressOrder, selectedTimePack));
                   // homeViewModel.getProfile();
                 },
                 child: Padding(

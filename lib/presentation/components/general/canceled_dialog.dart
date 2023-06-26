@@ -1,4 +1,3 @@
-import 'package:dobareh_bloc/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -49,7 +48,8 @@ class CanceledDialog extends StatelessWidget {
                   child: CustomFilledButton(
                       width: 156.w,
                       onPressed: () {
-                        Get.offAll(HomePage.router());
+                        // Get.offAll(HomePage.router());
+                        Get.back(result: true);
                       },
                       buttonChild: const Text("تایید")))
             ],

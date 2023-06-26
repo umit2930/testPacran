@@ -7,7 +7,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 
 import '../../../../utils/enums.dart';
-import '../interceptor.dart';
 
 class OrderApiProvider {
   final Dio _dio = Dio();
@@ -17,7 +16,7 @@ class OrderApiProvider {
   OrderApiProvider() : _userToken = Get.find(tag: userTokenTag) {
     _dio.options.baseUrl = apiBaseURL;
     _dio.options.headers["Authorization"] = "Bearer $_userToken";
-    _dio.interceptors.add(CustomInterceptors());
+    // _dio.interceptors.add(CustomInterceptors());
   }
 
   Future<Response> getDetails(int orderID) {

@@ -4,7 +4,6 @@ import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart
 import 'package:dobareh_bloc/presentation/components/general/location_checker.dart';
 import 'package:dobareh_bloc/presentation/components/general/retry_widget.dart';
 import 'package:dobareh_bloc/presentation/components/order_details/bottom_actions_widget.dart';
-import 'package:dobareh_bloc/presentation/pages/home_page.dart';
 import 'package:dobareh_bloc/presentation/pages/report_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:dobareh_bloc/utils/icon_assistant.dart';
@@ -46,8 +45,8 @@ class OrderDetailsPage extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () {
-        Get.offAll(HomePage.router());
-        return Future.value(false);
+        // Get.offAll(HomePage.router());
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: PreferredSize(
@@ -68,12 +67,14 @@ class OrderDetailsPage extends StatelessWidget {
                         child: const LoadingWidget());
                   });
             } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
+              Get.back();
+
               showDialog(
                   barrierDismissible: false,
                   context: context,
                   builder: (context) {
                     return const CanceledDialog();
-                  });
+                  }).then((value) => Get.back());
             } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
               context.showToast(
                   message: state.errorMessage, messageType: MessageType.error);
@@ -104,7 +105,10 @@ class OrderDetailsAppbar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconAssistant.backIconButton(() => Get.offAll(HomePage.router())),
+            IconAssistant.backIconButton(() {
+              Get.back();
+              // Get.offAll(HomePage.router());
+            }),
             Expanded(
               child: FittedBox(
                 fit: BoxFit.scaleDown,

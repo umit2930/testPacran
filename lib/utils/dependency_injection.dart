@@ -29,7 +29,7 @@ class HomeOrderBinding extends Bindings {
 
   @override
   void dependencies() {
-    Get.put(token, tag: userTokenTag);
+    Get.replace(token, tag: userTokenTag);
     Get.put<UserApiProvider>(UserApiProvider(), permanent: true);
     Get.put<UserRepository>(UserRepository(), permanent: true);
     Get.put<OrderApiProvider>(OrderApiProvider(), permanent: true);

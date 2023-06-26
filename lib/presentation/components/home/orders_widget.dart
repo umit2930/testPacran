@@ -1,3 +1,4 @@
+import 'package:dobareh_bloc/presentation/pages/home_page.dart';
 import 'package:dobareh_bloc/presentation/pages/order_datails_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,7 @@ class HomeOrdersWidget extends StatelessWidget {
                       int.parse(toadyString.substring(5, 7)),
                       int.parse(toadyString.substring(8, 10)),
                     );
+                    HomePage.refreshData = true;
                     Get.to(OrdersListPage.router(
                         today,
                         state.inProgressOrder == null
@@ -64,6 +66,7 @@ class HomeOrdersWidget extends StatelessWidget {
           decoration: boxDecoration,
           child: const Column(
             children: [
+
               ///Choice chips
               ChoiceChipsWidget(),
 
@@ -108,13 +111,13 @@ class ChoiceChipsWidget extends StatelessWidget {
 
         return SingleChildScrollView(
           padding:
-              EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
+          EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.h),
           scrollDirection: Axis.horizontal,
           child: Wrap(
             spacing: 8.w,
             children: List.generate(
               choicesPacks.length,
-              (index) {
+                  (index) {
                 bool isSelected = (selectedID == index);
                 return ChoiceChip(
                   labelPadding: EdgeInsets.zero,
@@ -125,7 +128,7 @@ class ChoiceChipsWidget extends StatelessWidget {
                     // width: 133.w,
                     // height: 42.h,
                     padding:
-                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
+                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
                     child: ColorFiltered(
                         colorFilter: ColorFilter.mode(
                             (isSelected ? white : black), BlendMode.srcATop),
@@ -167,6 +170,7 @@ class OrdersListWidget extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           ///In process item
           if (inProgressOrder != null &&
               inProgressOrder.deliveryTime?.from ==
@@ -184,7 +188,9 @@ class OrdersListWidget extends StatelessWidget {
                         "نام و نام خانوادگی",
                     address: inProgressOrder.address?.address ?? "آدرس",
                     onPressed: () {
-                      Get.off(
+                      HomePage.refreshData = true;
+
+                      Get.to(
                         OrderDetailsPage.router(
                           orderID: inProgressOrder.id!.round(),
                         ),
@@ -216,13 +222,13 @@ class OrdersListWidget extends StatelessWidget {
                 ),
                 ListView.builder(
                   padding:
-                      EdgeInsets.only(left: 16.w, right: 16.w, bottom: 80.h),
+                  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 80.h),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     var item = selectedTimePack
                         .where((element) =>
-                            element.status == OrderStatus.waiting.value)
+                    element.status == OrderStatus.waiting.value)
                         .elementAt(index);
                     return HomeOrderItem(
                         isActive: false,
@@ -232,19 +238,21 @@ class OrdersListWidget extends StatelessWidget {
                         address: item.address!.address!,
                         onPressed: inProgressOrder == null
                             ? () {
-                          Get.off(OrderDetailsPage.router(
+                                HomePage.refreshData = true;
+
+                                Get.to(OrderDetailsPage.router(
                                     orderID: item.id!.toInt()));
                               }
                             : () {
-                                context.showToast(
-                                  message: "شما یک سفارش در حال پردازش دارید!",
-                                  messageType: MessageType.warning,
-                                );
-                              });
+                          context.showToast(
+                            message: "شما یک سفارش در حال پردازش دارید!",
+                            messageType: MessageType.warning,
+                          );
+                        });
                   },
                   itemCount: selectedTimePack
                       .where((element) =>
-                          element.status == OrderStatus.waiting.value)
+                  element.status == OrderStatus.waiting.value)
                       .length,
                 ),
               ],

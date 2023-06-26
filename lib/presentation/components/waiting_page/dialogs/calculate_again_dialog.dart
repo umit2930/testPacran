@@ -79,7 +79,7 @@ class CalculateAgainDialog extends StatelessWidget {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
-                                    return ConfirmCancelDialog();
+                                    return const ConfirmCancelDialog();
                                   }).then((value) {
                                 if (value == true) {
                                   Navigator.pop(context, false);

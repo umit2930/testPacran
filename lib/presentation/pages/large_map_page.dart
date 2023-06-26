@@ -33,7 +33,7 @@ class LargeMapPage extends StatelessWidget {
         return Future.value(true);
       },
       child: Scaffold(
-        body: LargeMapBody(),
+        body: const LargeMapBody(),
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(66.h),
             child: const LargeMapAppbar()),
@@ -137,7 +137,7 @@ class LargeMapAppbar extends StatelessWidget {
 }
 
 class LargeMapBody extends StatelessWidget {
-  LargeMapBody({Key? key}) : super(key: key);
+  const LargeMapBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +224,7 @@ class LargeMapBody extends StatelessWidget {
                                 onPressed: state.inProgressOrder == null
                                     ? () {
                                         // Get.back();
-                                        Get.to(OrderDetailsPage.router(
+                                        Get.off(OrderDetailsPage.router(
                                             orderID: item.id!.toInt()));
                                       }
                                     : () {
@@ -243,7 +243,7 @@ class LargeMapBody extends StatelessWidget {
                                 address: item.address?.address ?? "آدرس",
                                 onPressed: () {
                                   // Get.back();
-                                  Get.to(OrderDetailsPage.router(
+                                  Get.off(OrderDetailsPage.router(
                                       orderID: item.id!.toInt()));
                                 },
                                 isActive: true,

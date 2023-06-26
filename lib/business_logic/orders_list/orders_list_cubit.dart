@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:dobareh_bloc/data/model/home/home_response.dart'
+    as home_response;
 import 'package:dobareh_bloc/data/model/order/orders_list_response.dart';
 import 'package:dobareh_bloc/data/repository/order_repository.dart';
+import 'package:dobareh_bloc/data/repository/user_repository.dart';
 import 'package:dobareh_bloc/utils/app_exception.dart';
 import 'package:dobareh_bloc/utils/enums.dart';
 import 'package:equatable/equatable.dart';
@@ -8,21 +11,23 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
-part 'orders_list_assistant.dart';
+import '../home/home_cubit.dart';
+
 part 'orders_list_state.dart';
 
 class OrdersListCubit extends Cubit<OrdersListState> {
-  OrdersListCubit({required Jalali todayDate, required Orders? inProgressOrder})
+  OrdersListCubit({required Jalali todayDate})
       : _orderRepository = Get.find(),
+        _userRepository = Get.find(),
         super(OrdersListState(
           waitingOrdersStatus: WaitingOrdersStatus.initial,
           deliveredOrdersStatus: DeliveredOrdersStatus.initial,
           selectedDate: Jalali.now(),
           todayDate: todayDate,
-          inProgressOrder: inProgressOrder,
         ));
 
   final OrderRepository _orderRepository;
+  final UserRepository _userRepository;
 
   void tabSelected({required int index}) {
     emit(state.copyWith(selectedTab: index));
@@ -38,17 +43,20 @@ class OrdersListCubit extends Cubit<OrdersListState> {
 
   void waitingOrdersRequested() async {
     try {
-      var gregorianDate =
-          DateFormat('yyyy-MM-dd').format(Jalali.now().toDateTime());
-
       emit(state.copyWith(waitingOrdersStatus: WaitingOrdersStatus.loading));
-      var response = await _orderRepository.getOrders(
-          orderStatus: OrderStatus.waiting, date: gregorianDate);
-      emit(state.copyWith(
+      var response = await _userRepository.getHome();
+
+      //TODO find better way.
+      emit(OrdersListState(
           waitingOrdersStatus: WaitingOrdersStatus.success,
           waitingOrdersResponse: response,
           waitingPacks: extractTimePacks(response),
-      ));
+          inProgressOrder: getInProgressOrder(response),
+          deliveredOrdersStatus: state.deliveredOrdersStatus,
+          todayDate: state.todayDate,
+          selectedDate: state.selectedDate,
+          selectedTab: state.selectedTab,
+          selectedTimePackID: state.selectedTimePackID));
     } on AppException catch (appException) {
       emit(state.copyWith(
           waitingOrdersStatus: WaitingOrdersStatus.failure,

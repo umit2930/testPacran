@@ -19,6 +19,8 @@ void main() async {
   runApp(const App());
 }
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
@@ -34,6 +36,7 @@ class App extends StatelessWidget {
         designSize: const Size(360, 790),
         builder: (BuildContext context, Widget? child) {
           return GetMaterialApp(
+            navigatorObservers: [routeObserver],
             debugShowCheckedModeBanner: false,
             // navigatorKey: _navigatorKey,
             localizationsDelegates: const [
@@ -45,7 +48,6 @@ class App extends StatelessWidget {
               Locale('fa'),
             ],
             locale: const Locale('fa'),
-            title: 'Bloc Demo',
             theme: DobareTheme.theme,
             builder: (context, child) {
               return BlocListener<AuthenticationCubit, AuthenticationState>(
@@ -68,8 +70,8 @@ class App extends StatelessWidget {
                           binding: HomeOrderBinding(userToken));
                       break;
                     case AuthenticationStatus.unauthenticated:
-                      //TODO change to offALl.
-                      Get.off(() => NumberPage.router());
+                      //TODO change to offAll.
+                      Get.offAll(() => NumberPage.router());
                       break;
                   }
                 },

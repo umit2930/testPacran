@@ -1,7 +1,8 @@
-import 'package:dobareh_bloc/business_logic/order/calculate_values_cubit.dart';
 import 'package:dobareh_bloc/business_logic/order/change_order_status_cubit.dart';
+import 'package:dobareh_bloc/business_logic/order/invoice_cubit.dart';
 import 'package:dobareh_bloc/presentation/components/general/custom_filled_button.dart';
 import 'package:dobareh_bloc/presentation/components/general/loading_widget.dart';
+import 'package:dobareh_bloc/presentation/pages/calculate_values_page.dart';
 import 'package:dobareh_bloc/presentation/pages/waiting_page.dart';
 import 'package:dobareh_bloc/utils/extension.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/model/calculate_values/calculate_values_body.dart';
+import '../../data/model/calculate_values/categories_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/enums.dart';
 import '../../utils/icon_assistant.dart';
@@ -21,10 +24,13 @@ import '../components/order_details/material_item.dart';
 class InvoicePage extends StatelessWidget {
   const InvoicePage({Key? key}) : super(key: key);
 
-  static Widget router(int orderID, CalculateValuesCubit calculateValuesCubit) {
+  static Widget router(
+      int orderID, Map<MaterialCategories, Items> addedValues) {
     return MultiBlocProvider(providers: [
-      BlocProvider<CalculateValuesCubit>.value(
-        value: calculateValuesCubit,
+      BlocProvider<InvoiceCubit>(
+        create: (context) {
+          return InvoiceCubit(orderID: orderID, addedValues: addedValues);
+        },
       ),
       BlocProvider(create: (context) {
         return ChangeOrderStatusCubit(orderID: orderID);
@@ -36,10 +42,9 @@ class InvoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        /* Get.off(CalculateValuesPage(
-            orderId: orderID,
-          ));*/
-        return Future.value(true);
+        Get.off(CalculateValuesPage.router(
+            context.read<InvoiceCubit>().state.orderID));
+        return Future.value(false);
       },
       child: Scaffold(
         appBar: PreferredSize(
@@ -62,12 +67,14 @@ class InvoicePage extends StatelessWidget {
                             child: const LoadingWidget());
                       });
                 } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
+                  Get.back();
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (context) {
                         return const CanceledDialog();
-                      });
+                      }).then((value) => Get.back());
                 } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
                   context.showToast(
                       message: state.errorMessage, messageType: MessageType.error);
@@ -77,11 +84,11 @@ class InvoicePage extends StatelessWidget {
                 }
               },
             ),
-            BlocListener<CalculateValuesCubit, CalculateValuesState>(
+            BlocListener<InvoiceCubit, InvoiceState>(
               listener: (context, state) {
                 if (state.submitValuesStatus == SubmitValuesStatus.success) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Get.offAll(WaitingPage.router(state.orderID));
+                    Get.off(() => WaitingPage.router(state.orderID));
                   });
                 }
               },
@@ -107,7 +114,9 @@ class InvoicePageAppbar extends StatelessWidget {
         padding: EdgeInsets.only(top: 8.h, left: 16.w),
         child: Row(
           children: [
-            IconAssistant.backIconButton(() => Get.back()),
+            IconAssistant.backIconButton(() => Get.off(
+                CalculateValuesPage.router(
+                    context.read<InvoiceCubit>().state.orderID))),
             Expanded(
               child: Text(
                 "فاکتور ثبت شده",
@@ -120,7 +129,8 @@ class InvoicePageAppbar extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.r)),
                     backgroundColor: secondaryTint2),
                 onPressed: () {
-                  Get.back();
+                  Get.off(CalculateValuesPage.router(
+                      context.read<InvoiceCubit>().state.orderID));
 
                   // Get.off(CalculateValuesPage.router());
                 },
@@ -152,7 +162,7 @@ class InvoicePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return BlocBuilder<CalculateValuesCubit, CalculateValuesState>(
+    return BlocBuilder<InvoiceCubit, InvoiceState>(
       builder: (context, state) {
         var addedValues = state.addedValues;
         return SafeArea(
@@ -286,24 +296,21 @@ class InvoicePageBody extends StatelessWidget {
                       EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
                   child: Row(
                     children: [
-                      Expanded(child: BlocBuilder<CalculateValuesCubit,
-                          CalculateValuesState>(
-                        builder: (context, state) {
-                          if (state.submitValuesStatus ==
-                              SubmitValuesStatus.loading) {
-                            return const LoadingWidget();
-                          }
-                          if (state.submitValuesStatus ==
-                              SubmitValuesStatus.error) {
-                            context.showToast(
-                                message: state.errorMessage,
-                                messageType: MessageType.error);
-                          }
+                    Expanded(child: BlocBuilder<InvoiceCubit, InvoiceState>(
+                      builder: (context, state) {
+                        if (state.submitValuesStatus ==
+                            SubmitValuesStatus.loading) {
+                          return const LoadingWidget();
+                        }
+                        if (state.submitValuesStatus ==
+                            SubmitValuesStatus.error) {
+                          context.showToast(
+                              message: state.errorMessage,
+                              messageType: MessageType.error);
+                        }
                           return CustomFilledButton(
                               onPressed: () {
-                                context
-                                    .read<CalculateValuesCubit>()
-                                    .valuesSubmitted();
+                                context.read<InvoiceCubit>().valuesSubmitted();
                               },
                               buttonChild: const Text("ارسال مقادیر به کاربر"));
                         },

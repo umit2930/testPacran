@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../data/model/support/SupportResponse.dart';
+import '../../../data/model/support/support_response.dart';
 import '../../../utils/colors.dart';
 
 class SupportItem extends StatelessWidget {
@@ -29,14 +29,16 @@ class SupportItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.w),
-                      child: Text(
-                        support.question ?? "سوال ",
-                        style: textTheme.bodyMedium?.copyWith(color: natural2),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: Text(
+                          support.question ?? "سوال ",
+                          style: textTheme.bodyMedium?.copyWith(color: natural2),
+                        ),
                       ),
                     ),
-                    Spacer(),
+
                     SvgPicture.asset("assets/icons/arrow_left.svg")
                   ],
                 ),

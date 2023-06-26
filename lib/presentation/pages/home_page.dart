@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
+import '../../main.dart';
 import '../components/general/loading_widget.dart';
 import '../components/general/retry_widget.dart';
 import '../components/home/map_widget.dart';
@@ -18,6 +18,7 @@ import '../components/home/summery_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+  static bool refreshData = true;
 
   static Widget router() {
     return BlocProvider(
@@ -71,6 +72,7 @@ class HomeAppbar extends StatelessWidget {
             }),
             SvgPicture.asset("assets/icons/logo.svg"),
             IconAssistant.notificationIconButton(() {
+              HomePage.refreshData = false;
               Get.to(NotificationPage.router());
             }),
           ],
@@ -80,13 +82,17 @@ class HomeAppbar extends StatelessWidget {
   }
 }
 
-class HomeBody extends StatelessWidget with WidgetsBindingObserver {
+class HomeBody extends StatelessWidget with RouteAware {
   const HomeBody({Key? key}) : super(key: key);
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    Logger().i(state.name);
+  void didPopNext() {
+    if (HomePage.refreshData == true) {
+      homeCubit?.getHomeRequested();
+    }
   }
+
+  static HomeCubit? homeCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +101,15 @@ class HomeBody extends StatelessWidget with WidgetsBindingObserver {
           builder: (BuildContext context, state) {
         switch (state.homeStatus) {
           case HomeStatus.initial:
+            homeCubit = context.read<HomeCubit>();
+            routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
             context.read<HomeCubit>().getHomeRequested();
             return const LoadingWidget();
           case HomeStatus.loading:
             return const LoadingWidget();
           case HomeStatus.failure:
             return FailureWidget(
-                onRetryPressed: () {
+              onRetryPressed: () {
                 context.read<HomeCubit>().getHomeRequested();
               },
               errorMessage: state.errorMessage,
@@ -117,19 +125,19 @@ class HomeBody extends StatelessWidget with WidgetsBindingObserver {
                       child: const OpenStreetMapWidget()),
 
                   ///summery
-                      Padding(
-                          padding:
+                  Padding(
+                      padding:
                           EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
-                          child: const SummeryWidget()),
+                      child: const SummeryWidget()),
 
-                      ///orders list
-                      Padding(
-                          padding: EdgeInsets.only(top: 32.h),
-                          child: const HomeOrdersWidget())
-                    ],
-                  ),
-                );
-            }
+                  ///orders list
+                  Padding(
+                      padding: EdgeInsets.only(top: 32.h),
+                      child: const HomeOrdersWidget())
+                ],
+              ),
+            );
+        }
           }),
     );
   }

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';
 
-import '../../data/model/calculate_values/OrederStatusResponse.dart';
+import '../../data/model/calculate_values/oreder_status_response.dart';
 import '../../data/repository/order_repository.dart';
 import '../../utils/app_exception.dart';
 

@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import '../../business_logic/order/change_order_status_cubit.dart';
 import '../../utils/colors.dart';
 import '../../utils/enums.dart';
+import '../../utils/extension.dart';
 import '../components/general/canceled_dialog.dart';
 import '../components/general/confirm_cancel_dialog.dart';
 import '../components/general/loading_widget.dart';
@@ -52,12 +53,21 @@ class WaitingPage extends StatelessWidget {
                     });
               } else if (state.changeOrderStatus == ChangeOrderStatus.success) {
                 context.read<WaitingCubit>().orderStatusClosed();
+
+                //close loading
+                Get.back();
                 showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return const CanceledDialog();
-                    });
+                    }).then((value) => Get.back());
+              } else if (state.changeOrderStatus == ChangeOrderStatus.error) {
+                //close loading
+                Get.back();
+                context.showToast(
+                    message: state.errorMessage,
+                    messageType: MessageType.error);
               }
             },
           ),
@@ -76,11 +86,11 @@ class WaitingPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return const AcceptedByUserDialog();
-                      });
+                      }).then((value) => Get.back());
                   // });
 
                   break;
-              //calculate again
+                //calculate again
                 case 3:
                   context.read<WaitingCubit>().orderStatusClosed();
 
@@ -91,12 +101,12 @@ class WaitingPage extends StatelessWidget {
                       builder: (context) {
                         return const CalculateAgainDialog();
                       }).then((value) {
-                    //if false -> user canceled the order
+                    //if false -> driver canceled the order
                     if (value == false) {
                       context.read<ChangeOrderStatusCubit>().statusSubmitted(
                           orderStatus: OrderStatus.rejected,
                           changeReason: OrderStatusChangeReason.disagreement);
-                      //if true -> user want to recalculate
+                      //if true -> driver want to recalculate
                     } else {
                       Get.off(CalculateValuesPage.router(state.orderID));
                     }
@@ -111,7 +121,7 @@ class WaitingPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return const CanceledDialog();
-                      });
+                      }).then((value) => Get.back());
                   break;
               }
             },

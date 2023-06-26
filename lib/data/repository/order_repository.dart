@@ -1,19 +1,17 @@
-import 'dart:convert';
 
 import 'package:dobareh_bloc/data/data_provider/remote/order/order_api_provider.dart';
-import 'package:dobareh_bloc/data/model/calculate_values/CalculateValuesBody.dart';
-import 'package:dobareh_bloc/data/model/calculate_values/CategoriesResponse.dart'
+import 'package:dobareh_bloc/data/model/calculate_values/calculate_values_body.dart';
+import 'package:dobareh_bloc/data/model/calculate_values/categories_response.dart'
     as categories_response;
-import 'package:dobareh_bloc/data/model/calculate_values/OrederStatusResponse.dart';
+import 'package:dobareh_bloc/data/model/calculate_values/oreder_status_response.dart';
 import 'package:dobareh_bloc/data/model/order/orders_list_response.dart';
 import 'package:dobareh_bloc/data/model/success_model.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
-import 'package:logger/logger.dart';
 
 import '../../utils/enums.dart';
-import '../model/calculate_values/CategoriesResponse.dart';
+import '../model/calculate_values/categories_response.dart';
 import '../model/order/order_response.dart';
 
 class OrderRepository {

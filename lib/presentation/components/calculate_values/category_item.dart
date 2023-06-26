@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../data/model/calculate_values/CalculateValuesBody.dart';
+import '../../../data/model/calculate_values/calculate_values_body.dart';
 import '../../../utils/colors.dart';
 import 'add_value_bottomsheet.dart';
 
@@ -47,7 +47,6 @@ class CategoryItem extends StatelessWidget {
                         title: category.title ?? "پسماند",
                       );
                     }).then((value) {
-                      print(value);
                   if (value != null) {
                     ///delete
                     if (value == 0.0) {

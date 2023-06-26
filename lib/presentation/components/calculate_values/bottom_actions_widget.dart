@@ -84,8 +84,8 @@ class BottomActions extends StatelessWidget {
                       messageType: MessageType.warning,
                     );
                   } else {
-                    Get.to(InvoicePage.router(
-                        state.orderID, context.read<CalculateValuesCubit>()));
+                    Get.off(
+                        InvoicePage.router(state.orderID, state.addedValues));
                   }
                 },
                 buttonChild: Row(

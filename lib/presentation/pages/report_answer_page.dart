@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../data/model/report/ReportResponse.dart';
+import '../../data/model/report/report_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/icon_assistant.dart';
 

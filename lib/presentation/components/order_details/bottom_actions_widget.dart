@@ -61,14 +61,14 @@ class BottomActionsWidget extends StatelessWidget {
                             orderAddress?.longitude != null) {
                           MapsLauncher.launchCoordinates(
                               double.parse(orderAddress!.latitude!),
-                              double.parse(orderAddress!.longitude!));
+                              double.parse(orderAddress.longitude!));
                         }
                         context
                             .read<ChangeOrderStatusCubit>()
                             .statusSubmitted(orderStatus: OrderStatus.onWay);
                       },
                       buttonChild: const Text("شروع حرکت"),
-                      width: 158.w),
+                      width: 150.w),
                   const CommunicationWidget()
                 ],
               ));
@@ -86,7 +86,7 @@ class BottomActionsWidget extends StatelessWidget {
                             orderStatus: OrderStatus.inLocation);
                       },
                       buttonChild: const Text("به مقصد رسیدم"),
-                      width: 158.w),
+                      width: 150.w),
                   const CommunicationWidget()
                 ],
               ));
@@ -130,7 +130,7 @@ class BottomActionsWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 21.h),
                     child: CustomFilledButton(
                         onPressed: () {
-                          Get.to(CalculateValuesPage.router((context
+                          Get.off(CalculateValuesPage.router((context
                                       .read<OrderDetailsCubit>()
                                       .state
                                       .orderResponse
@@ -154,7 +154,7 @@ class BottomActionsWidget extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return const CanceledDialog();
-                });
+                }).then((value) => Get.back());
           });
 
           return SizedBox(
@@ -162,9 +162,12 @@ class BottomActionsWidget extends StatelessWidget {
               child: const Center(child: Text("ماموریت لغو شد")));
         case OrderStatus.checkFactor:
           // TODO: Handle checkFactor state - go to waiting page.
+          // Get.off(WaitingPage.router(state.orderID));
+
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            Get.offAll(WaitingPage.router(state.orderID));
+            Get.off(() => WaitingPage.router(state.orderID));
           });
+
           return SizedBox(
               height: 120.h,
               child: const Center(child: Text("چک کردن فاکتور")));

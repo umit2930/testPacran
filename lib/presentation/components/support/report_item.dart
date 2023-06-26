@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../data/model/report/ReportResponse.dart';
+import '../../../data/model/report/report_response.dart';
 import '../../../utils/colors.dart';
 
 class ReportItem extends StatelessWidget {

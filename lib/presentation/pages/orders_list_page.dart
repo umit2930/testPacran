@@ -17,8 +17,7 @@ class OrdersListPage extends StatelessWidget {
 
   static Widget router(Jalali todayDate, Orders? inProgressOrder) {
     return BlocProvider(
-      create: (context) => OrdersListCubit(
-          todayDate: todayDate, inProgressOrder: inProgressOrder),
+      create: (context) => OrdersListCubit(todayDate: todayDate),
       child: const OrdersListPage(),
     );
   }
@@ -168,10 +167,10 @@ class TabsWidget extends StatelessWidget {
       case 1:
         return const DeliveredTab();
       case 2:
-        return WarehouseTab();
+        return const WarehouseTab();
       default:
-        //TODO if there is a state that number go to defult ???
-        return Center(
+        //TODO if there is a state that number go to default ?
+        return const Center(
           child: Text("error"),
         );
     }

@@ -7,14 +7,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../main.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/enums.dart';
 import '../general/loading_widget.dart';
 import '../general/retry_widget.dart';
 import '../home/order_item.dart';
 
-class WaitingTab extends StatelessWidget {
+class WaitingTab extends StatelessWidget with RouteAware {
   const WaitingTab({Key? key}) : super(key: key);
+
+  @override
+  void didPopNext() {
+    ordersListCubit?.waitingOrdersRequested();
+    ordersListCubit?.deliveredOrdersRequested();
+  }
+
+  static OrdersListCubit? ordersListCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +31,8 @@ class WaitingTab extends StatelessWidget {
         builder: (context, state) {
       switch (state.waitingOrdersStatus) {
         case WaitingOrdersStatus.initial:
+          ordersListCubit = context.read<OrdersListCubit>();
+          routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
           context.read<OrdersListCubit>().waitingOrdersRequested();
           return const LoadingWidget();
         case WaitingOrdersStatus.loading:
@@ -150,7 +161,7 @@ class WaitingTabSuccessWidget extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(children: [
                 ///In process item
-/*                if (inProgressOrder != null &&
+                if (inProgressOrder != null &&
                     inProgressOrder.deliveryTime?.from ==
                         selectedTime.from) ...[
                   Padding(
@@ -168,13 +179,13 @@ class WaitingTabSuccessWidget extends StatelessWidget {
                               address:
                                   inProgressOrder.address?.address ?? "آدرس",
                               onPressed: () {
-                                Get.off(OrderDetailsPage.router(
+                                Get.to(OrderDetailsPage.router(
                                   orderID: inProgressOrder.id!.round(),
                                 ));
                               }),
                         ]),
                   )
-                ],*/
+                ],
 
                 if (filteredTimePack.isNotEmpty) ...[
                   ListView.builder(
@@ -203,7 +214,7 @@ class WaitingTabSuccessWidget extends StatelessWidget {
                     },
                     itemCount: filteredTimePack.length,
                   ),
-                ] else ...[
+                ] else if (selectedTimePack.isEmpty) ...[
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.only(top: 60.h),

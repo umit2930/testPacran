@@ -79,12 +79,6 @@ class LargeMapWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _goToCurrentLocation() async {
-    final GoogleMapController controller = await _controller.future;
-    final position = await determinePosition();
-    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(position.latitude, position.longitude), zoom: 12)));
-  }
 
   Future<void> _goToLocation(CameraPosition cameraPosition) async {
     final GoogleMapController controller = await _controller.future;

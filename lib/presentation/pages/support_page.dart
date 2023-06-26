@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../data/model/support/SupportResponse.dart';
+import '../../data/model/support/support_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/icon_assistant.dart';
 import '../components/general/call_support_bottomsheet.dart';

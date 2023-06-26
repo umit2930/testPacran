@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
-import '../../../pages/home_page.dart';
 import '../../general/custom_filled_button.dart';
 
 class AcceptedByUserDialog extends StatelessWidget {
@@ -41,7 +40,8 @@ class AcceptedByUserDialog extends StatelessWidget {
                   child: CustomFilledButton(
                       width: 156.w,
                       onPressed: () {
-                        Get.offAll(HomePage.router());
+                        // Get.offAll(HomePage.router());
+                        Get.back(result: true);
                       },
                       buttonChild: const Text("تایید")))
             ],

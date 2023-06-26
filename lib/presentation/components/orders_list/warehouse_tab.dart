@@ -9,7 +9,7 @@ import '../../../data/model/order/orders_list_response.dart';
 import '../../../utils/colors.dart';
 
 class WarehouseTab extends StatefulWidget {
-  WarehouseTab({Key? key}) : super(key: key);
+  const WarehouseTab({Key? key}) : super(key: key);
 
   @override
   State<WarehouseTab> createState() => _WarehouseTabState();

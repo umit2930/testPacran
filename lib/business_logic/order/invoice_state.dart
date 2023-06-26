@@ -1,14 +1,12 @@
-part of 'calculate_values_cubit.dart';
-
+part of 'invoice_cubit.dart';
 
 //TODO is calling two api in one cubit is correct?
-enum CalculateValuesStatus { init, loading, success, error }
 
+enum SubmitValuesStatus { init, loading, success, error }
 
-class CalculateValuesState extends Equatable {
-  final CalculateValuesStatus calculateValuesStatus;
+class InvoiceState extends Equatable {
+  final SubmitValuesStatus submitValuesStatus;
 
-  final CategoriesResponse? categoriesResponse;
   final SuccessModel? calculateValuesResponse;
 
   final String? errorMessage;
@@ -34,18 +32,17 @@ class CalculateValuesState extends Equatable {
     return total;
   }
 
-  const CalculateValuesState({
-    required this.calculateValuesStatus,
+  const InvoiceState({
+    required this.submitValuesStatus,
     required this.orderID,
-    this.categoriesResponse,
     this.calculateValuesResponse,
     this.errorMessage,
     //TODO where to set default values of state ?
     required this.addedValues,
   });
 
-  CalculateValuesState copyWith({
-    CalculateValuesStatus? calculateValuesStatus,
+  InvoiceState copyWith({
+    SubmitValuesStatus? submitValuesStatus,
     CategoriesResponse? categoriesResponse,
     SuccessModel? calculateValuesResponse,
     String? errorMessage,
@@ -54,10 +51,8 @@ class CalculateValuesState extends Equatable {
     int? totalPrice,
     double? totalWeight,
   }) {
-    return CalculateValuesState(
-      calculateValuesStatus:
-          calculateValuesStatus ?? this.calculateValuesStatus,
-      categoriesResponse: categoriesResponse ?? this.categoriesResponse,
+    return InvoiceState(
+      submitValuesStatus: submitValuesStatus ?? this.submitValuesStatus,
       calculateValuesResponse:
           calculateValuesResponse ?? this.calculateValuesResponse,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -68,8 +63,7 @@ class CalculateValuesState extends Equatable {
 
   @override
   List<Object?> get props => [
-        calculateValuesStatus,
-        categoriesResponse,
+        submitValuesStatus,
         calculateValuesResponse,
         errorMessage,
         orderID,

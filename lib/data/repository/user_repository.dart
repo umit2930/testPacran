@@ -1,11 +1,11 @@
 import 'package:dobareh_bloc/data/data_provider/remote/order/user_api_provider.dart';
 import 'package:dobareh_bloc/data/model/home/home_response.dart';
 import 'package:dobareh_bloc/data/model/home/profile_response.dart';
-import 'package:dobareh_bloc/data/model/notifications/NotificationsResponse.dart';
-import 'package:dobareh_bloc/data/model/report/ReportResponse.dart';
-import 'package:dobareh_bloc/data/model/report/SendReportResponse.dart';
-import 'package:dobareh_bloc/data/model/support/SupportAnswerResponse.dart';
-import 'package:dobareh_bloc/data/model/support/SupportResponse.dart';
+import 'package:dobareh_bloc/data/model/notifications/notifications_response.dart';
+import 'package:dobareh_bloc/data/model/report/report_response.dart';
+import 'package:dobareh_bloc/data/model/report/send_report_response.dart';
+import 'package:dobareh_bloc/data/model/support/support_answer_response.dart';
+import 'package:dobareh_bloc/data/model/support/support_response.dart';
 import 'package:dobareh_bloc/utils/network_response_to_result.dart';
 import 'package:get/get.dart';
 

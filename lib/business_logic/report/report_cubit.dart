@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:dobareh_bloc/data/model/report/ReportResponse.dart';
+import 'package:dobareh_bloc/data/model/report/report_response.dart';
 import 'package:dobareh_bloc/data/repository/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';
